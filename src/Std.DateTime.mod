@@ -17,7 +17,7 @@ MODULE DateTime IN Std;
 IN Std IMPORT Const, Type, Char, Integer, OSHost, String := ArrayOfChar;
 
 TYPE
-    DATETIME* = HUGEINT;
+    DATETIME* = Type.DATETIME;
 
 CONST
 	ERROR*      = MIN(HUGEINT);

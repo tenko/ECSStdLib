@@ -2,7 +2,10 @@
 MAKEFLAGS += --no-builtin-rules --no-builtin-variables
 
 # OptSpeed or OptSize
-OPT = OptSize
+OPT = OptSpeed
+
+# Real64 or Real32
+Real = Real64
 
 ifdef MSYSTEM
 	PRG = .exe
@@ -15,7 +18,7 @@ else
 endif
 
 CLS = DBSQLite3Dll$(SYS).cpp
-OLS += Const Config$(SYS) Type Char ArrayOfChar$(OPT) OSHost$(SYS) Integer Cardinal
+OLS += Const Config$(SYS) Type Char ArrayOfChar$(OPT) OSHost$(SYS) Integer Cardinal $(Real)
 OLS += ArrayOfByte$(OPT) ArrayOfSet DateTime String Regex ADTBasicType ADTStream ADTList ADTVector
 OLS += ADTSet ADTDictionary ADTTree O2Testing O2Timing$(SYS)
 OLS += OS OSStream OSFile OSDir OSPath

@@ -4,6 +4,7 @@ MODULE Type IN Std;
 IMPORT Config IN Std;
 
 TYPE
+    DATETIME* = HUGEINT;
     STRING* = POINTER TO ARRAY OF CHAR;
     Writer* = RECORD END;
 
