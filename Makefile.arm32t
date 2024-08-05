@@ -12,18 +12,23 @@ ECS := /c/EigenCompilerSuite/runtime
 
 # OptSpeed or OptSize
 OPT = OptSpeed
+
+# Real64 or Real32
+Real = Real32
+
 CPU = armt32
 # Semihost or Baremetal
 SYS = Semihost
 
-RTS = $(CPU)$(SYS)Run.obf $(ECS)/armt32run.obf
+RTS = $(CPU)$(SYS)Run.obf $(ECS)/armt32run.obf $(ECS)/obarmt32run.lib
 
-OLS += Const Config$(SYS) Type Char ArrayOfChar$(OPT) OSHost$(SYS) Integer Cardinal
+OLS += Const Config$(SYS) Type Char ArrayOfChar$(OPT) OSHost$(SYS) Integer Cardinal $(Real)
 OLS += ArrayOfByte$(OPT) ArrayOfSet DateTime String Regex ADTBasicType ADTStream ADTList ADTVector
-OLS += ADTSet ADTDictionary ADTTree obl.out$(SYS) O2Testing
+OLS += ADTSet ADTDictionary ADTTree O2Testing
 OLS += OS OSStream OSFile OSDir OSPath
-MOD = $(addprefix src/, $(addsuffix .mod, $(OLS)))
-OBF = $(addprefix build/, $(addsuffix .obf, $(OLS)))
+
+MOD = $(addprefix src/, $(addprefix Std., $(addsuffix .mod, $(OLS))))
+OBF = $(addprefix build/, $(addprefix Std., $(addsuffix .obf, $(OLS))))
 
 OTS  = TestArrayOfByte TestArrayOfChar TestArrayOfSet TestCardinal TestInteger
 OTS += TestString TestRegex TestDateTime TestADTBasicType TestADTList TestADTSet
@@ -34,26 +39,26 @@ TMOD = $(addprefix tests/, $(addsuffix .mod, $(OTS)))
 TOBF = $(addprefix build/, $(addsuffix .obf, $(OTS)))
 
 .PHONY: all
-all : oberon$(CPU).lib
+all : std$(CPU).lib
 
-build/ADTBasicType.obf : src/Type.mod
-build/ADTDictionary.obf : src/ADTVector.mod
-build/ADTSet.obf : src/ADTVector.mod
-build/ADTStream.obf : src/ArrayOfByte$(OPT).mod src/ArrayOfChar$(OPT).mod src/Cardinal.mod src/Config$(SYS).mod src/Const.mod src/DateTime.mod src/Integer.mod src/String.mod src/Type.mod
-build/ADTVector.obf : src/ArrayOfByte$(OPT).mod src/Cardinal.mod
-build/ArrayOfChar$(OPT).obf : src/Char.mod src/Const.mod src/Type.mod
-build/ArrayOfSet.obf : src/ArrayOfByte$(OPT).mod
-build/Cardinal.obf : src/Const.mod src/Type.mod src/Char.mod src/OSHost$(SYS).mod
-build/DateTime.obf : src/Const.mod src/Type.mod src/Char.mod src/Integer.mod src/OSHost$(SYS).mod src/ArrayOfChar$(OPT).mod
-build/Integer.obf : src/Const.mod src/Type.mod src/Char.mod
-build/O2Testing.obf : src/ArrayOfChar$(OPT).mod
-build/OS.obf : src/Char.mod src/ArrayOfChar$(OPT).mod src/String.mod src/OSHost$(SYS).mod
-build/OSDir.obf : src/String.mod src/OSHost$(SYS).mod
-build/OSFile.obf : src/DateTime.mod src/OSHost$(SYS).mod
-build/OSPath.obf : src/ArrayOfChar$(OPT).mod src/Config$(SYS).mod src/Const.mod src/Char.mod src/OSDir.mod src/String.mod
-build/OSStream.obf : src/Const.mod src/ADTStream.mod src/OSHost$(SYS).mod
-build/Regex.obf : src/ArrayOfChar$(OPT).mod src/ArrayOfSet.mod
-build/String.obf : src/Char.mod src/Config$(SYS).mod src/Type.mod src/ArrayOfChar$(OPT).mod src/Integer.mod src/Cardinal.mod src/DateTime.mod
+build/Std.ADTBasicType.obf : src/Std.Type.mod
+build/Std.ADTDictionary.obf : src/Std.ADTVector.mod
+build/Std.ADTSet.obf : src/Std.ADTVector.mod
+build/Std.ADTStream.obf : src/Std.ArrayOfByte$(OPT).mod src/Std.ArrayOfChar$(OPT).mod src/Std.Cardinal.mod src/Std.Config$(SYS).mod src/Std.Const.mod src/Std.DateTime.mod src/Std.Integer.mod src/Std.String.mod src/Std.Type.mod
+build/Std.ADTVector.obf : src/Std.ArrayOfByte$(OPT).mod src/Std.Cardinal.mod
+build/Std.ArrayOfChar$(OPT).obf : src/Std.Char.mod src/Std.Const.mod src/Std.Type.mod
+build/Std.ArrayOfSet.obf : src/Std.ArrayOfByte$(OPT).mod
+build/Std.Cardinal.obf : src/Std.Const.mod src/Std.Type.mod src/Std.Char.mod src/Std.OSHost$(SYS).mod
+build/Std.DateTime.obf : src/Std.Const.mod src/Std.Type.mod src/Std.Char.mod src/Std.Integer.mod src/Std.OSHost$(SYS).mod src/Std.ArrayOfChar$(OPT).mod
+build/Std.Integer.obf : src/Std.Const.mod src/Std.Type.mod src/Std.Char.mod
+build/Std.O2Testing.obf : src/Std.ArrayOfChar$(OPT).mod
+build/Std.OS.obf : src/Std.Char.mod src/Std.ArrayOfChar$(OPT).mod src/Std.String.mod src/Std.OSHost$(SYS).mod
+build/Std.OSDir.obf : src/Std.String.mod src/Std.OSHost$(SYS).mod
+build/Std.OSFile.obf : src/Std.DateTime.mod src/Std.OSHost$(SYS).mod
+build/Std.OSPath.obf : src/Std.ArrayOfChar$(OPT).mod src/Std.Config$(SYS).mod src/Std.Const.mod src/Std.Char.mod src/Std.OSDir.mod src/Std.String.mod
+build/Std.OSStream.obf : src/Std.Const.mod src/Std.ADTStream.mod src/Std.OSHost$(SYS).mod
+build/Std.Regex.obf : src/Std.ArrayOfChar$(OPT).mod src/Std.ArrayOfSet.mod
+build/Std.String.obf : src/Std.Char.mod src/Std.Config$(SYS).mod src/Std.Type.mod src/Std.ArrayOfChar$(OPT).mod src/Std.Integer.mod src/Std.Cardinal.mod src/Std.DateTime.mod
 
 build/%.obf: src/%.mod
 	@echo compiling $<
@@ -67,35 +72,35 @@ build/%.obf: src/%.asm
 	@cd build && cp -f $(addprefix ../, $<) .
 	@cd build && $(AS) $(notdir $<)
 
-oberon$(CPU).lib : $(OBF)
+std$(CPU).lib : $(OBF)
 	@echo linking $@
 	@-rm $@
 	@touch $@
 	@linklib $@ $^
 
-build/$(RTS) : src/$(CPU)$(SYS)Run.asm
+build/$(CPU)$(SYS)Run.obf : src/$(CPU)$(SYS)Run.asm
 	@echo compiling $<
 	@mkdir -p build
 	@cd build && cp -f $(addprefix ../, $<) .
 	@cd build && $(AS) $(notdir $<)
 
-build/TestADTBasicType.obf : src/ADTBasicType.mod
-build/TestADTDictionary.obf : src/ADTDictionary.mod
-build/TestADTList.obf : src/ADTList.mod
-build/TestADTSet.obf : src/ADTSet.mod
-build/TestADTTree.obf : src/ADTTree.mod
-build/TestADTVector.obf : src/ADTVector.mod
-build/TestADTStream.obf : src/Const.mod src/String.mod src/ADTStream.mod
-build/TestArrayOfByte.obf : src/ArrayOfByte$(OPT).mod
-build/TestArrayOfChar.obf : src/ArrayOfChar$(OPT).mod
-build/TestArrayOfSet.obf : src/ArrayOfSet.mod
-build/TestCardinal.obf : src/Cardinal.mod
-build/TestDateTime.obf : src/DateTime.mod
-build/TestInteger.obf : src/Integer.mod
-build/TestOS.obf : src/String.mod src/OSStream.mod src/OSPath.mod src/OSFile.mod src/OSDir.mod
-build/TestOSPath.obf : src/OSPath.mod
-build/TestRegex.obf : src/Regex.mod
-build/TestString.obf : src/String.mod
+build/TestADTBasicType.obf : src/Std.ADTBasicType.mod
+build/TestADTDictionary.obf : src/Std.ADTDictionary.mod
+build/TestADTList.obf : src/Std.ADTList.mod
+build/TestADTSet.obf : src/Std.ADTSet.mod
+build/TestADTTree.obf : src/Std.ADTTree.mod
+build/TestADTVector.obf : src/Std.ADTVector.mod
+build/TestADTStream.obf : src/Std.Const.mod src/Std.String.mod src/Std.ADTStream.mod
+build/TestArrayOfByte.obf : src/Std.ArrayOfByte$(OPT).mod
+build/TestArrayOfChar.obf : src/Std.ArrayOfChar$(OPT).mod
+build/TestArrayOfSet.obf : src/Std.ArrayOfSet.mod
+build/TestCardinal.obf : src/Std.Cardinal.mod
+build/TestDateTime.obf : src/Std.DateTime.mod
+build/TestInteger.obf : src/Std.Integer.mod
+build/TestOS.obf : src/Std.String.mod src/Std.OSStream.mod src/Std.OSPath.mod src/Std.OSFile.mod src/Std.OSDir.mod
+build/TestOSPath.obf : src/Std.OSPath.mod
+build/TestRegex.obf : src/Std.Regex.mod
+build/TestString.obf : src/Std.String.mod
 
 build/%.obf: tests/%.mod
 	@echo compiling $<
@@ -104,19 +109,19 @@ build/%.obf: tests/%.mod
 	@cd build && $(OB) $(notdir $<)
 
 .PHONY: TestMain
-TestMain : $(TOBF) oberon$(CPU).lib build/$(RTS)
+TestMain : $(TOBF) oberon$(CPU).lib build/$(CPU)$(SYS)Run.obf
 	@echo compiling $<
 	@mkdir -p build
-	@cd build && $(LK) $(notdir $(TOBF)) ../oberon$(CPU).lib $(RTS)
+	@cd build && $(LK) $(notdir $(TOBF)) ../std$(CPU).lib $(RTS)
 	@cd build && $(QEMU) -M $(DEVICE) -semihosting -nographic -device loader,file=TestArrayOfByte.rom,addr=$(ADR)
 
 .PHONY: Test
-Test : misc/Test.mod oberon$(CPU).lib build/$(RTS)
+Test : misc/Test.mod oberon$(CPU).lib build/$(CPU)$(SYS)Run.obf
 	@echo compiling $<
 	@mkdir -p build
 	@cd build && cp -f $(addprefix ../, $<) .
 	@cd build && $(OB) $(notdir $<)
-	@cd build && $(LK) Test.obf ../oberon$(CPU).lib $(RTS)
+	@cd build && $(LK) Test.obf ../std$(CPU).lib $(RTS)
 	@cd build && $(QEMU) -M $(DEVICE) -semihosting -semihosting-config arg="test a b c" -nographic -device loader,file=Test.rom,addr=$(ADR)
 
 .PHONY: clean

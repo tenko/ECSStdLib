@@ -334,7 +334,7 @@ BEGIN
     IF neg THEN y := -y  END;
     result := y;
     RETURN i = start + j
-END StringToReal;
+END FromString;
 
 BEGIN
     ASSERT(SIZE(REAL) = 4);
