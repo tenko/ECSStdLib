@@ -109,14 +109,14 @@ build/%.obf: tests/%.mod
 	@cd build && $(OB) $(notdir $<)
 
 .PHONY: TestMain
-TestMain : $(TOBF) oberon$(CPU).lib build/$(CPU)$(SYS)Run.obf
+TestMain : $(TOBF) std$(CPU).lib build/$(CPU)$(SYS)Run.obf
 	@echo compiling $<
 	@mkdir -p build
 	@cd build && $(LK) $(notdir $(TOBF)) ../std$(CPU).lib $(RTS)
 	@cd build && $(QEMU) -M $(DEVICE) -semihosting -nographic -device loader,file=TestArrayOfByte.rom,addr=$(ADR)
 
 .PHONY: Test
-Test : misc/Test.mod oberon$(CPU).lib build/$(CPU)$(SYS)Run.obf
+Test : misc/Test.mod std$(CPU).lib build/$(CPU)$(SYS)Run.obf
 	@echo compiling $<
 	@mkdir -p build
 	@cd build && cp -f $(addprefix ../, $<) .
