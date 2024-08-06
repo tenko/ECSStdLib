@@ -5,8 +5,9 @@ Ported from Oberon A2:
   ETH Oberon, Copyright 2001 ETH Zuerich Institut fuer Computersysteme, ETH Zentrum, CH-8092 Zuerich.
   Refer to the "General ETH Oberon System Source License" contract available at: http://www.oberon.ethz.ch/
 
-Most functionality will eventually be replaced by porting code from Newlib/LibmCS.
+Most math functionality will eventually be replaced by porting code from Newlib/LibmCS.
 Formatting and parsing from porting of Dragonbox, Ryu, Fastfloat etc.
+Formatting optimized for size : https://github.com/eyalroz/printf
 *)
 MODULE Real IN Std;
 
