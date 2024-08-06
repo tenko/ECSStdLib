@@ -6,11 +6,12 @@ Ported from Oberon A2:
   Refer to the "General ETH Oberon System Source License" contract available at: http://www.oberon.ethz.ch/
 
 Most functionality will eventually be replaced by porting code from Newlib/LibmCS.
+Formatting and parsing from porting of Dragonbox, Ryu, Fastfloat etc.
 *)
-MODULE Real;
+MODULE Real IN Std;
 
 IMPORT SYSTEM;
-IN Std IMPORT Const, Char, ArrayOfChar;
+IN Std IMPORT Const, Type, Char, ArrayOfChar;
 
 CONST
     FPZero*     = Const.FPZero;
@@ -256,6 +257,97 @@ BEGIN
     WHILE (e < 0) DO r := r / 10;  INC( e );  END;
     RETURN r;
 END Ten;
+
+(**
+Format `REAL`.
+
+* `width` : Total field with. Can overflow if number is bigger.
+
+The formatting flags defaults to `Right` alignment.
+The `Spc` flag fills in a blank character for `+` if the number is positive.
+The `Sign` flag fills in a `+` character if the number is positive.
+If both `Spc` and `Sign` are given then `Sign` precedes.
+*)
+PROCEDURE Format*(VAR Writer : Type.Writer; value : REAL; prec: INTEGER; width: LENGTH; flags: SET);
+VAR
+    val, x : SIGNED32;
+    i, len, digits, left, right : LENGTH;
+    class : INTEGER;
+    str : ARRAY 20 OF CHAR;
+    neg : BOOLEAN;
+BEGIN
+    neg := value < 0;
+    class := FPClassify(value);
+    IF class = FPInfinite THEN
+        str := "INF";
+        len := 3
+    ELSIF class = FPNaN THEN
+        str := "NAN";
+        len := 3
+    ELSIF class = FPZero THEN
+        str := "0";
+        len := 1
+    ELSE
+        (* TODO : may overflow, switch to exponent for large values *)
+        val := ENTIER (value);
+        IF val < 0 THEN 
+            IF val < value THEN INC (val) END;
+            value := val - value
+        ELSE
+            value := value - val
+        END;
+        digits := 0; x := ABS(val);
+        REPEAT INC(digits); x := x DIV 10 UNTIL x = 0;
+        x := ABS(val); i := digits;
+        str[i] := 00X;
+        REPEAT
+            DEC(i);
+            str[i] := CHR(ORD('0') + x MOD 10);
+            x := x DIV 10;
+        UNTIL x = 0;
+        IF value # 0 THEN
+            ArrayOfChar.AppendChar(str, ".");
+            INC(len);
+        END;
+        WHILE (prec # 0) & (value # 0) DO
+            value := value * 10;
+            val := ENTIER (value);
+            ArrayOfChar.AppendChar(str, CHR(ORD('0') + val MOD 10));
+            value := value - val;
+            DEC(prec);
+            INC(digits);
+        END;
+        INC(len, digits)
+    END;
+    (* sign *)
+    IF class # FPNaN THEN
+        IF neg THEN INC(len);
+        ELSIF (flags * Const.Sign) # {} THEN INC(len)
+        END;
+    END;
+    (* Alignment *)
+    left := 0; right := 0;
+    IF width > len THEN
+        IF (flags * Const.Left) # {} THEN
+            right := width - len
+        ELSIF (flags * Const.Center) # {} THEN
+            left := (width - len) DIV 2;
+            right := (width - len) - left;
+        ELSE (* Default to Right *)
+            left := width - len
+        END
+    END;
+    WHILE left > 0 DO Writer.WriteChar(' '); DEC(left) END;
+    (* Sign *)
+    IF class # FPNaN THEN
+        IF neg THEN Writer.WriteChar('-');
+        ELSIF (flags * Const.Sign) # {} THEN Writer.WriteChar('+')
+        ELSIF (flags * Const.Spc) # {} THEN Writer.WriteChar(' ')
+        END;
+    END;
+    Writer.WriteString(str);
+    WHILE right > 0 DO Writer.WriteChar(' '); DEC(right) END
+END Format;
 
 (**
 Convert string `str` to `REAL` and `start` and `length` into `str`.
