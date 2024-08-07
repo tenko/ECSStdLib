@@ -181,6 +181,22 @@ BEGIN
     RETURN y
 END ArcTan;
 
+(** Computes the arc tangent of `y` / `x` using the signs of arguments to determine the correct quadrant. *)
+PROCEDURE ArcTan2*(x, y: REAL): REAL;
+BEGIN
+    IF x # 0 THEN
+        IF x > 0 THEN RETURN ArcTan(y/x)
+        ELSE
+            IF y < 0 THEN RETURN  ArcTan(y/x) - PI
+            ELSE RETURN  ArcTan(y/x) - PI END
+        END
+    ELSE
+        IF y > 0 THEN RETURN PI / 2
+        ELSIF y < 0 THEN RETURN -PI / 2 END
+    END;
+    RETURN NaN
+END ArcTan2;
+
 (** Computes the square root of the `REAL` x *)
 PROCEDURE Sqrt*(x: REAL): REAL;
 VAR h: SET64; e: SIGNED64; a, s: REAL;
@@ -235,6 +251,26 @@ BEGIN
         RETURN x
     END
 END Exp;
+
+(** Computes the tangent of the value `REAL` x in radians *)
+PROCEDURE Tan* (x: REAL): REAL;
+VAR neg: BOOLEAN; y, s1: REAL;
+BEGIN
+	y := x - ENTIER(x / PI) * PI;
+	IF y > PI/2 THEN neg := TRUE ELSE neg := FALSE END;
+	s1 := Sin(y);
+	IF neg THEN RETURN -s1 / Sqrt(1 - s1 * s1) ELSE RETURN s1 / Sqrt(1 - s1 * s1) END
+END Tan;
+
+(** Computes the arc sine of the value `REAL` x *)
+PROCEDURE ArcSin* (x: REAL): REAL;
+BEGIN RETURN ArcTan(x / Sqrt(1 - x * x))
+END ArcSin;
+
+(** Computes the arc cosine of the value `REAL` x *)
+PROCEDURE ArcCos* (x: LONGREAL): LONGREAL;
+BEGIN RETURN PI/2 - ArcSin(x)
+END ArcCos;
 
 PROCEDURE FormatFix(VAR str : ARRAY OF CHAR; value : REAL; prec: INTEGER);
 VAR
