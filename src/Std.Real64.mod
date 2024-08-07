@@ -28,9 +28,14 @@ CONST
     FPSubnormal*= Const.FPSubnormal;
     FPInfinite* = Const.FPInfinite;
     FPNaN*      = Const.FPNaN;
-    PI*   = 3.1415926535897932384626433832795028841972;
-    E* = 2.7182818284590452353602874713526624977572;
-    LN2* = 0.693147180559945309417232121458D0;
+    E*          = 2.71828182845904523536;
+    PI*         = 3.14159265358979323846;
+    PIDIV2*     = 1.57079632679489661923;
+    PIDIV4*     = 0.785398163397448309616;
+    SQRT2*      = 1.41421356237309504880;
+    EPS*        = 2.220446E-16;
+    MINIMUM*    = 2.2250738585072014E-308;
+    MAXIMUM*    = 1.7976931348623158E308;
     MaxRoundArray   = 17;
     MaxPowerArray   = 9;
     MaxFixedFloat   = 1.0E9;
@@ -118,7 +123,7 @@ BEGIN
 END SignBit;
 
 (** Return a `REAL` with the magnitude (absolute value) of x but the sign of y. *)
-PROCEDURE CopySign*(x, y : LONGREAL): LONGREAL;
+PROCEDURE CopySign*(x, y : REAL): REAL;
 VAR hx, hy : WORD;
 BEGIN
     hx := GetHighWord(x); hy := GetHighWord(y);
@@ -134,6 +139,19 @@ BEGIN
     SetHighWord(x, WORD(SET32(high) * SET32(07FFFFFFFH)));
     RETURN x
 END Abs;
+
+(** Computes the largest integer value not greater than x *)
+PROCEDURE Floor* (x: REAL) : REAL ;
+BEGIN RETURN REAL(ENTIER(x))
+END Floor;
+
+(** Computes the nearest integer value to x, rounding halfway cases away from zero *)
+PROCEDURE Round* (x: REAL) : REAL ;
+BEGIN
+    IF x = 0. THEN RETURN x;
+    ELSIF x < 0. THEN RETURN -REAL(ENTIER(-x + 0.5));
+    ELSE RETURN REAL(ENTIER(x + 0.5)) END
+END Round;
 
 (** Computes the sine of the angle `REAL` x in radians *)
 PROCEDURE Sin*(x: REAL): REAL;
@@ -268,7 +286,7 @@ BEGIN RETURN ArcTan(x / Sqrt(1 - x * x))
 END ArcSin;
 
 (** Computes the arc cosine of the value `REAL` x *)
-PROCEDURE ArcCos* (x: LONGREAL): LONGREAL;
+PROCEDURE ArcCos* (x: REAL): REAL;
 BEGIN RETURN PI/2 - ArcSin(x)
 END ArcCos;
 
@@ -432,7 +450,7 @@ BEGIN
     ELSIF class = FPNaN THEN
         str := "NAN";
         len := 3
-    ELSIF class = FPZero THEN
+    ELSIF (class = FPZero) OR (class = FPSubnormal) THEN
         str := "0";
         len := 1
     ELSE
@@ -599,5 +617,5 @@ BEGIN
 	q52 := SYSTEM.VAL(REAL, 04022655229F407DCH); q51 := SYSTEM.VAL(REAL, 040348462DB028A62H);
 	q50 := SYSTEM.VAL(REAL, 04029A55D3717FEF3H);
     Inf := INF;
-    NaN := REAL(07FF8000000000000H);
+    NaN := SYSTEM.VAL(REAL, 07FF8000000000000H);
 END Real.

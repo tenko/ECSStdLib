@@ -30,9 +30,14 @@ CONST
     FPSubnormal*= Const.FPSubnormal;
     FPInfinite* = Const.FPInfinite;
     FPNaN*      = Const.FPNaN;
-    PI*   = 3.1415926535897932384626433832795028841972;
-    E* = 2.7182818284590452353602874713526624977572;
-    LN2* = 0.693147180559945309417232121458D0;
+    E*          = 2.71828182845904523536;
+    PI*         = 3.14159265358979323846;
+    PIDIV2*     = 1.57079632679489661923;
+    PIDIV4*     = 0.785398163397448309616;
+    SQRT2*      = 1.41421356237309504880;
+    EPS*        = 1.1920929E-7;
+    MINIMUM*    = 1.175494351E-38;
+    MAXIMUM*    = 3.402823466E+38;
     MaxRoundArray   = 8;
     MaxPowerArray   = 6;
     MaxFixedFloat   = 1.0E9;
@@ -40,6 +45,7 @@ CONST
 
 TYPE
     WORD = UNSIGNED32;
+    REAL = REAL32;
 
 VAR
     Inf- : REAL;
@@ -100,8 +106,26 @@ END SignBit;
 
 (** Return a `REAL` with the magnitude (absolute value) of x but the sign of y. *)
 PROCEDURE CopySign*(x, y : REAL): REAL;
-BEGIN RETURN REAL((SET32(x) * SET32(07FFFFFFFH)) + (SET32(y) * SET32(080000000H)))
+BEGIN RETURN SYSTEM.VAL(REAL, (SET32(x) * SET32(07FFFFFFFH)) + (SET32(y) * SET32(080000000H)))
 END CopySign;
+
+(** Return absolute value of x. *)
+PROCEDURE Abs*(x : REAL): REAL;
+BEGIN RETURN SYSTEM.VAL(REAL, SET32(x) * SET32(07FFFFFFFH)) 
+END Abs;
+
+(** Computes the largest integer value not greater than x *)
+PROCEDURE Floor* (x: REAL) : REAL ;
+BEGIN RETURN REAL(ENTIER(x))
+END Floor;
+
+(** Computes the nearest integer value to x, rounding halfway cases away from zero *)
+PROCEDURE Round* (x: REAL) : REAL ;
+BEGIN
+    IF x = 0. THEN RETURN x;
+    ELSIF x < 0. THEN RETURN -REAL(ENTIER(-x + 0.5));
+    ELSE RETURN REAL(ENTIER(x + 0.5)) END
+END Round;
 
 (** Computes the sine of the angle `REAL` x in radians *)
 PROCEDURE Sin*(x: REAL): REAL;
@@ -227,7 +251,7 @@ BEGIN RETURN ArcTan(x / Sqrt(1 - x * x))
 END ArcSin;
 
 (** Computes the arc cosine of the value `REAL` x *)
-PROCEDURE ArcCos* (x: LONGREAL): LONGREAL;
+PROCEDURE ArcCos* (x: REAL): REAL;
 BEGIN RETURN PI/2 - ArcSin(x)
 END ArcCos;
 
@@ -386,7 +410,7 @@ BEGIN
     ELSIF class = FPNaN THEN
         str := "NAN";
         len := 3
-    ELSIF class = FPZero THEN
+    ELSIF (class = FPZero) OR (class = FPSubnormal) THEN
         str := "0";
         len := 1
     ELSE
@@ -541,6 +565,6 @@ BEGIN
     c52 := SYSTEM.VAL(REAL, 03ED413CDH); s52 := SYSTEM.VAL(REAL, 03F490FDBH);
 	p50 := SYSTEM.VAL(REAL, 040CBD065H); q52 := SYSTEM.VAL(REAL, 041099F6AH);
     q51 := SYSTEM.VAL(REAL, 0C08DFBCBH); q50 := SYSTEM.VAL(REAL, 03FFE6CB2H);
-    Inf := REAL(07FF00000H);
-    NaN := REAL(07FF80000H);
+    Inf := SYSTEM.VAL(REAL, 07FF00000H);
+    NaN := SYSTEM.VAL(REAL, 07FF80000H);
 END Real.
