@@ -16,6 +16,7 @@ CONST
     Left* = {0};     Right* = {1};    Center* = {2};
     Sign* = {3};     Zero* = {4};     Spc* = {5};
     Alt* = {6};      Upper* = {7};
+    Fix* = {8};      Exp* = {9};
     (* LongReal / Real *)
     FPZero* = 0;
     FPNormal* = 1;

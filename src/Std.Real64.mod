@@ -1,7 +1,7 @@
 (*
 Module with operation on `REAL` type.
 
-Ported from Oberon A2:
+Ported from Oberon System 3:
   ETH Oberon, Copyright 2001 ETH Zuerich Institut fuer Computersysteme, ETH Zentrum, CH-8092 Zuerich.
   Refer to the "General ETH Oberon System Source License" contract available at: http://www.oberon.ethz.ch/
 
@@ -23,7 +23,9 @@ CONST
     PI*   = 3.1415926535897932384626433832795028841972;
     E* = 2.7182818284590452353602874713526624977572;
     LN2* = 0.693147180559945309417232121458D0;
-    EPS = 2.2D-16;
+    MaxRoundArray   = 17;
+    MaxPowerArray   = 9;
+    MaxFixedFloat   = 1.0E9;
 
 TYPE
     WORD = UNSIGNED32;
@@ -31,6 +33,13 @@ TYPE
 VAR
     Inf- : REAL;
     NaN- : REAL;
+    RoundValue : ARRAY MaxRoundArray OF REAL;
+    Powers : ARRAY MaxPowerArray OF REAL;
+    c11, p10: REAL; (* sqrt *)
+	c21, p22, p21, p20, q21, q20: REAL; (* exp *)
+	c42, p42, p41, p40, q42, q41, q40: REAL; (* ln *)
+	c31, p36, p35, p34, p33, p32, p31, p30, q36, q35, q34, q33, q32, q31, q30: REAL; (* sin, cos *)
+	c51, s51, c52, s52, c53, s53, p53, p52, p51, p50, q52, q51, q50: REAL; (* atan *)
 
 PROCEDURE GetWords(VAR high, low : WORD; real : REAL);
 BEGIN
@@ -48,21 +57,6 @@ END GetHighWord;
 PROCEDURE SetHighWord(VAR real : REAL; high : WORD);
 BEGIN SYSTEM.PUT(SYSTEM.ADR(real) + SIZE(WORD), high);
 END SetHighWord;
-
-PROCEDURE Expo(x: REAL): UNSIGNED32;
-BEGIN RETURN UNSIGNED32(ASH(SYSTEM.VAL(UNSIGNED64, x), -52)) MOD 2048
-END Expo;
-
-PROCEDURE Mantissa(x: REAL): UNSIGNED64;
-BEGIN RETURN SYSTEM.VAL(UNSIGNED64, SYSTEM.VAL(SET64, x) * {0 .. 51})
-END Mantissa;
-
-PROCEDURE Equal(x, y: REAL): BOOLEAN;
-BEGIN
-    IF x > y THEN x := x - y
-    ELSE x := y - x END;
-    RETURN x < EPS
-END Equal;
 
 (**
 Categorizes floating point value.
@@ -134,154 +128,104 @@ END Abs;
 
 (** Computes the sine of the angle `REAL` x in radians *)
 PROCEDURE Sin*(x: REAL): REAL;
-VAR
-    k: INTEGER;
-    xk, prev, res: REAL;
-BEGIN
-    WHILE x >= 2 * PI DO x := x - 2*PI END;
-    WHILE x < 0 DO x := x + 2*PI END;
-    res := x;
-    xk := x;
-    k := 1;
-    REPEAT
-        prev := res;
-        xk := -xk * x * x / (2 * k) / (2 * k + 1);
-        res := res + xk;
-        INC(k);
-    UNTIL Equal(prev, res) OR (k = 5000);
-    RETURN res
+VAR n: SIGNED64; y, yy, f: REAL;
+BEGIN 
+    y := c31*x; n := ENTIER(y+0.5);  (*c31 = 2/pi*)
+    y := 2*(y-n); yy := y*y;
+    IF ODD(n) THEN
+        f := (((((q36*yy + q35)*yy + q34)*yy + q33)*yy + q32)*yy + q31)*yy + q30
+    ELSE
+        f := ((((((p36*yy + p35)*yy + p34)*yy + p33)*yy + p32)*yy + p31)*yy + p30)*y
+    END;
+    IF ODD(n DIV 2) THEN f := -f END;
+    RETURN f
 END Sin;
 
 (** Computes the cosine of the angle `REAL` x in radians *)
 PROCEDURE Cos*(x: REAL): REAL;
-VAR
-    k: INTEGER;
-    prev, res, xk: REAL;
-BEGIN
-    WHILE x >= 2 * PI DO x := x - 2*PI END;
-    WHILE x < 0 DO x := x + 2*PI END;
-    res := 1.0;
-    xk := 1.0;
-    k := 1;
-    REPEAT
-        prev := res;
-        xk := -xk * x * x / (2 * k - 1) / (2 * k);
-        res := res + xk;
-        INC(k, 1)
-    UNTIL Equal(xk, 0.0) OR Equal(prev, res) OR (k = 5000);
-    RETURN res
+VAR n: SIGNED64; y, yy, f: REAL;
+BEGIN 
+    y := c31*x; n := ENTIER(y+0.5);  (*c31 = 2/pi*)
+    y := 2*(y-n); INC(n); yy := y*y;
+    IF ODD(n) THEN
+        f := (((((q36*yy + q35)*yy + q34)*yy + q33)*yy + q32)*yy + q31)*yy + q30
+    ELSE
+        f := ((((((p36*yy + p35)*yy + p34)*yy + p33)*yy + p32)*yy + p31)*yy + p30)*y
+    END ;
+    IF ODD(n DIV 2) THEN f := -f END;
+    RETURN f
 END Cos;
 
 (** Computes the arc tangent of the value `REAL` x *)
-PROCEDURE ArcTan(y:REAL):REAL;
-VAR
-    k: INTEGER;
-    prev, res, term, yk: REAL;
-BEGIN
-    IF (y = 1) OR (y = -1) THEN
-        RETURN y * PI / 4
-    ELSIF (y > 1) OR (y < -1) THEN
-        RETURN PI / 2 - ArcTan(1 / y)
-    ELSE
-        (* atan(y) = sum_k (-1)^(k) y^{2 k + 1} / (2 k + 1), |y| < 1 *)
-        prev := PI / 2;
-        res := 0.0;
-        yk := y;
-        k := 0;
-        REPEAT
-            prev := res;
-            term := 1 / (2 * k + 1) * yk;
-            IF ODD(k) THEN
-                res := res - term
-            ELSE
-                res := res + term
-            END;
-            yk := yk * y * y;
-            INC(k)
-        UNTIL Equal(prev, res) OR (k = 50000);
-        RETURN res
-    END
+PROCEDURE ArcTan*(x: REAL): REAL;
+VAR y, yy, s: REAL;
+BEGIN 
+    y := ABS(x); s := 0;
+    IF y > c51 THEN y := -1/y; s := s51
+    ELSIF y > 1 THEN y := (y - c52)/(y*c52 + 1); s := s52
+    ELSIF y > c53 THEN y := (y*c52 - 1)/(y + c52); s := s53
+    END;
+    yy := y*y;
+    y := y*(((p53*yy + p52)*yy + p51)*yy + p50)/
+        (((yy + q52)*yy + q51)*yy + q50) + s;
+    IF x < 0 THEN y := -y END;
+    RETURN y
 END ArcTan;
 
-(** Computes the arc tangent of the value `REAL` x/y using the sign to select the right quadrant *)
-PROCEDURE ArcTan2*(y, x: REAL): REAL;
-BEGIN
-    IF (x>0) & (y>=0) THEN RETURN ArcTan(y/x)
-    ELSIF (x>0) & (y<0) THEN RETURN ArcTan(y/x)
-    ELSIF x<0 THEN RETURN ArcTan(y/x)-PI (*?*)
-    ELSIF (x=0) & (y>0) THEN RETURN PI/2
-    ELSIF (x=0) & (y<0) THEN RETURN -PI/2
-    ELSE (*( x=0) & (y=0) *) RETURN 0 
-    END
-END ArcTan2;
+(** Computes the square root of the `REAL` x *)
+PROCEDURE Sqrt*(x: REAL): REAL;
+VAR h: SET64; e: SIGNED64; a, s: REAL;
+BEGIN 
+	IF x <= 0 THEN
+		IF x = 0 THEN RETURN 0 ELSE RETURN NaN END
+	ELSE
+		SYSTEM.GET(SYSTEM.ADR(x)+4, h); SYSTEM.PUT(SYSTEM.ADR(x)+4, h - {20..30} + {21..29}); a := x; 	(* expo(a) = 1022 *)
+		e := SYSTEM.LSH(SYSTEM.VAL(SIGNED64, h), -20) MOD 2048 - 1022;
+		s := p10*(a + c11);  (*c11 = 1/sqrt(2)*)
+		s := s + a/s;
+		s := 0.25*s + a/s;
+		s := 0.5*(s + a/s);
+		IF ODD(e) THEN INC(e); s := c11*s END;
+		x := s; SYSTEM.GET(SYSTEM.ADR(x)+4, h); SYSTEM.PUT(SYSTEM.ADR(x)+4, SYSTEM.VAL(SIGNED64, h) + SYSTEM.LSH(e DIV 2, 20));
+		RETURN x
+	END
+END Sqrt;
 
 (** Computes natural (e) logarithm of x *)
 PROCEDURE Ln*(x: REAL): REAL;
-VAR
-    k: INTEGER;
-    res, y, yk: REAL;
-    mantissa: UNSIGNED64;
-BEGIN
-    IF x <= 0 THEN
-        HALT(0);
-    END;
-    IF x < 1.0 THEN
-        RETURN -Ln(1.0 / x)
-    ELSIF x >= 2.0 THEN
-        (*
-            algorithm idea from http://stackoverflow.com/questions/10732034/how-are-logarithms-programmed
-            and https://en.wikipedia.org/wiki/Natural_logarithm (Newton's method)
-            ln(m * 2^e) = e ln(2) + ln(m)
-        *)
-        mantissa := Mantissa(x) + 3FF0000000000000H;
-        RETURN (Expo(x) - 1023) * LN2 + Ln(SYSTEM.VAL(REAL, mantissa))
-    ELSE
-        (* ln(x) = 2 * sum_k 1/(2 k + 1) y^k, where y = (x - 1) / (x + 1), x real *)
-        y := (x - 1) / (x + 1);
-        yk := y;
-        res := y;
-        k := 1;
-        REPEAT
-            yk := yk * y * y;
-            res := res + yk / (2 * k + 1);
-            INC(k)
-        UNTIL Equal(yk, 0.0) OR (k = 5000);
-        RETURN 2.0 * res;
-    END
+VAR h: SET64; e: SIGNED64; a, aa, a1, a2: REAL;
+BEGIN 
+	IF x <= 0 THEN RETURN NaN
+	ELSE
+		SYSTEM.GET(SYSTEM.ADR(x)+4, h); SYSTEM.PUT(SYSTEM.ADR(x)+4, h - {20..30} + {21..29}); a := x; 	(* expo(a) = 1022 *)
+		e := SYSTEM.LSH(SYSTEM.VAL(SIGNED64, h), -20) MOD 2048 - 1022;
+		IF a < c11 THEN a := 2*a; DEC(e) END ;
+		a := (a-1)/(a+1);
+		aa := a*a;
+		a1 := ((p42*aa + p41)*aa + p40);
+		a2 := (((aa + q42)*aa + q41)*aa + q40);
+		a := c42*e + a*a1/a2;
+		RETURN a   (*c42 = ln(2)*)
+	END
 END Ln;
 
 (** Computes e raised to the power of x *)
 PROCEDURE Exp*(x: REAL): REAL;
-VAR
-    k: INTEGER;
-    prev, res, xk: REAL;
-BEGIN
-    IF x < 0.0 THEN
-        RETURN 1.0 / Exp(-x)
-    ELSE
-        (* exp(x) = sum_k x^(k) / k! *)
-        prev := 0.0;
-        res := 1.0;
-        k := 1;
-        xk := 1;
-        REPEAT
-            prev := res;
-            xk := xk / k * x;
-            res := res + xk;
-            INC(k, 1)
-        UNTIL Equal(xk, 0.0) OR (k = 5000);
-        RETURN res
+VAR h: SET64; n: SIGNED64; p, y, yy: REAL;
+BEGIN 
+    y := c21*x;  (*c21 = 1/ln(2)*)
+    n := ENTIER(y + 0.5); y := y-n;
+    IF y >= 0 THEN INC(n) END ;
+    IF n < -1023 THEN RETURN 0
+    ELSIF n > 1024 THEN RETURN Inf
+    ELSE yy := y*y;
+        p := ((p22*yy + p21)*yy + p20)*y;
+        p := p/((yy + q21)*yy + q20 - p) + 0.5;
+        IF y < 0 THEN p := 2*p END ;
+        x := p; SYSTEM.GET(SYSTEM.ADR(x)+4, h); SYSTEM.PUT(SYSTEM.ADR(x)+4, SYSTEM.VAL(SIGNED64, h) + SYSTEM.LSH(n, 20));
+        RETURN x
     END
 END Exp;
-
-(** Computes the square root of the `REAL` x *)
-PROCEDURE Sqrt*(x: REAL): REAL;
-BEGIN
-    IF x <= 0 THEN
-        IF x = 0 THEN RETURN 0 ELSE HALT(0) END;
-    END;
-    RETURN Exp(0.5 * Ln(x));
-END Sqrt;
 
 PROCEDURE Ten( e: INTEGER ): REAL; 
 VAR r: REAL;
@@ -294,10 +238,145 @@ BEGIN
     RETURN r;
 END Ten;
 
+PROCEDURE FormatFix(VAR str : ARRAY OF CHAR; value : REAL; prec: INTEGER);
+VAR
+    i, digits, round, val : INTEGER;
+BEGIN
+    IF prec > 15 THEN prec := 15 END;
+    IF prec <= 0 THEN prec := 6 END;
+    IF value < 0 THEN
+        value := ABS(value);
+    END;
+    (* force real to less than 10 *)
+    round := prec;
+    digits := 1;
+    WHILE value >= 10.0 DO
+        IF value >= 1.0E4 THEN
+            value := value / 1.0E4;
+            INC(digits, 4);
+        ELSIF value >= 1.0E2 THEN
+            value := value / 1.0E2;
+            INC(digits, 2);
+        ELSE
+            value := value / 10.0;
+            INC(digits, 1);
+        END;
+    END;
+    (* round off *)
+    round := prec + (digits - 1);
+    IF round < 0 THEN
+        round := 0
+    ELSIF round > MaxRoundArray - 1 THEN
+        round := MaxRoundArray - 1;
+    END;
+    value := value + RoundValue[round];
+    IF value >= 10.0 THEN
+        value := value / 10.0;
+        INC(digits);
+    END;
+    (* write digits *)
+    FOR i := 1 TO digits DO
+        val := ENTIER(value);
+        IF i < 15 THEN
+            ArrayOfChar.AppendChar(str, CHR(ORD('0') + val MOD 10)); 
+        ELSE
+            ArrayOfChar.AppendChar(str, '0');
+        END;
+        value := 10*(value - val);
+    END;
+    (* write fractional part *)
+    IF prec >= 0 THEN
+        ArrayOfChar.AppendChar(str, '.');
+        INC(prec, digits);
+        WHILE digits < prec DO
+            val := ENTIER(value);
+            IF i < 15 THEN
+                ArrayOfChar.AppendChar(str, CHR(ORD('0') + val MOD 10)); 
+            ELSE
+                ArrayOfChar.AppendChar(str, '0');
+            END;
+            value := 10*(value - val);
+            INC(digits);
+        END;
+    END;
+END FormatFix;
+
+PROCEDURE FormatSci(VAR str : ARRAY OF CHAR; value : REAL; prec: INTEGER);
+VAR
+    i, digits, exp, pow2, val : INTEGER;
+BEGIN
+    exp := 0; digits := 0;
+    IF (prec <= 0) OR (prec > 15) THEN prec := 15 END;
+    IF value < 0 THEN
+        value := ABS(value);
+    END;
+    (* force the number between 0 and 10 *)
+    IF value >= 10.0 THEN
+        pow2 := 256;
+        FOR i := MaxPowerArray - 1 TO 0 BY -1 DO
+            IF value > Powers[i] THEN
+                value := value / Powers[i];
+                INC(exp, pow2)
+            END;
+            pow2 := pow2 DIV 2
+        END;
+    ELSIF value < 1.0 THEN
+        pow2 := 256;
+        FOR i := MaxPowerArray - 1 TO 0 BY -1 DO
+            IF value <= (1.0 / Powers[i]) THEN
+                value := value * Powers[i];
+                DEC(exp, pow2);
+            END;
+            pow2 := pow2 DIV 2
+        END;
+        IF value < 1.0 THEN
+            value := value * 10;
+            DEC(exp)
+        END;
+    END;
+    (* round off *)
+    IF prec - 1 < MaxRoundArray THEN
+        value := value + RoundValue[prec - 1]
+    END;
+    IF value >= 10.0 THEN
+        value := value / 10.0;
+        INC(exp);
+    END;
+    (* first digit *)
+    val := ENTIER(value);
+    ArrayOfChar.AppendChar(str, CHR(ORD('0') + val MOD 10));
+    value := value - val;
+    value := value * 10;
+    digits := 1;
+    (* fractional part *)
+    IF prec > 1 THEN
+        ArrayOfChar.AppendChar(str, ".");
+        WHILE digits < prec DO
+            val := ENTIER(value);
+            ArrayOfChar.AppendChar(str, CHR(ORD('0') + val MOD 10));
+            value := 10*(value - val);
+            INC(digits)
+        END;
+    END;
+    (* exponent *)
+    ArrayOfChar.AppendChar(str, "E");
+    IF exp < 0 THEN ArrayOfChar.AppendChar(str, "-")
+    ELSE ArrayOfChar.AppendChar(str, "+") END;
+    exp := ABS(exp);
+    IF exp >= 100 THEN
+        ArrayOfChar.AppendChar(str, CHR(ORD('0') + exp DIV 100))
+    END;
+    exp := exp MOD 100;
+    ArrayOfChar.AppendChar(str, CHR(ORD('0') + exp DIV 10));
+    ArrayOfChar.AppendChar(str, CHR(ORD('0') + exp MOD 10));
+END FormatSci;
+
 (**
 Format `REAL`.
 
+* `prec` : Precision or zero for default value.
 * `width` : Total field with. Can overflow if number is bigger.
+* `flags` : `Exp` or `Fix` formatting supported. Defaults to `Fix`
 
 The formatting flags defaults to `Right` alignment.
 The `Spc` flag fills in a blank character for `+` if the number is positive.
@@ -306,10 +385,9 @@ If both `Spc` and `Sign` are given then `Sign` precedes.
 *)
 PROCEDURE Format*(VAR Writer : Type.Writer; value : REAL; prec: INTEGER; width: LENGTH; flags: SET);
 VAR
-    val, x : SIGNED64;
-    i, len, digits, left, right : LENGTH;
+    str : ARRAY 32 OF CHAR;
+    len, left, right : LENGTH;
     class : INTEGER;
-    str : ARRAY 20 OF CHAR;
     neg : BOOLEAN;
 BEGIN
     neg := value < 0;
@@ -324,36 +402,12 @@ BEGIN
         str := "0";
         len := 1
     ELSE
-        (* TODO : may overflow, switch to exponent for large values *)
-        val := ENTIER (value);
-        IF val < 0 THEN 
-            IF val < value THEN INC (val) END;
-            value := val - value
+        IF (flags * Const.Exp # {}) OR ((value > MaxFixedFloat) OR (value < -MaxFixedFloat)) THEN
+            FormatSci(str, value, prec);
         ELSE
-            value := value - val
+            FormatFix(str, value, prec);
         END;
-        digits := 0; x := ABS(val);
-        REPEAT INC(digits); x := x DIV 10 UNTIL x = 0;
-        x := ABS(val); i := digits;
-        str[i] := 00X;
-        REPEAT
-            DEC(i);
-            str[i] := CHR(ORD('0') + x MOD 10);
-            x := x DIV 10;
-        UNTIL x = 0;
-        IF value # 0 THEN
-            ArrayOfChar.AppendChar(str, ".");
-            INC(len);
-        END;
-        WHILE (prec # 0) & (value # 0) DO
-            value := value * 10;
-            val := ENTIER (value);
-            ArrayOfChar.AppendChar(str, CHR(ORD('0') + val MOD 10));
-            value := value - val;
-            DEC(prec);
-            INC(digits);
-        END;
-        INC(len, digits)
+        len := ArrayOfChar.Length(str);
     END;
     (* sign *)
     IF class # FPNaN THEN
@@ -466,6 +520,40 @@ END FromString;
 
 BEGIN
     ASSERT(SIZE(REAL) = 8);
+    RoundValue[0] := 0.5; RoundValue[1] := 5.0E-2 + 1.0E-16;
+    RoundValue[2] := 5.0E-3 + 1.0E-16; RoundValue[3] := 5.0E-4 + 1.0E-16;
+    RoundValue[4] := 5.0E-5 + 1.0E-16; RoundValue[5] := 5.0E-6 + 1.0E-16;
+    RoundValue[6] := 5.0E-7 + 1.0E-16; RoundValue[7] := 5.0E-8 + 1.0E-16;
+    RoundValue[8] := 5.0E-9 + 1.0E-16; RoundValue[9] := 5.0E-10 + 1.0E-16;
+    RoundValue[10] := 5.0E-11 + 1.0E-16; RoundValue[11] := 5.0E-12 + 1.0E-16;
+    RoundValue[12] := 5.0E-13 + 1.0E-16; RoundValue[13] := 5.0E-14 + 1.0E-16;
+    RoundValue[14] := 5.0E-15 + 1.0E-16; RoundValue[15] := 5.0E-16;
+    RoundValue[16] := 5.0E-17;
+    Powers[0] := 1.0E1; Powers[1] := 1.0E2; Powers[2] := 1.0E4;
+    Powers[3] := 1.0E8; Powers[4] := 1.0E16; Powers[5] := 1.0E32;
+    Powers[6] := 1.0E64; Powers[7] := 1.0E128; Powers[8] := 1.0E256;
+    c11 := SYSTEM.VAL(REAL, 03FE6A09E667F3BCDH); p10 := SYSTEM.VAL(REAL, 03FE2E29B8F2FCF79H);
+	c21 := SYSTEM.VAL(REAL, 03FF71547652B82FEH); p22 := SYSTEM.VAL(REAL, 03F97A609AA5CD460H);
+	p21 := SYSTEM.VAL(REAL, 0403433A29C957776H); p20 := SYSTEM.VAL(REAL, 04097A774E9C773D2H);
+	q21 := SYSTEM.VAL(REAL, 0406D25B413B5FFD9H); q20 := SYSTEM.VAL(REAL, 040B11016B314DFB1H);
+	c42 := SYSTEM.VAL(REAL, 03FE62E42FEFA39EFH); p42 := SYSTEM.VAL(REAL, 0C03253EF500DFE4AH);
+	p41 := SYSTEM.VAL(REAL, 040575DB08C526AEEH); p40 := SYSTEM.VAL(REAL, 0C0568B2E25EFD645H);
+	q42 := SYSTEM.VAL(REAL, 0C034BBC5DCDB3E86H); q41 := SYSTEM.VAL(REAL, 0404EE16A98F7C5C0H);
+	q40 := SYSTEM.VAL(REAL, 0C0468B2E25EFD64BH); c31 := SYSTEM.VAL(REAL, 03FE45F306DC9C883H);
+	p36 := SYSTEM.VAL(REAL, 03D9E3EED386DCB82H); p35 := SYSTEM.VAL(REAL, 0BE1E3006399B0141H);
+	p34 := SYSTEM.VAL(REAL, 03E950782FCA31EF8H); p33 := SYSTEM.VAL(REAL, 0BF032D2CCE2D52FAH);
+	p32 := SYSTEM.VAL(REAL, 03F6466BC677586FFH); p31 := SYSTEM.VAL(REAL, 0BFB4ABBCE625BE41H);
+	p30 := SYSTEM.VAL(REAL, 03FE921FB54442D18H); q36 := SYSTEM.VAL(REAL, 03DDF3C92814ECDA3H);
+	q35 := SYSTEM.VAL(REAL, 0BE5A6C98987E2CEFH); q34 := SYSTEM.VAL(REAL, 03ECE1F4FAE0F3ECCH);
+	q33 := SYSTEM.VAL(REAL, 0BF355D3C7DB78384H); q32 := SYSTEM.VAL(REAL, 03F903C1F081AFFA4H);
+	q31 := SYSTEM.VAL(REAL, 0BFD3BD3CC9BE4580H); q30 := SYSTEM.VAL(REAL, 03FEFFFFFFFFFFFFFH);
+	c51 := SYSTEM.VAL(REAL, 0400DDB3D742C2655H); s51 := SYSTEM.VAL(REAL, 03FF921FB54442D18H);
+	c52 := SYSTEM.VAL(REAL, 03FFBB67AE8584CAAH); s52 := SYSTEM.VAL(REAL, 03FF0C152382D7366H);
+	c53 := SYSTEM.VAL(REAL, 03FD126145E9ECD56H); s53 := SYSTEM.VAL(REAL, 03FE0C152382D7366H);
+	p53 := SYSTEM.VAL(REAL, 03FCA5162FC998D80H); p52 := SYSTEM.VAL(REAL, 04013B19B23C5E3D6H);
+	p51 := SYSTEM.VAL(REAL, 040303E28A72936F6H); p50 := SYSTEM.VAL(REAL, 04029A55D3717FEF3H);
+	q52 := SYSTEM.VAL(REAL, 04022655229F407DCH); q51 := SYSTEM.VAL(REAL, 040348462DB028A62H);
+	q50 := SYSTEM.VAL(REAL, 04029A55D3717FEF3H);
     Inf := INF;
     NaN := REAL(07FF8000000000000H);
 END Real.

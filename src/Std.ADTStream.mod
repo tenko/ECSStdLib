@@ -1,7 +1,7 @@
 MODULE ADTStream IN Std;
 
 IMPORT SYSTEM;
-IN Std IMPORT Config, Type, Const, Integer, Cardinal;
+IN Std IMPORT Config, Type, Const, Integer, Cardinal, Real;
 IN Std IMPORT ArrayOfByte, ArrayOfChar, String, DateTime;
 
 TYPE
@@ -278,6 +278,22 @@ If both `Spc` and `Sign` are given then `Sign` precedes.
 PROCEDURE (VAR s : Stream) FormatInteger*(value : HUGEINT; width: LENGTH; flags: SET);
 BEGIN Integer.Format(s, value, width, flags);
 END FormatInteger;
+
+(**
+Format `REAL`.
+
+* `prec` : Precision or zero for default value.
+* `width` : Total field with. Can overflow if number is bigger.
+* `flags` : `Exp` or `Fix` formatting supported. Defaults to `Fix`
+
+The formatting flags defaults to `Right` alignment.
+The `Spc` flag fills in a blank character for `+` if the number is positive.
+The `Sign` flag fills in a `+` character if the number is positive.
+If both `Spc` and `Sign` are given then `Sign` precedes.
+*)
+PROCEDURE (VAR s : Stream) FormatReal*(value : REAL; prec : INTEGER; width: LENGTH; flags: SET);
+BEGIN Real.Format(s, value, prec, width, flags);
+END FormatReal;
 
 (**
 Format `HUGECARD`.
