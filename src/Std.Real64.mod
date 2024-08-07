@@ -1,13 +1,21 @@
 (*
 Module with operation on `REAL` type.
 
-Ported from Oberon System 3:
+Ported from Oberon System 3/4:
   ETH Oberon, Copyright 2001 ETH Zuerich Institut fuer Computersysteme, ETH Zentrum, CH-8092 Zuerich.
   Refer to the "General ETH Oberon System Source License" contract available at: http://www.oberon.ethz.ch/
 
-Most math functionality will eventually be replaced by porting code from Newlib/LibmCS.
-Formatting and parsing from porting of Dragonbox, Ryu, Fastfloat etc.
-Formatting optimized for size : https://github.com/eyalroz/printf
+Double precision: S EEEEEEEEEEE MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+    1 bit for the sign
+    11 bits for the exponent
+    52 bits for the mantissa
+    64 bits = 8 bytes for one double precision floating point number
+
+    The exponent is stored as an unbiased exponent, to get the real exponent (within range -1022..1024)
+    you have to subtract 1023 from the resulting number).
+    The number 0 is represented as exponent = 0 and mantissa = 0.
+    An exponent of 2047 and a mantissa of 0 denotes infinity.
+    An exponent of 2047 and a mantissa of #0 denotes NaN.
 *)
 MODULE Real IN Std;
 
@@ -26,6 +34,7 @@ CONST
     MaxRoundArray   = 17;
     MaxPowerArray   = 9;
     MaxFixedFloat   = 1.0E9;
+    MinFixedFloat   = 1.0E-9;
 
 TYPE
     WORD = UNSIGNED32;
@@ -227,23 +236,11 @@ BEGIN
     END
 END Exp;
 
-PROCEDURE Ten( e: INTEGER ): REAL; 
-VAR r: REAL;
-BEGIN
-    IF e < -307 THEN RETURN 0
-    ELSIF 308 < e THEN RETURN INF END;
-    r := 1;
-    WHILE (e > 0) DO r := r * 10;  DEC( e );  END;
-    WHILE (e < 0) DO r := r / 10;  INC( e );  END;
-    RETURN r;
-END Ten;
-
 PROCEDURE FormatFix(VAR str : ARRAY OF CHAR; value : REAL; prec: INTEGER);
 VAR
     i, digits, round, val : INTEGER;
 BEGIN
-    IF prec > 15 THEN prec := 15 END;
-    IF prec <= 0 THEN prec := 6 END;
+    IF (prec <= 0) OR (prec > 17) THEN prec := 17 END;
     IF value < 0 THEN
         value := ABS(value);
     END;
@@ -306,7 +303,7 @@ VAR
     i, digits, exp, pow2, val : INTEGER;
 BEGIN
     exp := 0; digits := 0;
-    IF (prec <= 0) OR (prec > 15) THEN prec := 15 END;
+    IF (prec <= 0) OR (prec > 17) THEN prec := 17 END;
     IF value < 0 THEN
         value := ABS(value);
     END;
@@ -390,6 +387,7 @@ VAR
     class : INTEGER;
     neg : BOOLEAN;
 BEGIN
+    str[0] := 00X;
     neg := value < 0;
     class := FPClassify(value);
     IF class = FPInfinite THEN
@@ -402,7 +400,7 @@ BEGIN
         str := "0";
         len := 1
     ELSE
-        IF (flags * Const.Exp # {}) OR ((value > MaxFixedFloat) OR (value < -MaxFixedFloat)) THEN
+        IF (flags * Const.Exp # {}) OR ((ABS(value) > MaxFixedFloat) OR (ABS(value) < MinFixedFloat)) THEN
             FormatSci(str, value, prec);
         ELSE
             FormatFix(str, value, prec);
@@ -467,6 +465,16 @@ VAR
             Next
         END;
     END ScanFractionalPart;
+    PROCEDURE Ten( e: INTEGER ): REAL; 
+    VAR r: REAL;
+    BEGIN
+        IF e < -307 THEN RETURN 0
+        ELSIF 308 < e THEN RETURN INF END;
+        r := 1;
+        WHILE (e > 0) DO r := r * 10;  DEC( e );  END;
+        WHILE (e < 0) DO r := r / 10;  INC( e );  END;
+        RETURN r;
+    END Ten;
 BEGIN
     y := 0; i := start; e := 0;
     j := length;

@@ -1,13 +1,23 @@
 (*
 Module with operation on `REAL` type.
 
-Ported from Oberon System 3:
+Ported from Oberon System 3/4:
   ETH Oberon, Copyright 2001 ETH Zuerich Institut fuer Computersysteme, ETH Zentrum, CH-8092 Zuerich.
   Refer to the "General ETH Oberon System Source License" contract available at: http://www.oberon.ethz.ch/
 
-Most math functionality will eventually be replaced by porting code from Newlib/LibmCS.
-Formatting and parsing from porting of Dragonbox, Ryu, Fastfloat etc.
-Formatting optimized for size : https://github.com/eyalroz/printf
+Floating point format according to the IEEE standard:
+
+Single precision: S EEEEEEEE MMMMMMMMMMMMMMMMMMMMMMM
+    1 bit for the sign
+    8 bits for the exponent
+    23 bits for the mantissa
+    32 bits = 4 bytes for one single precision floating point number
+    
+    The exponent is stored as an unbiased exponent, to get the real exponent (within range -126..127)
+    you have to subtract 127 from the resulting number).
+    The number 0 is represented as exponent = 0 and mantissa = 0.
+    An exponent of 255 and a mantissa of 0 denotes infinity.
+    An exponent of 255 and a mantissa of #0 denotes NaN.
 *)
 MODULE Real IN Std;
 
@@ -26,6 +36,7 @@ CONST
     MaxRoundArray   = 8;
     MaxPowerArray   = 6;
     MaxFixedFloat   = 1.0E9;
+    MinFixedFloat   = 1.0E-9;
 
 TYPE
     WORD = UNSIGNED32;
@@ -184,23 +195,11 @@ BEGIN
     END
 END Exp;
 
-PROCEDURE Ten( e: INTEGER ): REAL; 
-VAR r: REAL;
-BEGIN
-    IF e < -38 THEN RETURN 0
-    ELSIF 38 < e THEN RETURN INF END;
-    r := 1;
-    WHILE (e > 0) DO r := r * 10;  DEC( e );  END;
-    WHILE (e < 0) DO r := r / 10;  INC( e );  END;
-    RETURN r;
-END Ten;
-
 PROCEDURE FormatFix(VAR str : ARRAY OF CHAR; value : REAL; prec: INTEGER);
 VAR
     i, digits, round, val : INTEGER;
 BEGIN
-    IF prec > 8 THEN prec := 8 END;
-    IF prec <= 0 THEN prec := 6 END;
+    IF (prec <= 0) OR (prec > 9) THEN prec := 9 END;
     IF value < 0 THEN
         value := ABS(value);
     END;
@@ -263,7 +262,7 @@ VAR
     i, digits, exp, pow2, val : INTEGER;
 BEGIN
     exp := 0; digits := 0;
-    IF (prec <= 0) OR (prec > 8) THEN prec := 8 END;
+    IF (prec <= 0) OR (prec > 9) THEN prec := 9 END;
     IF value < 0 THEN
         value := ABS(value);
     END;
@@ -355,7 +354,7 @@ BEGIN
         str := "0";
         len := 1
     ELSE
-        IF (flags * Const.Exp # {}) OR ((value > MaxFixedFloat) OR (value < -MaxFixedFloat)) THEN
+        IF (flags * Const.Exp # {}) OR ((ABS(value) > MaxFixedFloat) OR (ABS(value) < MinFixedFloat)) THEN
             FormatSci(str, value, prec);
         ELSE
             FormatFix(str, value, prec);
@@ -420,6 +419,16 @@ VAR
             Next
         END;
     END ScanFractionalPart;
+    PROCEDURE Ten( e: INTEGER ): REAL; 
+    VAR r: REAL;
+    BEGIN
+        IF e < -38 THEN RETURN 0
+        ELSIF 38 < e THEN RETURN INF END;
+        r := 1;
+        WHILE (e > 0) DO r := r * 10;  DEC( e );  END;
+        WHILE (e < 0) DO r := r / 10;  INC( e );  END;
+        RETURN r;
+    END Ten;
 BEGIN
     y := 0; i := start; e := 0;
     j := length;

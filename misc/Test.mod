@@ -1,19 +1,31 @@
 MODULE test;
 
-IMPORT SYSTEM, String IN Std, OS IN Std;
+IN Std IMPORT OSStream, Real;
 
 VAR
-    s : String.STRING;
+    fh : OSStream.Std;
+    eps: REAL;
+    fmt, j, k: INTEGER;
 BEGIN
-    TRACE(OS.Args());
-    OS.ProgramName(s);
-    TRACE(s^);
-    OS.Arg(s, 1);
-    TRACE(s^);
-    OS.Arg(s, 2);
-    TRACE(s^);
-    OS.Arg(s, 3);
-    TRACE(s^);
-    OS.Arg(s, 4);
-    TRACE(s^);
+    TRACE(fh.Open(OSStream.STDOUT));
+    fh.WriteString ('SIZE(REAL) = ');
+    fh.FormatInteger(SIZE(REAL), 0, {});
+    fh.WriteNL;
+    eps := 1.0;
+    k := 0;
+    WHILE  ((1.0 + 0.5 * eps) > 1.0) DO
+	    DEC(k);
+	    eps := 0.5 * eps
+    END;
+    fh.WriteString ('eps = ');
+    fh.FormatReal(eps, 17, 0, {});
+    fh.WriteNL;
+    FOR j := 0 TO 17 DO
+        fh.WriteString ('prec = ');
+        fh.FormatInteger(j, 2, {});
+        fh.WriteString ('  eps = ');
+        fh.FormatReal(eps, j, 0, {});
+        fh.WriteNL;
+    END;
+    fh.Close;
 END test.
