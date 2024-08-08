@@ -25,7 +25,7 @@ OLS += OS OSStream OSFile OSDir OSPath
 MOD = $(addprefix src/, $(addprefix Std., $(addsuffix .mod, $(OLS))))
 OBF = $(addprefix build/, $(addprefix Std., $(addsuffix .obf, $(OLS))))
 
-OTS  = TestArrayOfByte TestArrayOfChar TestArrayOfSet TestCardinal TestInteger
+OTS  = TestArrayOfByte TestArrayOfChar TestArrayOfSet TestCardinal TestInteger TestReal
 OTS += TestString TestRegex TestDateTime TestADTBasicType TestADTList TestADTSet
 OTS += TestADTDictionary TestADTVector TestADTTree TestADTStream TestOSPath TestOS
 
@@ -45,6 +45,7 @@ build/Std.ArrayOfSet.obf : src/Std.ArrayOfByte$(OPT).mod
 build/Std.Cardinal.obf : src/Std.Const.mod src/Std.Type.mod src/Std.Char.mod src/Std.OSHost$(SYS).mod
 build/Std.DateTime.obf : src/Std.Const.mod src/Std.Type.mod src/Std.Char.mod src/Std.Integer.mod src/Std.OSHost$(SYS).mod src/Std.ArrayOfChar$(OPT).mod
 build/Std.Integer.obf : src/Std.Const.mod src/Std.Type.mod src/Std.Char.mod
+build/Std.$(Real).obf : src/Std.Const.mod src/Std.Type.mod src/Std.Char.mod src/Std.ArrayOfChar$(OPT).mod
 build/Std.O2Testing.obf : src/Std.ArrayOfChar$(OPT).mod
 build/Std.OS.obf : src/Std.Char.mod src/Std.ArrayOfChar$(OPT).mod src/Std.String.mod src/Std.OSHost$(SYS).mod
 build/Std.OSDir.obf : src/Std.String.mod src/Std.OSHost$(SYS).mod
@@ -78,6 +79,7 @@ build/TestArrayOfSet.obf : src/Std.ArrayOfSet.mod
 build/TestCardinal.obf : src/Std.Cardinal.mod
 build/TestDateTime.obf : src/Std.DateTime.mod
 build/TestInteger.obf : src/Std.Integer.mod
+build/TestReal.obf : src/Std.$(Real).mod
 build/TestOS.obf : src/Std.String.mod src/Std.OSStream.mod src/Std.OSPath.mod src/Std.OSFile.mod src/Std.OSDir.mod
 build/TestOSPath.obf : src/Std.OSPath.mod
 build/TestRegex.obf : src/Std.Regex.mod

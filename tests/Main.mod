@@ -5,6 +5,7 @@ IMPORT TestArrayOfChar;
 IMPORT TestArrayOfSet;
 IMPORT TestCardinal;
 IMPORT TestInteger;
+IMPORT TestReal;
 IMPORT TestString;
 IMPORT TestRegex;
 IMPORT TestDateTime;
@@ -30,6 +31,7 @@ BEGIN
     TestArrayOfSet.Run(test);
     TestCardinal.Run(test);
     TestInteger.Run(test);
+    TestReal.Run(test);
     TestString.Run(test);
     TestRegex.Run(test);
     TestDateTime.Run(test);

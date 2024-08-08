@@ -109,6 +109,11 @@ PROCEDURE IsFinite*(x : REAL): BOOLEAN;
 BEGIN RETURN ~(IsNan(x) OR IsInf(x))
 END IsFinite;
 
+(** Return `TRUE` if x is Zero and `FALSE` otherwise.*)
+PROCEDURE IsZero*(x : REAL): BOOLEAN;
+BEGIN RETURN FPClassify(x) = FPZero
+END IsZero;
+
 (** Return `TRUE` if x is neither an infinity nor a NaN or Zero, and `FALSE` otherwise.*)
 PROCEDURE IsNormal*(x : REAL): BOOLEAN;
 BEGIN RETURN FPClassify(x) = FPNormal
@@ -187,6 +192,7 @@ END Cos;
 PROCEDURE ArcTan*(x: REAL): REAL;
 VAR y, yy, s: REAL;
 BEGIN 
+    IF IsInf(x) THEN RETURN CopySign(1.0, x) END;
     y := ABS(x); s := 0;
     IF y > c51 THEN y := -1/y; s := s51
     ELSIF y > 1 THEN y := (y - c52)/(y*c52 + 1); s := s52
@@ -202,15 +208,15 @@ END ArcTan;
 (** Computes the arc tangent of `y` / `x` using the signs of arguments to determine the correct quadrant. *)
 PROCEDURE ArcTan2*(x, y: REAL): REAL;
 BEGIN
-    IF x # 0 THEN
-        IF x > 0 THEN RETURN ArcTan(y/x)
+    IF y # 0 THEN
+        IF y > 0 THEN RETURN ArcTan(x/y)
         ELSE
-            IF y < 0 THEN RETURN  ArcTan(y/x) - PI
-            ELSE RETURN  ArcTan(y/x) - PI END
+            IF x < 0 THEN RETURN  ArcTan(x/y) - PI
+            ELSE RETURN  ArcTan(x/y) - PI END
         END
     ELSE
-        IF y > 0 THEN RETURN PI / 2
-        ELSIF y < 0 THEN RETURN -PI / 2 END
+        IF x > 0 THEN RETURN PI / 2
+        ELSIF x < 0 THEN RETURN -PI / 2 END
     END;
     RETURN NaN
 END ArcTan2;
@@ -235,7 +241,7 @@ BEGIN
 END Sqrt;
 
 (** Computes natural (e) logarithm of x *)
-PROCEDURE Ln*(x: REAL): REAL;
+PROCEDURE Log*(x: REAL): REAL;
 VAR h: SET64; e: SIGNED64; a, aa, a1, a2: REAL;
 BEGIN 
 	IF x <= 0 THEN RETURN NaN
@@ -250,7 +256,7 @@ BEGIN
 		a := c42*e + a*a1/a2;
 		RETURN a   (*c42 = ln(2)*)
 	END
-END Ln;
+END Log;
 
 (** Computes e raised to the power of x *)
 PROCEDURE Exp*(x: REAL): REAL;
@@ -279,16 +285,6 @@ BEGIN
 	s1 := Sin(y);
 	IF neg THEN RETURN -s1 / Sqrt(1 - s1 * s1) ELSE RETURN s1 / Sqrt(1 - s1 * s1) END
 END Tan;
-
-(** Computes the arc sine of the value `REAL` x *)
-PROCEDURE ArcSin* (x: REAL): REAL;
-BEGIN RETURN ArcTan(x / Sqrt(1 - x * x))
-END ArcSin;
-
-(** Computes the arc cosine of the value `REAL` x *)
-PROCEDURE ArcCos* (x: REAL): REAL;
-BEGIN RETURN PI/2 - ArcSin(x)
-END ArcCos;
 
 PROCEDURE FormatFix(VAR str : ARRAY OF CHAR; value : REAL; prec: INTEGER);
 VAR
@@ -560,10 +556,12 @@ BEGIN
             y := NaN
         ELSE RETURN FALSE END;
     END;
-    IF (y # Inf) OR (y # NaN) THEN
+    IF IsFinite(y) THEN
         IF (ch = "d") OR (ch = "D") OR (ch = "e") OR (ch = "E") THEN
             Next;
+            negE := FALSE; 
             IF ch = "-" THEN negE := TRUE; Next END;
+            IF ch = "+" THEN Next END;
             IF ~Char.IsDigit(ch) THEN RETURN FALSE END;
             WHILE (ch = "0") DO Next END;
             WHILE ("0" <= ch) & (ch <= "9") DO

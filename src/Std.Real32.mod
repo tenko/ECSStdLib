@@ -45,7 +45,6 @@ CONST
 
 TYPE
     WORD = UNSIGNED32;
-    REAL = REAL32;
 
 VAR
     Inf- : REAL;
@@ -65,7 +64,7 @@ Return either FPNormal, FPZero, FPNaN, FPInfinite or FPSubnormal.
 PROCEDURE FPClassify*(x : REAL): INTEGER;
 VAR w : WORD;
 BEGIN
-    w := WORD(SET32(x) * SET32(07FFFFFFFH));
+    w := WORD(SYSTEM.VAL(SET32, x) * SET32(07FFFFFFFH));
     IF w = 000000000H THEN
         RETURN FPZero
     ELSIF (w > 000800000H) & (w < 07F7FFFFFH) THEN
@@ -94,6 +93,11 @@ PROCEDURE IsFinite*(x : REAL): BOOLEAN;
 BEGIN RETURN ~(IsNan(x) OR IsInf(x))
 END IsFinite;
 
+(** Return `TRUE` if x is Zero and `FALSE` otherwise.*)
+PROCEDURE IsZero*(x : REAL): BOOLEAN;
+BEGIN RETURN FPClassify(x) = FPZero
+END IsZero;
+
 (** Return `TRUE` if x is neither an infinity nor a NaN or Zero, and `FALSE` otherwise.*)
 PROCEDURE IsNormal*(x : REAL): BOOLEAN;
 BEGIN RETURN FPClassify(x) = FPNormal
@@ -101,17 +105,17 @@ END IsNormal;
 
 (** Return `TRUE` if sign bit is set. *)
 PROCEDURE SignBit*(x : REAL): BOOLEAN;
-BEGIN RETURN SET32(x) * SET32(080000000H) # {}
+BEGIN RETURN SYSTEM.VAL(SET32, x) * SET32(080000000H) # {}
 END SignBit;
 
 (** Return a `REAL` with the magnitude (absolute value) of x but the sign of y. *)
 PROCEDURE CopySign*(x, y : REAL): REAL;
-BEGIN RETURN SYSTEM.VAL(REAL, (SET32(x) * SET32(07FFFFFFFH)) + (SET32(y) * SET32(080000000H)))
+BEGIN RETURN SYSTEM.VAL(REAL, (SYSTEM.VAL(SET32, x) * SET32(07FFFFFFFH)) + (SYSTEM.VAL(SET32, y) * SET32(080000000H)))
 END CopySign;
 
 (** Return absolute value of x. *)
 PROCEDURE Abs*(x : REAL): REAL;
-BEGIN RETURN SYSTEM.VAL(REAL, SET32(x) * SET32(07FFFFFFFH)) 
+BEGIN RETURN SYSTEM.VAL(REAL, SYSTEM.VAL(SET32, x) * SET32(07FFFFFFFH)) 
 END Abs;
 
 (** Computes the largest integer value not greater than x *)
@@ -161,6 +165,7 @@ END Cos;
 PROCEDURE ArcTan*(x: REAL): REAL;
 VAR y, yy, s: REAL;
 BEGIN 
+    IF IsInf(x) THEN RETURN CopySign(1.0, x) END;
     y := ABS(x); s := 0;
     IF y > c51 THEN y := -1/y; s := s51
     ELSIF y > c52 THEN y := (y-1)/(y+1); s := s52
@@ -174,15 +179,15 @@ END ArcTan;
 (** Computes the arc tangent of `y` / `x` using the signs of arguments to determine the correct quadrant. *)
 PROCEDURE ArcTan2*(x, y: REAL): REAL;
 BEGIN
-    IF x # 0 THEN
-        IF x > 0 THEN RETURN ArcTan(y/x)
+    IF y # 0 THEN
+        IF y > 0 THEN RETURN ArcTan(x/y)
         ELSE
-            IF y < 0 THEN RETURN  ArcTan(y/x) - PI
-            ELSE RETURN  ArcTan(y/x) - PI END
+            IF x < 0 THEN RETURN  ArcTan(x/y) - PI
+            ELSE RETURN  ArcTan(x/y) - PI END
         END
     ELSE
-        IF y > 0 THEN RETURN PI / 2
-        ELSIF y < 0 THEN RETURN -PI / 2 END
+        IF x > 0 THEN RETURN PI / 2
+        ELSIF x < 0 THEN RETURN -PI / 2 END
     END;
     RETURN NaN
 END ArcTan2;
@@ -204,7 +209,7 @@ BEGIN
 END Sqrt;
 
 (** Computes natural (e) logarithm of x *)
-PROCEDURE Ln*(x: REAL): REAL;
+PROCEDURE Log*(x: REAL): REAL;
 VAR e: SIGNED32; a: REAL;
 BEGIN 
 	IF x <= 0 THEN RETURN NaN
@@ -216,7 +221,7 @@ BEGIN
 		a := c42*e + a*(c43 + c44/(c45 - a*a));
 		RETURN a
 	END
-END Ln;
+END Log;
 
 (** Computes e raised to the power of x *)
 PROCEDURE Exp*(x: REAL): REAL;
@@ -244,16 +249,6 @@ BEGIN
 	s1 := Sin(y);
 	IF neg THEN RETURN -s1 / Sqrt(1 - s1 * s1) ELSE RETURN s1 / Sqrt(1 - s1 * s1) END
 END Tan;
-
-(** Computes the arc sine of the value `REAL` x *)
-PROCEDURE ArcSin* (x: REAL): REAL;
-BEGIN RETURN ArcTan(x / Sqrt(1 - x * x))
-END ArcSin;
-
-(** Computes the arc cosine of the value `REAL` x *)
-PROCEDURE ArcCos* (x: REAL): REAL;
-BEGIN RETURN PI/2 - ArcSin(x)
-END ArcCos;
 
 PROCEDURE FormatFix(VAR str : ARRAY OF CHAR; value : REAL; prec: INTEGER);
 VAR
@@ -482,7 +477,7 @@ VAR
     PROCEDURE Ten( e: INTEGER ): REAL; 
     VAR r: REAL;
     BEGIN
-        IF e < -38 THEN RETURN 0
+        IF e < -37 THEN RETURN 0
         ELSIF 38 < e THEN RETURN INF END;
         r := 1;
         WHILE (e > 0) DO r := r * 10;  DEC( e );  END;
@@ -507,7 +502,7 @@ BEGIN
             y := y * 10 + (ORD(ch) - ORD("0"));
             Next
         END;
-        IF ch = "." THEN Next; ScanFractionalPart END
+        IF ch = "." THEN Next; ScanFractionalPart END;
     ELSE
         IF ch = "I" THEN
             Next; IF ch # "N" THEN RETURN FALSE END;
@@ -520,10 +515,12 @@ BEGIN
             y := NaN
         ELSE RETURN FALSE END;
     END;
-    IF (y # Inf) OR (y # NaN) THEN
+    IF IsFinite(y) THEN
         IF (ch = "d") OR (ch = "D") OR (ch = "e") OR (ch = "E") THEN
             Next;
+            negE := FALSE; 
             IF ch = "-" THEN negE := TRUE; Next END;
+            IF ch = "+" THEN Next END;
             IF ~Char.IsDigit(ch) THEN RETURN FALSE END;
             WHILE (ch = "0") DO Next END;
             WHILE ("0" <= ch) & (ch <= "9") DO
@@ -532,7 +529,7 @@ BEGIN
             END;
             IF negE THEN y := y / Ten(e)
             ELSE y := y * Ten(e)
-            END
+            END;
         END
     END;
     IF neg THEN y := -y  END;
@@ -565,6 +562,6 @@ BEGIN
     c52 := SYSTEM.VAL(REAL, 03ED413CDH); s52 := SYSTEM.VAL(REAL, 03F490FDBH);
 	p50 := SYSTEM.VAL(REAL, 040CBD065H); q52 := SYSTEM.VAL(REAL, 041099F6AH);
     q51 := SYSTEM.VAL(REAL, 0C08DFBCBH); q50 := SYSTEM.VAL(REAL, 03FFE6CB2H);
-    Inf := SYSTEM.VAL(REAL, 07FF00000H);
+    Inf := SYSTEM.VAL(REAL, 07F800000H);
     NaN := SYSTEM.VAL(REAL, 07FF80000H);
 END Real.
