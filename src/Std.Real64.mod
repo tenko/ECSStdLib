@@ -324,11 +324,7 @@ BEGIN
     (* write digits *)
     FOR i := 1 TO digits DO
         val := ENTIER(value);
-        IF i < 15 THEN
-            ArrayOfChar.AppendChar(str, CHR(ORD('0') + val MOD 10)); 
-        ELSE
-            ArrayOfChar.AppendChar(str, '0');
-        END;
+        ArrayOfChar.AppendChar(str, CHR(ORD('0') + val MOD 10)); 
         value := 10*(value - val);
     END;
     (* write fractional part *)
@@ -337,11 +333,7 @@ BEGIN
         INC(prec, digits);
         WHILE digits < prec DO
             val := ENTIER(value);
-            IF i < 15 THEN
-                ArrayOfChar.AppendChar(str, CHR(ORD('0') + val MOD 10)); 
-            ELSE
-                ArrayOfChar.AppendChar(str, '0');
-            END;
+            ArrayOfChar.AppendChar(str, CHR(ORD('0') + val MOD 10)); 
             value := 10*(value - val);
             INC(digits);
         END;
@@ -515,15 +507,15 @@ VAR
             Next
         END;
     END ScanFractionalPart;
-    PROCEDURE Ten( e: INTEGER ): REAL; 
-    VAR r: REAL;
+    PROCEDURE Ten(exp : INTEGER): REAL;
+    VAR t : REAL; i : INTEGER;
     BEGIN
-        IF e < -307 THEN RETURN 0
-        ELSIF 308 < e THEN RETURN INF END;
-        r := 1;
-        WHILE (e > 0) DO r := r * 10;  DEC( e );  END;
-        WHILE (e < 0) DO r := r / 10;  INC( e );  END;
-        RETURN r;
+        t := 1.0; i := 0;
+        WHILE (exp > 0) & (i < LEN(Powers)) DO
+            IF ODD(exp) THEN t := t * Powers[i] END;
+            INC(i); exp := ASH(exp, -1);
+        END;
+        RETURN t
     END Ten;
 BEGIN
     y := 0; i := start; e := 0;
@@ -615,5 +607,5 @@ BEGIN
 	q52 := SYSTEM.VAL(REAL, 04022655229F407DCH); q51 := SYSTEM.VAL(REAL, 040348462DB028A62H);
 	q50 := SYSTEM.VAL(REAL, 04029A55D3717FEF3H);
     Inf := INF;
-    NaN := SYSTEM.VAL(REAL, 07FF8000000000000H);
+    NaN := SYSTEM.VAL(REAL, 07FF8000000000001H);
 END Real.

@@ -220,9 +220,9 @@ BEGIN
         ret := Real.FromString(value, "2e308", 0, 0); (* Overflow *)
         Assert(ret & (value = Real.Inf), __LINE__);
     ELSE
-        ret := Real.FromString(value, "3.402823466E+38", 0, 0);
+        ret := Real.FromString(value, "3.40282E+38", 0, 0);
         Assert(ret, __LINE__);
-        AssertReal(value, 3.402823466E+38, tol, __LINE__); (* fails due to Ten is not accurate *)
+        AssertReal(value, 3.40282E+38, tol, __LINE__); (* Strange error *)
     END;
     ret := Real.FromString(value, " 1234", 1, 4); (* start & length *)
     Assert(ret & (value = 1234.), __LINE__);

@@ -288,11 +288,7 @@ BEGIN
     (* write digits *)
     FOR i := 1 TO digits DO
         val := ENTIER(value);
-        IF i < 8 THEN
-            ArrayOfChar.AppendChar(str, CHR(ORD('0') + val MOD 10)); 
-        ELSE
-            ArrayOfChar.AppendChar(str, '0');
-        END;
+        ArrayOfChar.AppendChar(str, CHR(ORD('0') + val MOD 10)); 
         value := 10*(value - val);
     END;
     (* write fractional part *)
@@ -301,11 +297,7 @@ BEGIN
         INC(prec, digits);
         WHILE digits < prec DO
             val := ENTIER(value);
-            IF i < 15 THEN
-                ArrayOfChar.AppendChar(str, CHR(ORD('0') + val MOD 10)); 
-            ELSE
-                ArrayOfChar.AppendChar(str, '0');
-            END;
+            ArrayOfChar.AppendChar(str, CHR(ORD('0') + val MOD 10)); 
             value := 10*(value - val);
             INC(digits);
         END;
@@ -397,6 +389,7 @@ VAR
     class : INTEGER;
     neg : BOOLEAN;
 BEGIN
+    str[0] := 00X;
     neg := value < 0;
     class := FPClassify(value);
     IF class = FPInfinite THEN
@@ -474,16 +467,17 @@ VAR
             Next
         END;
     END ScanFractionalPart;
-    PROCEDURE Ten( e: INTEGER ): REAL; 
-    VAR r: REAL;
+    PROCEDURE Ten(exp : INTEGER): REAL;
+    VAR t : REAL; i : INTEGER;
     BEGIN
-        IF e < -37 THEN RETURN 0
-        ELSIF 38 < e THEN RETURN INF END;
-        r := 1;
-        WHILE (e > 0) DO r := r * 10;  DEC( e );  END;
-        WHILE (e < 0) DO r := r / 10;  INC( e );  END;
-        RETURN r;
+        t := 1.0; i := 0;
+        WHILE (exp > 0) & (i < LEN(Powers)) DO
+            IF ODD(exp) THEN t := t * Powers[i] END;
+            INC(i); exp := ASH(exp, -1);
+        END;
+        RETURN t
     END Ten;
+
 BEGIN
     y := 0; i := start; e := 0;
     j := length;
