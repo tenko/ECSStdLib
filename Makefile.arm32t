@@ -24,7 +24,7 @@ RTS = $(CPU)$(SYS)Run.obf $(ECS)/armt32run.obf $(ECS)/obarmt32run.lib
 
 OLS += Const Config$(SYS) Type Char ArrayOfChar$(OPT) OSHost$(SYS) Integer Cardinal $(Real)
 OLS += ArrayOfByte$(OPT) ArrayOfSet DateTime String Regex ADTBasicType ADTStream ADTList ADTVector
-OLS += ADTSet ADTDictionary ADTTree O2Testing
+OLS += ADTSet ADTDictionary ADTTree O2Testing SysMem
 OLS += OS OSStream OSFile OSDir OSPath
 
 MOD = $(addprefix src/, $(addprefix Std., $(addsuffix .mod, $(OLS))))
