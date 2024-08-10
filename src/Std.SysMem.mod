@@ -9,7 +9,7 @@ IMPORT SYSTEM;
 
 CONST
     MAGIC = UNSIGNED32(0DEADBEEFH);
-    NALLOC = 1;
+    NALLOC = 4;
     ADR = SYSTEM.ADR;
 
 TYPE
@@ -23,6 +23,7 @@ TYPE
     END;
 VAR
     FreePtr : NodePtr;
+    BasePtr : NodePtr;
     Base : Node;
     AllocSize- : LENGTH;
     Heap- : UNSIGNED32;
@@ -63,9 +64,10 @@ VAR
         RETURN ret
     END Adr;
 BEGIN
+    (* TRACE(ptr); *)
     IF ptr = 0 THEN  RETURN END;
     SYSTEM.PUT(ADR(ins), ptr - SIZE(Node));
-    IF ins.magic # MAGIC THEN RETURN END;
+    IF ins.magic # MAGIC THEN TRACE(ins.magic # MAGIC); RETURN END;
     adrins := Adr(ins);
     cur := FreePtr;
     (* Step through the free list looking for the position *)
@@ -143,12 +145,12 @@ BEGIN
     nunits := ((nbytes + SIZE(Node) - 1) DIV SIZE(Node)) + 1;
     IF FreePtr = NIL THEN
         (* Insert sentinentel node *)
-        FreePtr := SYSTEM.VAL(NodePtr, ADR(Base));
+        BasePtr := SYSTEM.VAL(NodePtr, ADR(Base));
         Base.magic := MAGIC;
-        Base.next := FreePtr;
+        Base.next := BasePtr;
         Base.size := 0;
-        Heap := UNSIGNED32(020000175H);
-        (* GetHeapStart(Heap); *)
+        FreePtr := BasePtr;
+        Heap := GetHeapStart();
     END;
     prev := FreePtr; cur := prev.next; i := 0;
     LOOP
@@ -165,6 +167,7 @@ BEGIN
                 cur.size := nunits;
             END;
             FreePtr := prev;
+            (* TRACE(Adr(cur) + SIZE(Node)); *)
             RETURN Adr(cur) + SIZE(Node)
         END;
         IF cur = FreePtr THEN
