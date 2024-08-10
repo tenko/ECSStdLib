@@ -18,6 +18,7 @@ IMPORT TestADTDictionary;
 IMPORT TestADTVector;
 IMPORT TestADTTree;
 IMPORT TestADTStream;
+IMPORT SysMem IN Std;
 
 CONST
     M = "TestMain";

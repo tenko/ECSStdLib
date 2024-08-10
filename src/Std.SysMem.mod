@@ -9,13 +9,12 @@ IMPORT SYSTEM;
 
 CONST
     MAGIC = UNSIGNED32(0DEADBEEFH);
-    NALLOC = 256;
+    NALLOC = 1;
     ADR = SYSTEM.ADR;
 
 TYPE
     BYTE = SYSTEM.BYTE;
     ADDRESS = SYSTEM.ADDRESS;
-    BYTES = POINTER TO ARRAY OF BYTE;
     NodePtr = POINTER TO Node;
     Node = RECORD-
         magic : UNSIGNED32;
@@ -24,9 +23,11 @@ TYPE
     END;
 VAR
     FreePtr : NodePtr;
-    BasePtr : NodePtr;
     Base : Node;
     AllocSize- : LENGTH;
+    Heap- : UNSIGNED32;
+
+PROCEDURE ^ GetHeapStart ["get_heap_start"] () : ADDRESS;
 
 (* Calculate free memory size *)
 PROCEDURE FreeMem*(): LENGTH;
@@ -41,7 +42,7 @@ VAR
     END Adr;
 BEGIN
     IF FreePtr = NIL THEN RETURN 0 END;
-    cur := BasePtr;
+    cur := Base.next;
     size := cur.size * SIZE(Node);
     WHILE Adr(cur.next) > Adr(cur) DO
         cur := cur.next;
@@ -62,7 +63,7 @@ VAR
         RETURN ret
     END Adr;
 BEGIN
-    IF ptr = 0 THEN RETURN END;
+    IF ptr = 0 THEN  RETURN END;
     SYSTEM.PUT(ADR(ins), ptr - SIZE(Node));
     IF ins.magic # MAGIC THEN RETURN END;
     adrins := Adr(ins);
@@ -99,27 +100,31 @@ BEGIN
         (* the insertion block is not right-adjacent to the end of another block *)
         cur.next := ins;
     END;
-    
     (* Set the free pointer list to start the block previous to the insertion block. *)
     FreePtr := cur;
 END Dispose;
 
 (* Allocate new memory from system *)
 PROCEDURE MoreCore(nunits : LENGTH): NodePtr;
-VAR
+VAR 
     node : NodePtr;
-    arr : BYTES;
+    adr : ADDRESS;
+    PROCEDURE Adr(node : NodePtr): ADDRESS;
+    VAR ret : ADDRESS;
+    BEGIN
+        SYSTEM.GET(ADR(node), ret);
+        RETURN ret
+    END Adr;
 BEGIN
     IF nunits < NALLOC THEN nunits := NALLOC END;
-    SYSTEM.NEW(arr, nunits * SIZE(Node));
-    IF arr = NIL THEN RETURN NIL END;
+    SYSTEM.PUT(ADR(node), Heap);
+    INC(Heap, nunits * SIZE(Node));
     INC(AllocSize, nunits * SIZE(Node));
-    SYSTEM.PUT(ADR(node), ADR(arr[0]));
     node.magic := MAGIC;
     node.next := NIL;
     node.size := nunits;
     (* insert node into freelist *)
-    Dispose(ADR(arr[0]) + SIZE(Node));
+    Dispose(Adr(node) + SIZE(Node));
     RETURN FreePtr
 END MoreCore;
 
@@ -127,7 +132,7 @@ END MoreCore;
 PROCEDURE New*(nbytes : LENGTH): ADDRESS;
 VAR
     cur, prev : NodePtr;
-    nunits : LENGTH;
+    nunits, i : LENGTH;
     PROCEDURE Adr(node : NodePtr): ADDRESS;
     VAR ret : ADDRESS;
     BEGIN
@@ -138,14 +143,14 @@ BEGIN
     nunits := ((nbytes + SIZE(Node) - 1) DIV SIZE(Node)) + 1;
     IF FreePtr = NIL THEN
         (* Insert sentinentel node *)
-        (* FreePtr := SYSTEM.VAL(NodePtr, ADR(Base)); *)
-        NEW(BasePtr);
-        FreePtr := BasePtr;
-        BasePtr.magic := MAGIC;
-        BasePtr.next := FreePtr;
-        BasePtr.size := 0;
+        FreePtr := SYSTEM.VAL(NodePtr, ADR(Base));
+        Base.magic := MAGIC;
+        Base.next := FreePtr;
+        Base.size := 0;
+        Heap := UNSIGNED32(020000175H);
+        (* GetHeapStart(Heap); *)
     END;
-    prev := FreePtr; cur := prev.next;
+    prev := FreePtr; cur := prev.next; i := 0;
     LOOP
         IF cur.size >= nunits THEN
             (* found a block of memory large enough *)
@@ -160,7 +165,6 @@ BEGIN
                 cur.size := nunits;
             END;
             FreePtr := prev;
-            ASSERT(cur.magic = MAGIC);
             RETURN Adr(cur) + SIZE(Node)
         END;
         IF cur = FreePtr THEN
@@ -174,4 +178,5 @@ END New;
 
 BEGIN
     AllocSize := 0;
+    Heap := 0;
 END SysMem.

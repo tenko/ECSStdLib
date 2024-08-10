@@ -59,18 +59,29 @@ SYS_READC:    .qbyte    0x07
 ; standard free function
 .code free
     .alignment    4
-
+    push    {lr}
+    ;add sp, sp, 4
+    bl.w    @Std:SysMem.Dispose
+    ;sub sp, sp, 4
+    pop     {lr}
 	bx.n	lr
 
 ; standard malloc function
 .code malloc
     .alignment    4
+    push {lr}
+    ;add sp, sp, 4
+    bl.w    @Std:SysMem.New
+    ;sub sp, sp, 4
+    pop {lr}
+	bx.n	lr
 
+; fetch heap start
+.code get_heap_start
+    .alignment    4
+    
     ldr.n   r2, offset (heap) + offset (heap) % 4
 	ldr.n	r0, [r2, 0]
-	ldr.n	r3, [sp, 0]
-	add.n	r3, r3, r0
-	str.n	r3, [r2, 0]
 	bx.n	lr
 
 heap:	.qbyte	@_heap_start
