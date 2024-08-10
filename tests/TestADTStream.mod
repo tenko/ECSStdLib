@@ -38,6 +38,7 @@ BEGIN
     Assert(fm.ReadLine(str) = FALSE, __LINE__);
     fm.Close();
 
+    DISPOSE(str);
     Testing.End(test);
 END Run;
 

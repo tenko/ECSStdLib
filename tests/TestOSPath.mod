@@ -134,6 +134,7 @@ BEGIN
     Assert(Pth.Match('name.c', '*.[!a-z]') = FALSE, __LINE__);
     Assert(Pth.Match('name.1', '*.[!a-z]') = TRUE, __LINE__);
 
+    DISPOSE(s); DISPOSE(pth);
     Testing.End(test);
 END Run;
 

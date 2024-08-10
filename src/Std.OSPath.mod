@@ -25,6 +25,7 @@ BEGIN
     IF len - i > 0 THEN
         String.Extract(str, right, i, len - i);
         String.Append(dst, str^);
+        DISPOSE(str)
     END;
 END Join;
 
@@ -48,6 +49,7 @@ BEGIN
     END;
     OSDir.Current(cwd);
     Join(dst, cwd^, path);
+    DISPOSE(cwd);
 END Absolute;
 
 (** Extract filename part of path *)

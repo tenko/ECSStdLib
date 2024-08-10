@@ -25,7 +25,7 @@ BEGIN
     Assert(OSDir.Create(str^) = TRUE, __LINE__);
     Assert(OSFile.Exists(str^) = TRUE, __LINE__);
     Assert(OSDir.SetCurrent(str^) = TRUE, __LINE__);
-
+    
     IF fh.Open("test.txt", OSStream.AccessWrite + OSStream.ModeNew) THEN
         fh.WriteString('test123'); fh.WriteNL();
         fh.WriteString('123test');
@@ -45,6 +45,7 @@ BEGIN
     Assert(OSDir.SetCurrent('..') = TRUE, __LINE__);
     Assert(OSDir.Delete('dummy') = TRUE, __LINE__);
 
+    DISPOSE(str);
     Testing.End(test);
 END Run;
 

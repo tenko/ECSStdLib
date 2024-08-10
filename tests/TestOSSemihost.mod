@@ -39,6 +39,7 @@ BEGIN
     Assert(OSFile.Delete("test.txt") = TRUE, __LINE__);
     Assert(OSFile.Exists("test.txt") = FALSE, __LINE__);
 
+    DISPOSE(str);
     Testing.End(test);
 END Run;
 

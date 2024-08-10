@@ -274,7 +274,8 @@ BEGIN
     Str.FormatDateTime(str, d, '%y-%m-%dT%H:%M:%S');
     Assert(str^ = '2019-11-15T16:43:20', __LINE__);
     *)
-
+    
+    DISPOSE(str); DISPOSE(dst);
     Testing.End(test);
 END Run;
 

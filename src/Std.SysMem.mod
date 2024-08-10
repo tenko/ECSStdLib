@@ -3,6 +3,8 @@ Simple allocator implemented as embedded free list
 allocator from "The C Programming Language", Page 173.
 
 Ref : https://stackoverflow.com/a/36512105/10830469
+
+Import this module to replace runtime malloc & free.
 *)
 MODULE SysMem IN Std;
 IMPORT SYSTEM;
@@ -26,24 +28,22 @@ VAR
     BasePtr : NodePtr;
     Base : Node;
     AllocSize- : LENGTH;
-    Heap- : UNSIGNED32;
+    Heap- : ADDRESS;
 
-PROCEDURE ^ GetHeapStart ["get_heap_start"] () : ADDRESS;
+VAR ^ heapStart ["_trailer"]: SYSTEM.BYTE;
+
+PROCEDURE Adr(node : NodePtr): ADDRESS;
+BEGIN RETURN SYSTEM.VAL(ADDRESS, node);
+END Adr;
 
 (* Calculate free memory size *)
 PROCEDURE FreeMem*(): LENGTH;
 VAR
     cur : NodePtr;
     size : LENGTH;
-    PROCEDURE Adr(node : NodePtr): ADDRESS;
-    VAR ret : ADDRESS;
-    BEGIN
-        SYSTEM.GET(ADR(node), ret);
-        RETURN ret
-    END Adr;
 BEGIN
     IF FreePtr = NIL THEN RETURN 0 END;
-    cur := Base.next;
+    cur := BasePtr;
     size := cur.size * SIZE(Node);
     WHILE Adr(cur.next) > Adr(cur) DO
         cur := cur.next;
@@ -53,21 +53,14 @@ BEGIN
 END FreeMem;
 
 (* Free memory at ptr and add to free list *)
-PROCEDURE Dispose*(ptr : ADDRESS);
+PROCEDURE Dispose* ["free"] (ptr : ADDRESS);
 VAR
     cur, ins, nxt : NodePtr;
     adrins, adrcur, anxt : ADDRESS;
-    PROCEDURE Adr(node : NodePtr): ADDRESS;
-    VAR ret : ADDRESS;
-    BEGIN
-        SYSTEM.GET(ADR(node), ret);
-        RETURN ret
-    END Adr;
 BEGIN
-    (* TRACE(ptr); *)
     IF ptr = 0 THEN  RETURN END;
     SYSTEM.PUT(ADR(ins), ptr - SIZE(Node));
-    IF ins.magic # MAGIC THEN TRACE(ins.magic # MAGIC); RETURN END;
+    IF ins.magic # MAGIC THEN RETURN END;
     adrins := Adr(ins);
     cur := FreePtr;
     (* Step through the free list looking for the position *)
@@ -87,7 +80,6 @@ BEGIN
         INC(ins.size, cur.next.size);
         ASSERT(cur.next.magic = MAGIC);
         ASSERT(cur.next.next.magic = MAGIC);
-        cur.magic := 0;
         ins.next := cur.next.next;
     ELSE
         (* the insertion block is not left-adjacent to the beginning of another block *)
@@ -96,7 +88,6 @@ BEGIN
     IF (adrcur + cur.size*SIZE(Node)) = adrins THEN
         (* the end of another block of data is adjacent to the beginning of the insertion block *)
         INC(cur.size, ins.size);
-        ins.magic := 0;
         cur.next := ins.next;
     ELSE
         (* the insertion block is not right-adjacent to the end of another block *)
@@ -111,12 +102,6 @@ PROCEDURE MoreCore(nunits : LENGTH): NodePtr;
 VAR 
     node : NodePtr;
     adr : ADDRESS;
-    PROCEDURE Adr(node : NodePtr): ADDRESS;
-    VAR ret : ADDRESS;
-    BEGIN
-        SYSTEM.GET(ADR(node), ret);
-        RETURN ret
-    END Adr;
 BEGIN
     IF nunits < NALLOC THEN nunits := NALLOC END;
     SYSTEM.PUT(ADR(node), Heap);
@@ -131,16 +116,10 @@ BEGIN
 END MoreCore;
 
 (* Allocate nbytes memory and return adddress. Return 0 on failure *)
-PROCEDURE New*(nbytes : LENGTH): ADDRESS;
+PROCEDURE New* ["malloc"] (nbytes : LENGTH): ADDRESS;
 VAR
     cur, prev : NodePtr;
     nunits, i : LENGTH;
-    PROCEDURE Adr(node : NodePtr): ADDRESS;
-    VAR ret : ADDRESS;
-    BEGIN
-        SYSTEM.GET(ADR(node), ret);
-        RETURN ret
-    END Adr;
 BEGIN
     nunits := ((nbytes + SIZE(Node) - 1) DIV SIZE(Node)) + 1;
     IF FreePtr = NIL THEN
@@ -150,7 +129,7 @@ BEGIN
         Base.next := BasePtr;
         Base.size := 0;
         FreePtr := BasePtr;
-        Heap := GetHeapStart();
+        Heap := ADR(heapStart);
     END;
     prev := FreePtr; cur := prev.next; i := 0;
     LOOP
@@ -167,7 +146,6 @@ BEGIN
                 cur.size := nunits;
             END;
             FreePtr := prev;
-            (* TRACE(Adr(cur) + SIZE(Node)); *)
             RETURN Adr(cur) + SIZE(Node)
         END;
         IF cur = FreePtr THEN
