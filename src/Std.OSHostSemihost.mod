@@ -10,17 +10,20 @@ CONST
     STDOUT* = 1;
     STDERR* = 2;
     DATETIMEOFFSET* = TRUE;
-    (* Semihost functions *)
+    (* Semihost functions: https://github.com/ARM-software/abi-aa/blob/main/semihosting/semihosting.rst *)
     SYS_CLOSE = 02H;
     SYS_ERRNO = 13H;
+    SYS_EXIT = 018H;
     SYS_EXIT_EXTENDED = 20H;
     SYS_FLEN = 0CH;
     SYS_GET_CMDLINE = 15H;
     SYS_OPEN = 01H;
     SYS_READ = 06H;
+    SYS_READC = 07H;
     SYS_REMOVE = 0EH;
     SYS_RENAME = 0FH;
     SYS_SEEK = 0AH;
+    SYS_WRITEC = 03H;
     SYS_WRITE = 05H;
     ADP_Stopped_ApplicationExit = 20026H;
     (* libc errno codes *)
@@ -53,6 +56,32 @@ BEGIN
     ");
     RETURN ret
 END SemiHost;
+
+(* Replace abort function in runtime *)
+PROCEDURE Abort ["abort"] ();
+VAR args : ARRAY 2 OF ADDRESS;
+BEGIN
+    args[0] := ADP_Stopped_ApplicationExit;
+    args[1] := 0;
+    IGNORE(SemiHost(SYS_EXIT_EXTENDED, SYSTEM.ADR(args)));
+END Abort;
+
+(* Replace putchar function in runtime *)
+PROCEDURE PutChar ["putchar"] (character: INTEGER): INTEGER;
+VAR args : ARRAY 1 OF ADDRESS;
+BEGIN
+    args[0] := character;
+    IGNORE(SemiHost(SYS_WRITEC, SYSTEM.ADR(args)));
+    RETURN character
+END PutChar;
+
+(* Replace getchar function in runtime *)
+PROCEDURE Getchar ["getchar"] (): INTEGER;
+VAR args : ARRAY 1 OF ADDRESS;
+BEGIN
+    args[0] := 0;
+    RETURN SemiHost(SYS_READC, SYSTEM.ADR(args))
+END Getchar;
 
 (**
 Get number of program arguments
