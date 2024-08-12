@@ -74,6 +74,18 @@ BEGIN
     T(str, "a", TRUE, FALSE, __LINE__);
     str := "\w\W";
     T(str, "Test", TRUE, TRUE, __LINE__);
+    T("?", "a", TRUE, TRUE, 0);
+    T("??", "a", TRUE, FALSE, 0);
+    T("??", "ab", TRUE, TRUE, 0);
+    T("T??t", "Test", TRUE, TRUE, 0);
+    T("^(T??t)", "Test", TRUE, FALSE, 0);
+    T("^(T??t)", "TesT", TRUE, TRUE, 0);
+    T("(\d\d-\d\d-\d\d\d\d)|(\d\d/\d\d/\d\d\d\d)", "01-01-2023", TRUE, TRUE, 0);
+    T("(\d\d-\d\d-\d\d\d\d)|(\d\d/\d\d/\d\d\d\d)", "01/01/2023", TRUE, TRUE, 0);
+    T("(\d\d-\d\d-\d\d\d\d)|(\d\d/\d\d/\d\d\d\d)", "01/01/202", TRUE, FALSE, 0);
+    T("(\d\d-\d\d-\d\d\d\d)|(\d\d/\d\d/\d\d\d\d)", "01/0A/2023", TRUE, FALSE, 0);
+    T("\w\W\s\w\W", "Test 123", TRUE, TRUE, 0);
+    T("\w\W\s\w\W", "Test 123 Test", TRUE, FALSE, 0);
     Testing.End(test);
 END Run;
 
