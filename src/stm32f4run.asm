@@ -103,7 +103,7 @@
     .qbyte @isr_cryp + 1                ; CRYP crypto global interrupt
     .qbyte @isr_hash_rng + 1            ; Hash and Rng global interrupt
     .qbyte @isr_fpu + 1                 ; FPU global interrupt
-    #repeat 28                          ; Pad to 128 word size
+    #repeat 30                          ; Pad to 128 word size
         .qbyte 0x00                     ; Reserved
     #endrep
 
