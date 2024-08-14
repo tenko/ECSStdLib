@@ -20,7 +20,7 @@ CPU = armt32
 # Semihost or Baremetal
 SYS = Semihost
 
-RTS = stm32f4run.obf $(ECS)/armt32run.obf $(ECS)/obarmt32run.lib
+RTS = armv7mrun.obf $(ECS)/armt32run.obf $(ECS)/obarmt32run.lib
 
 OLS += Const Config$(SYS) Type Char ArrayOfChar$(OPT) OSHost$(SYS) Integer Cardinal $(Real)
 OLS += ArrayOfByte$(OPT) ArrayOfSet DateTime String Regex ADTBasicType ADTStream ADTList ADTVector
@@ -79,7 +79,7 @@ std$(CPU).lib : $(OBF)
 	@touch $@
 	@linklib $@ $^
 
-build/stm32f4run.obf : src/stm32f4run.asm
+build/stm32f4run.obf : src/armv7mrun.asm
 	@echo compiling $<
 	@mkdir -p build
 	@cd build && cp -f $(addprefix ../, $<) .
@@ -110,14 +110,14 @@ build/%.obf: tests/%.mod
 	@cd build && $(OB) $(notdir $<)
 
 .PHONY: TestMain
-TestMain : $(TOBF) std$(CPU).lib build/stm32f4run.obf
+TestMain : $(TOBF) std$(CPU).lib build/armv7mrun.obf
 	@echo compiling $<
 	@mkdir -p build
 	@cd build && $(LK) $(notdir $(TOBF)) ../std$(CPU).lib $(RTS)
 	@cd build && $(QEMU) -M $(DEVICE) -semihosting -nographic -device loader,file=TestArrayOfByte.rom,addr=$(ADR)
 
 .PHONY: Test
-Test : misc/Test.mod std$(CPU).lib build/stm32f4run.obf
+Test : misc/Test.mod std$(CPU).lib build/armv7mrun.obf
 	@echo compiling $<
 	@mkdir -p build
 	@cd build && cp -f $(addprefix ../, $<) .
