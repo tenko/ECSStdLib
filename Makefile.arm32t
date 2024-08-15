@@ -65,7 +65,7 @@ build/%.obf: src/%.mod
 	@echo compiling $<
 	@mkdir -p build
 	@cd build && cp -f $(addprefix ../, $<) .
-	@cd build && $(OB) -t armt32linux -c $(notdir $<)
+	@cd build && $(OB) -t armt32 -c $(notdir $<)
 
 build/%.obf: src/%.asm
 	@echo compiling $<
@@ -107,7 +107,7 @@ build/%.obf: tests/%.mod
 	@echo compiling $<
 	@mkdir -p build
 	@cd build && cat $(addprefix ../, $<) | awk '{gsub("__LINE__",NR,$$0);print}' > $(notdir $<)
-	@cd build && $(OB) -t armt32linux -c $(notdir $<)
+	@cd build && $(OB) -t armt32 -c $(notdir $<)
 
 .PHONY: TestMain
 TestMain : $(TOBF) std$(CPU).lib build/armv7mrun.obf
@@ -121,7 +121,7 @@ Test : misc/Test.mod std$(CPU).lib build/armv7mrun.obf
 	@echo compiling $<
 	@mkdir -p build
 	@cd build && cp -f $(addprefix ../, $<) .
-	@cd build && $(OB) $(notdir $<)
+	@cd build && $(OB) -t armt32 -c $(notdir $<)
 	@cd build && $(LK) Test.obf ../std$(CPU).lib $(RTS)
 	@cd build && $(QEMU) -M $(DEVICE) -semihosting -semihosting-config arg="test a b c" -nographic -device loader,file=Test.rom,addr=$(ADR)
 

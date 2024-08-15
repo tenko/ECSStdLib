@@ -30,7 +30,7 @@ VAR
     AllocSize- : LENGTH;
     Heap- : ADDRESS;
 
-VAR ^ heapStart ["_trailer"]: SYSTEM.BYTE;
+VAR ^ heapStart ["_trailer"]: ADDRESS;
 
 PROCEDURE Adr(node : NodePtr): ADDRESS;
 BEGIN RETURN SYSTEM.VAL(ADDRESS, node);
@@ -129,8 +129,7 @@ BEGIN
         Base.next := BasePtr;
         Base.size := 0;
         FreePtr := BasePtr;
-        Heap := ADR(heapStart);
-        Heap := ADDRESS(SET32(Heap + 3) - SET32(1));
+        Heap := ADDRESS(SET32(ADR(heapStart) + 3) - {2,1}); (* round up address to next qword *)
     END;
     prev := FreePtr; cur := prev.next; i := 0;
     LOOP
