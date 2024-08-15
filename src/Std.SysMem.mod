@@ -130,6 +130,7 @@ BEGIN
         Base.size := 0;
         FreePtr := BasePtr;
         Heap := ADR(heapStart);
+        Heap := ADDRESS(SET32(Heap + 3) - SET32(1));
     END;
     prev := FreePtr; cur := prev.next; i := 0;
     LOOP

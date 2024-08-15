@@ -24,6 +24,7 @@ CONST
     SYS_RENAME = 0FH;
     SYS_SEEK = 0AH;
     SYS_WRITEC = 03H;
+    SYS_WRITE0 = 04H;
     SYS_WRITE = 05H;
     ADP_Stopped_ApplicationExit = 20026H;
     (* libc errno codes *)
@@ -43,6 +44,8 @@ TYPE
 VAR
     argc, argvlen : LENGTH;
     argv : ARRAY 81 OF CHAR;
+    buffer : ARRAY 81 OF CHAR;
+    idx : LENGTH;
 
 PROCEDURE SemiHost(op : INTEGER; arg : ADDRESS): INTEGER;
 VAR ret : INTEGER;
@@ -57,10 +60,22 @@ BEGIN
     RETURN ret
 END SemiHost;
 
+(* flush buffer on exit *)
+PROCEDURE FlushBuffer;
+VAR
+    args : ARRAY 1 OF ADDRESS;
+BEGIN
+    IF idx = 0 THEN RETURN END;
+    buffer[idx] := 00X;
+    idx := 0;
+    IGNORE(SemiHost(SYS_WRITE0, SYSTEM.ADR(buffer)));
+END FlushBuffer;
+
 (* Replace abort function in runtime *)
 PROCEDURE Abort ["abort"] ();
 VAR args : ARRAY 2 OF ADDRESS;
 BEGIN
+    FlushBuffer;
     args[0] := ADP_Stopped_ApplicationExit;
     args[1] := 0;
     IGNORE(SemiHost(SYS_EXIT_EXTENDED, SYSTEM.ADR(args)));
@@ -68,10 +83,18 @@ END Abort;
 
 (* Replace putchar function in runtime *)
 PROCEDURE PutChar ["putchar"] (character: INTEGER): INTEGER;
-VAR args : ARRAY 1 OF ADDRESS;
+VAR
+    ch : CHAR;
 BEGIN
-    args[0] := character;
-    IGNORE(SemiHost(SYS_WRITEC, SYSTEM.ADR(args)));
+    ch := CHR(character);
+    IF ch = Char.CR THEN buffer[idx] := ' '
+    ELSE buffer[idx] := ch END;
+    INC(idx);
+    IF (idx >= 79) OR (ch = Char.LF) THEN
+            buffer[idx] := 00X;
+            idx := 0;
+            IGNORE(SemiHost(SYS_WRITE0, SYSTEM.ADR(buffer)));
+    END;
     RETURN character
 END PutChar;
 
@@ -473,6 +496,7 @@ BEGIN END EnvVar;
 PROCEDURE Exit*(code : INTEGER);
 VAR args : ARRAY 2 OF ADDRESS;
 BEGIN
+    FlushBuffer;
     args[0] := ADP_Stopped_ApplicationExit;
     args[1] := code;
     IGNORE(SemiHost(SYS_EXIT_EXTENDED, SYSTEM.ADR(args)));
@@ -494,5 +518,6 @@ BEGIN
 END GetLastError;
 
 BEGIN
-    argc := -1
+    argc := -1;
+    idx := 0;
 END OSHost.

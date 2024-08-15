@@ -1,7 +1,7 @@
 .SUFFIXES:
 MAKEFLAGS += --no-builtin-rules --no-builtin-variables
 
-OB := obarmt32
+OB := ecsd
 AS := armt32asm
 DAS := armt32dism
 LK := linkmem
@@ -11,7 +11,7 @@ ADR := 0x00000000
 ECS := /c/EigenCompilerSuite/runtime
 
 # OptSpeed or OptSize
-OPT = OptSpeed
+OPT = OptSize
 
 # Real64 or Real32
 Real = Real32
@@ -65,7 +65,7 @@ build/%.obf: src/%.mod
 	@echo compiling $<
 	@mkdir -p build
 	@cd build && cp -f $(addprefix ../, $<) .
-	@cd build && $(OB) $(notdir $<)
+	@cd build && $(OB) -t armt32linux -c $(notdir $<)
 
 build/%.obf: src/%.asm
 	@echo compiling $<
@@ -107,7 +107,7 @@ build/%.obf: tests/%.mod
 	@echo compiling $<
 	@mkdir -p build
 	@cd build && cat $(addprefix ../, $<) | awk '{gsub("__LINE__",NR,$$0);print}' > $(notdir $<)
-	@cd build && $(OB) $(notdir $<)
+	@cd build && $(OB) -t armt32linux -c $(notdir $<)
 
 .PHONY: TestMain
 TestMain : $(TOBF) std$(CPU).lib build/armv7mrun.obf
