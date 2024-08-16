@@ -15,7 +15,6 @@ CONST
     ADR = SYSTEM.ADR;
 
 TYPE
-    BYTE = SYSTEM.BYTE;
     ADDRESS = SYSTEM.ADDRESS;
     NodePtr = POINTER TO Node;
     Node = RECORD-
@@ -30,7 +29,7 @@ VAR
     AllocSize- : LENGTH;
     Heap- : ADDRESS;
 
-VAR ^ heapStart ["_trailer"]: ADDRESS;
+VAR ^ heapStart ["_trailer"]: SYSTEM.BYTE;
 
 PROCEDURE Adr(node : NodePtr): ADDRESS;
 BEGIN RETURN SYSTEM.VAL(ADDRESS, node);
@@ -55,7 +54,7 @@ END FreeMem;
 (* Free memory at ptr and add to free list *)
 PROCEDURE Dispose* ["free"] (ptr : ADDRESS);
 VAR
-    cur, ins, nxt : NodePtr;
+    cur, ins : NodePtr;
     adrins, adrcur, anxt : ADDRESS;
 BEGIN
     IF ptr = 0 THEN  RETURN END;
@@ -101,7 +100,6 @@ END Dispose;
 PROCEDURE MoreCore(nunits : LENGTH): NodePtr;
 VAR 
     node : NodePtr;
-    adr : ADDRESS;
 BEGIN
     IF nunits < NALLOC THEN nunits := NALLOC END;
     SYSTEM.PUT(ADR(node), Heap);
@@ -129,7 +127,7 @@ BEGIN
         Base.next := BasePtr;
         Base.size := 0;
         FreePtr := BasePtr;
-        Heap := ADDRESS(SET32(ADR(heapStart) + 3) - {2,1}); (* round up address to next qword *)
+        Heap := ADDRESS(SET32(ADR(heapStart) + 3) * (-SET32(3))); (* round up address to next word *)
     END;
     prev := FreePtr; cur := prev.next; i := 0;
     LOOP

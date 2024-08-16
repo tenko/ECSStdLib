@@ -22,10 +22,10 @@ SYS = Semihost
 
 RTS = armv7mrun.obf $(ECS)/armt32run.obf $(ECS)/obarmt32run.lib
 
-OLS += Const Config$(SYS) Type Char ArrayOfChar$(OPT) OSHost$(SYS) Integer Cardinal $(Real)
-OLS += ArrayOfByte$(OPT) ArrayOfSet DateTime String Regex ADTBasicType ADTStream ADTList ADTVector
-OLS += ADTSet ADTDictionary ADTTree O2Testing SysMem
-OLS += OS OSStream OSFile OSDir OSPath
+OLS += Const Config$(SYS) Type Char ArrayOfChar$(OPT) Integer Cardinal $(Real) ArrayOfByte$(OPT)
+OLS += ArrayOfSet DateTime String Regex ADTBasicType ADTStream ADTList ADTVector
+OLS += ADTSet ADTDictionary ADTTree O2Testing
+OLS += OS OSStream OSFile OSDir OSPath OSHost$(SYS) SysMem
 
 MOD = $(addprefix src/, $(addprefix Std., $(addsuffix .mod, $(OLS))))
 OBF = $(addprefix build/, $(addprefix Std., $(addsuffix .obf, $(OLS))))

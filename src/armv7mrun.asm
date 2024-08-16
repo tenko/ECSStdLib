@@ -88,6 +88,14 @@ loop:
     ldr.n   r2, offset (heap) + offset (heap) % 4
 	ldr.n	r0, [r2, 0]
 	ldr.n	r3, [sp, 0]
+
+    ; round up to nearest word
+    mov	    r4, 3
+	add	    r3, r3, r4
+    mov	    r4, 4
+	rsb	    r4, 0
+	and	    r3, r3, r2
+
 	add.n	r3, r3, r0
 	str.n	r3, [r2, 0]
 	bx.n	lr
@@ -105,8 +113,16 @@ heap:	.qbyte	@_heap_start
     .alignment    4
 
 	ldr	    r0, [pc, offset (heap)]
-    ldr     r1, [pc, offset (start)]
-	str	    r1, [r0, 0]
+    ldr     r3, [pc, offset (start)]
+
+    ; round up to nearest word
+    mov	    r4, 3
+	add	    r3, r3, r4
+    mov	    r4, 4
+	rsb	    r4, 0
+	and	    r3, r3, r2
+
+	str	    r3, [r0, 0]
 	b	    skip
 heap:   .qbyte	@_heap_start
 start:  .qbyte  extent (@_trailer)
