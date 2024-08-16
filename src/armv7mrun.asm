@@ -90,11 +90,11 @@ loop:
 	ldr.n	r3, [sp, 0]
 
     ; round up to nearest word
-    mov	    r4, 3
-	add	    r3, r3, r4
-    mov	    r4, 4
-	rsb	    r4, 0
-	and	    r3, r3, r2
+    mov	r1, 3
+	add	r4, r3, r1
+    mov	r1, 4
+	rsb	r1, 0
+	and	r3, r4, r1
 
 	add.n	r3, r3, r0
 	str.n	r3, [r2, 0]
@@ -116,12 +116,12 @@ heap:	.qbyte	@_heap_start
     ldr     r3, [pc, offset (start)]
 
     ; round up to nearest word
-    mov	    r4, 3
-	add	    r3, r3, r4
-    mov	    r4, 4
-	rsb	    r4, 0
-	and	    r3, r3, r2
-
+    mov	r1, 3
+	add	r4, r3, r1
+    mov	r1, 4
+	rsb	r1, 0
+	and	r3, r4, r1
+    
 	str	    r3, [r0, 0]
 	b	    skip
 heap:   .qbyte	@_heap_start
