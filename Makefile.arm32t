@@ -20,7 +20,7 @@ CPU = armt32
 # Semihost or Baremetal
 SYS = Semihost
 
-RTS = armv7mrun.obf $(ECS)/armt32run.obf $(ECS)/obarmt32run.lib
+RTS = armv7mrun.obf $(ECS)/micro.lib $(ECS)/armt32run.obf $(ECS)/obarmt32run.lib
 
 OLS += Const Config$(SYS) Type Char ArrayOfChar$(OPT) Integer Cardinal $(Real) ArrayOfByte$(OPT)
 OLS += ArrayOfSet DateTime String Regex ADTBasicType ADTStream ADTList ADTVector

@@ -19,13 +19,14 @@ IMPORT TestADTVector;
 IMPORT TestADTTree;
 IMPORT TestADTStream;
 IMPORT SysMem IN Std;
-
+IN Micro IMPORT Traps := ARMv7MTraps;
 CONST
     M = "TestMain";
 
 VAR
     test : Testing.TEST;
 BEGIN
+    Traps.Init; Traps.debug := TRUE;
     Testing.Initialize(test, M);
     TestArrayOfByte.Run(test);
     TestArrayOfChar.Run(test);

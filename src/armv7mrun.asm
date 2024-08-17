@@ -52,6 +52,23 @@ loop:   b.n    loop         ; loop forever if return from bkpt
 .data ram
 	.required
 	.origin	0x20000000 ; ram start
+    .require	_init_ram
+
+.initdata _init_ram
+    .alignment    4
+
+    mov     r0, 0
+	ldr	    r1, [pc, offset (start)]
+    ldr     r2, [pc, offset (ext)]
+    b       cond
+start:  .qbyte	0x20000000
+ext:    .qbyte  extent (@_trailer)
+loop:    
+    str     r0, [r1]
+    add     r1, r1, 4
+cond:
+    cmp     r1, r2
+    bcc     loop
 
 ; last section
 .trailer _trailer
