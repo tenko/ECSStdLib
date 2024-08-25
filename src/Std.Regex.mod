@@ -147,6 +147,7 @@ PROCEDURE pars_reg(expr-: ARRAY OF CHAR; VAR reg: Pattern;
     j : INTEGER;
   BEGIN
     IF res#0 THEN RETURN END;
+    IF n^.leg # NIL THEN DISPOSE(n^.leg) END;
     NEW(n^.leg);
     Set.Clear(n^.leg^);
     FOR j:=ORD('0') TO ORD('9') DO
@@ -160,6 +161,7 @@ PROCEDURE pars_reg(expr-: ARRAY OF CHAR; VAR reg: Pattern;
     j : INTEGER;
   BEGIN
     IF res#0 THEN RETURN END;
+    IF n^.leg # NIL THEN DISPOSE(n^.leg) END;
     NEW(n^.leg);
     Set.Clear(n^.leg^);
     FOR j:=ORD('0') TO ORD('9') DO
@@ -177,6 +179,7 @@ PROCEDURE pars_reg(expr-: ARRAY OF CHAR; VAR reg: Pattern;
   PROCEDURE set_whitespace(n: Pattern; alt : BOOLEAN);
   BEGIN
     IF res#0 THEN RETURN END;
+    IF n^.leg # NIL THEN DISPOSE(n^.leg) END;
     NEW(n^.leg);
     Set.Clear(n^.leg^);
     Set.Incl(n^.leg^, ORD(20X));
@@ -208,6 +211,7 @@ PROCEDURE pars_reg(expr-: ARRAY OF CHAR; VAR reg: Pattern;
 
   BEGIN
     IF res#0 THEN RETURN END;
+    IF n^.leg # NIL THEN DISPOSE(n^.leg) END;
     NEW(n^.leg);
     Set.Clear(n^.leg^);
     range:=FALSE; from:=0X; ch:=0X; (* !!!!? Sem *)
@@ -281,6 +285,7 @@ PROCEDURE pars_reg(expr-: ARRAY OF CHAR; VAR reg: Pattern;
 
   BEGIN
     IF res#ok THEN RETURN END;
+    IF n^.pat # NIL THEN DISPOSE(n^.pat) END;
     NEW(n^.pat,scan(FALSE)+1);
     n^.pat[scan(TRUE)]:=00X;
   END fill_str;
@@ -499,6 +504,7 @@ BEGIN
     res:=-i;
   ELSE
     res:=i;
+    IF reg^.res # NIL THEN DISPOSE(reg^.res) END;
     NEW(reg^.res);
     FOR i:=0 TO LEN(reg^.res^.len)-1 DO reg^.res^.len[i]:=0 END;
     reg^.res^.pos:=reg^.res^.len;
@@ -510,20 +516,12 @@ PROCEDURE Dispose*(VAR pattern : Pattern);
 VAR node, next: Pattern;
 BEGIN
     IF pattern = NIL THEN RETURN END;
-    node := pattern;
-    IF node.left # NIL THEN
-        WHILE node.left # NIL DO node := pattern.left END;
-    END;
-    WHILE node # NIL DO
-        next := node.next;
-        IF node.res # NIL THEN DISPOSE(node.res) END;
-        IF node.pat # NIL THEN DISPOSE(node.pat) END;
-        IF node.leg # NIL THEN DISPOSE(node.leg) END;
-        next := node.next;
-        DISPOSE(node);
-        node := next;
-    END;
-    pattern := NIL;
+    Dispose(pattern.left);
+    Dispose(pattern.next);
+    IF pattern.res # NIL THEN DISPOSE(pattern.res) END;
+    IF pattern.pat # NIL THEN DISPOSE(pattern.pat) END;
+    IF pattern.leg # NIL THEN DISPOSE(pattern.leg) END;
+    DISPOSE(pattern);
 END Dispose;
 
 (**
