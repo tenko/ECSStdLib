@@ -487,6 +487,18 @@ BEGIN
   END
 END match0;
 
+(** Free allocated regex data *)
+PROCEDURE Dispose*(VAR pattern : Pattern);
+BEGIN
+    IF pattern = NIL THEN RETURN END;
+    Dispose(pattern.left);
+    Dispose(pattern.next);
+    IF pattern.res # NIL THEN DISPOSE(pattern.res) END;
+    IF pattern.pat # NIL THEN DISPOSE(pattern.pat) END;
+    IF pattern.leg # NIL THEN DISPOSE(pattern.leg) END;
+    DISPOSE(pattern);
+END Dispose;
+
 (**
 Compile the regular expression expr and return status:
 
@@ -496,7 +508,8 @@ Compile the regular expression expr and return status:
 PROCEDURE Compile*(VAR reg: Pattern; expr-: ARRAY OF CHAR; VAR res: LONGINT);
   VAR i,code: LONGINT;
 BEGIN
-  IF reg = NIL THEN NEW(reg) END;
+  IF reg # NIL THEN Dispose(reg) END;
+  NEW(reg);
   i:=0;
   pars_reg(expr,reg,i,code);
   IF code#ok THEN res:=-i; RETURN END;
@@ -510,19 +523,6 @@ BEGIN
     reg^.res^.pos:=reg^.res^.len;
   END;
 END Compile;
-
-(** Free allocated regex data *)
-PROCEDURE Dispose*(VAR pattern : Pattern);
-VAR node, next: Pattern;
-BEGIN
-    IF pattern = NIL THEN RETURN END;
-    Dispose(pattern.left);
-    Dispose(pattern.next);
-    IF pattern.res # NIL THEN DISPOSE(pattern.res) END;
-    IF pattern.pat # NIL THEN DISPOSE(pattern.pat) END;
-    IF pattern.leg # NIL THEN DISPOSE(pattern.leg) END;
-    DISPOSE(pattern);
-END Dispose;
 
 (**
 Returns `TRUE`, if expression matches with string `s` starting
