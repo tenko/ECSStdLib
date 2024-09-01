@@ -102,11 +102,9 @@ BEGIN
     Assert(Real.IsInf(Real.Inf) = TRUE, 18);
     Assert(Real.IsInf(Real.Inf + 7.0) = TRUE, 19);
     Assert(Real.IsInf(-1.5 * Real.Inf) = TRUE, 20);
-
-
 END Run;
 
 BEGIN
-    (* Epsilon; *)
-    Run;
+    Epsilon;
+    (* Run; *)
 END test.

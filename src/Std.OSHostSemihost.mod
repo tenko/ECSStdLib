@@ -322,8 +322,18 @@ Return number of bytes actually written or -1 on failure.
 PROCEDURE FileWrite*(handle : HANDLE; buffer : ADDRESS; len : LENGTH): LENGTH;
 VAR
     args : ARRAY 3 OF ADDRESS;
-    ret : INTEGER;
+    i, ret : INTEGER;
+    ch : CHAR;
 BEGIN
+    IF (handle = STDOUT) OR (handle = STDERR) THEN
+        (* Direct to PutChar to perform buffered write due
+           to slow speed of semihost interface  *)
+        FOR i := 0 TO len - 1 DO
+            SYSTEM.GET(buffer + i, ch);
+            IGNORE(PutChar(ORD(ch)))
+        END;
+        RETURN len
+    END;
     args[0] := handle;
     args[1] := buffer;
     args[2] := len;
