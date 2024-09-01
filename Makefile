@@ -139,6 +139,12 @@ perfCompare$(PRG) : misc/perfCompare.mod std.lib
 	@cp build/$@ .
 	@./$@
 
+.PHONY: install
+install: std.lib
+	@echo Install
+	@cp -f std.lib /c/EigenCompilerSuite/runtime/
+	@cp -f build/std.*.sym /c/EigenCompilerSuite/libraries/oberon/
+
 .PHONY: clean
 clean:
 	@echo Clean

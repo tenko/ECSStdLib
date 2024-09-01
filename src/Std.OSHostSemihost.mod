@@ -47,6 +47,8 @@ VAR
     buffer : ARRAY 81 OF CHAR;
     idx : LENGTH;
 
+PROCEDURE ^ Putchar ["putchar"] (character: INTEGER): INTEGER;
+
 PROCEDURE SemiHost(op : INTEGER; arg : ADDRESS): INTEGER;
 VAR ret : INTEGER;
 BEGIN
@@ -325,12 +327,12 @@ VAR
     i, ret : INTEGER;
     ch : CHAR;
 BEGIN
-    IF (handle = STDOUT) OR (handle = STDERR) THEN
+    IF handle <= 3 THEN (* Hack due to different id of std handle *)
         (* Direct to PutChar to perform buffered write due
            to slow speed of semihost interface  *)
         FOR i := 0 TO len - 1 DO
             SYSTEM.GET(buffer + i, ch);
-            IGNORE(PutChar(ORD(ch)))
+            IGNORE(Putchar(ORD(ch)))
         END;
         RETURN len
     END;

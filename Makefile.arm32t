@@ -79,7 +79,7 @@ std$(CPU).lib : $(OBF)
 	@touch $@
 	@linklib $@ $^
 
-build/stm32f4run.obf : src/armv7mrun.asm
+build/armv7mrun.obf : src/armv7mrun.asm
 	@echo compiling $<
 	@mkdir -p build
 	@cd build && cp -f $(addprefix ../, $<) .
@@ -124,6 +124,12 @@ Test : misc/Test.mod std$(CPU).lib build/armv7mrun.obf
 	@cd build && $(OB) -t armt32 -c $(notdir $<)
 	@cd build && $(LK) Test.obf ../std$(CPU).lib $(RTS)
 	@cd build && $(QEMU) -M $(DEVICE) -semihosting -semihosting-config arg="test a b c" -nographic -device loader,file=Test.rom,addr=$(ADR)
+
+.PHONY: install
+install: std$(CPU).lib
+	@echo Install
+	@cp -f std$(CPU).lib /c/EigenCompilerSuite/runtime/
+	@cp -f build/std.*.sym /c/EigenCompilerSuite/libraries/oberon/
 
 .PHONY: clean
 clean:
