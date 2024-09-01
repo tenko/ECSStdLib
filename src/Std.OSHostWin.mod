@@ -164,6 +164,14 @@ BEGIN
     RETURN -1;
 END FileWrite;
 
+(*
+Write from std file into buffer.
+Return number of bytes actually written or -1 on failure.
+*)
+PROCEDURE FileStdWrite*(handle : HANDLE; buffer : ADDRESS; len : LENGTH): LENGTH;
+BEGIN RETURN FileWrite(handle, buffer, len)
+END FileStdWrite;
+
 (**
 Set byte position in file. Return new position or -1 in case of failure.
 *)

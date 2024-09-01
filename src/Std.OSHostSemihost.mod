@@ -327,15 +327,6 @@ VAR
     i, ret : INTEGER;
     ch : CHAR;
 BEGIN
-    IF handle <= 3 THEN (* Hack due to different id of std handle *)
-        (* Direct to PutChar to perform buffered write due
-           to slow speed of semihost interface  *)
-        FOR i := 0 TO len - 1 DO
-            SYSTEM.GET(buffer + i, ch);
-            IGNORE(Putchar(ORD(ch)))
-        END;
-        RETURN len
-    END;
     args[0] := handle;
     args[1] := buffer;
     args[2] := len;
@@ -343,6 +334,23 @@ BEGIN
     IF ret = 0 THEN RETURN len
     ELSE RETURN len - ret END;
 END FileWrite;
+
+(*
+Write from std handle into buffer.
+Return number of bytes actually written or -1 on failure.
+*)
+PROCEDURE FileStdWrite*(handle : HANDLE; buffer : ADDRESS; len : LENGTH): LENGTH;
+VAR
+    i : INTEGER;
+    ch : CHAR;
+BEGIN
+    (* Direct to PutChar to perform buffered write due to slow speed of semihost interface  *)
+    FOR i := 0 TO len - 1 DO
+        SYSTEM.GET(buffer + i, ch);
+        IGNORE(Putchar(ORD(ch)))
+    END;
+    RETURN len
+END FileStdWrite;
 
 (**
 Set byte position in file. Return new position or -1 in case of failure.

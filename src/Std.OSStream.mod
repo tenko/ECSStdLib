@@ -138,7 +138,7 @@ END ReadBytes;
 
 (** Write bytes from buffer with start and length. *)
 PROCEDURE (VAR s : Std) WriteBytes*(VAR buffer : ARRAY OF BYTE; start, length : LENGTH): LENGTH;
-BEGIN RETURN OSHost.FileWrite(s.fh, SYSTEM.ADR(buffer[start]), length)
+BEGIN RETURN OSHost.FileStdWrite(s.fh, SYSTEM.ADR(buffer[start]), length)
 END WriteBytes;
 
 (** Return `TRUE` if Stream is a TTY *)
