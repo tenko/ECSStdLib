@@ -109,7 +109,7 @@ VAR
     i : INTEGER;
     ch : CHAR;
 BEGIN
-    (* Direct to PutChar to perform buffered write due to slow speed of semihost interface  *)
+    (* Direct to PutChar *)
     FOR i := 0 TO len - 1 DO
         SYSTEM.GET(buffer + i, ch);
         IGNORE(Putchar(ORD(ch)))
