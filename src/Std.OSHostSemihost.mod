@@ -347,7 +347,7 @@ BEGIN
     (* Direct to PutChar to perform buffered write due to slow speed of semihost interface  *)
     FOR i := 0 TO len - 1 DO
         SYSTEM.GET(buffer + i, ch);
-        IGNORE(Putchar(ORD(ch)))
+        IGNORE(PutChar(ORD(ch)))
     END;
     RETURN len
 END FileStdWrite;

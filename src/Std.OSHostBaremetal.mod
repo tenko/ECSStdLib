@@ -2,7 +2,7 @@
 MODULE OSHost IN Std;
 
 IMPORT SYSTEM;
-IN Std IMPORT Const, Char, ArrayOfChar;
+IN Std IMPORT Const, Char;
 
 CONST
     INVALID_HANDLE* = -1;
@@ -10,12 +10,7 @@ CONST
     STDOUT* = 1;
     STDERR* = 2;
     DATETIMEOFFSET* = TRUE;
-    (* libc errno codes *)
-    EOK             = 0;    (* No error *)
-    ENOENT	        = 2;    (* No such file or directory *)
-    EACCES	        = 13;	(* Permission denied *)
-    EEXIST	        = 17;	(* File exists *)
-       
+
 TYPE
     ADDRESS = SYSTEM.ADDRESS;
     HANDLE* = INTEGER;
@@ -25,9 +20,10 @@ TYPE
     END;
 
 VAR
-    argc, argvlen : LENGTH;
+    argc: LENGTH;
 
 PROCEDURE ^ Putchar ["putchar"] (character: INTEGER): INTEGER;
+
 PROCEDURE ^ Abort ["abort"] ();
 
 (**
@@ -253,4 +249,6 @@ PROCEDURE GetLastError*(VAR error: INTEGER);
 BEGIN error := Const.OK;
 END GetLastError;
 
+BEGIN
+    argc := -1;
 END OSHost.
