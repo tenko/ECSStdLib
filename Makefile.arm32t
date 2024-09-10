@@ -18,7 +18,7 @@ Real = Real32
 
 CPU = armt32
 # Semihost or Baremetal
-SYS = Semihost
+SYS = Baremetal
 
 RTS = armv7mrun.obf $(ECS)/micro.lib $(ECS)/armt32run.obf $(ECS)/obarmt32run.lib
 
