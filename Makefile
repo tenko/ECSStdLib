@@ -20,13 +20,14 @@ endif
 OLS += Const Config$(SYS) Type Char ArrayOfChar$(OPT) OSHost$(SYS) Integer Cardinal $(Real)
 OLS += ArrayOfByte$(OPT) ArrayOfSet DateTime String Regex ADTBasicType ADTStream ADTList ADTVector
 OLS += ADTSet ADTDictionary ADTTree O2Testing O2Timing$(SYS)
-OLS += OS OSStream OSFile OSDir OSPath
+OLS += OS OSStream OSFile OSDir OSPath DataConfig
 MOD = $(addprefix src/, $(addprefix Std., $(addsuffix .mod, $(OLS))))
 OBF = $(addprefix build/, $(addprefix Std., $(addsuffix .obf, $(OLS))))
 
 OTS  = TestArrayOfByte TestArrayOfChar TestArrayOfSet TestCardinal TestInteger TestReal
 OTS += TestString TestRegex TestDateTime TestADTBasicType TestADTList TestADTSet
 OTS += TestADTDictionary TestADTVector TestADTTree TestADTStream TestOSPath TestOS
+OTS += TestDataConfig
 
 TMOD = $(addprefix tests/, $(addsuffix .mod, $(OTS)))
 TOBF = $(addprefix build/, $(addsuffix .obf, $(OTS)))
@@ -54,6 +55,7 @@ build/Std.OSStream.obf : src/Std.Const.mod src/Std.ADTStream.mod src/Std.OSHost$
 build/Std.Regex.obf : src/Std.ArrayOfChar$(OPT).mod src/Std.ArrayOfSet.mod
 build/Std.String.obf : src/Std.Char.mod src/Std.Config$(SYS).mod src/Std.Type.mod src/Std.ArrayOfChar$(OPT).mod src/Std.Integer.mod src/Std.Cardinal.mod src/Std.DateTime.mod
 build/Std.Type.obf : src/Std.Const.mod src/Std.Config$(SYS).mod
+build/Std.DataConfig.obf : src/Std.Const.mod src/Std.Char.mod src/Std.ArrayOfChar$(OPT).mod src/Std.String.mod src/Std.Type.mod src/Std.ADTDictionary.mod src/Std.ADTSet.mod 
 
 build/%.obf: src/%.mod
 	@echo compiling $< 
@@ -84,6 +86,7 @@ build/TestOS.obf : src/Std.String.mod src/Std.OSStream.mod src/Std.OSPath.mod sr
 build/TestOSPath.obf : src/Std.OSPath.mod
 build/TestRegex.obf : src/Std.Regex.mod
 build/TestString.obf : src/Std.String.mod
+build/DataConfig.obf : src/Std.DataConfig.mod src/Std.ADTStream.mod src/Std.String.mod
 
 build/%.obf: tests/%.mod
 	@echo compiling $<

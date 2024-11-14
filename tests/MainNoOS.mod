@@ -18,8 +18,11 @@ IMPORT TestADTDictionary;
 IMPORT TestADTVector;
 IMPORT TestADTTree;
 IMPORT TestADTStream;
+IMPORT TestDataConfig;
+
 IMPORT SysMem IN Std;
 IN Micro IMPORT Traps := ARMv7MTraps;
+
 CONST
     M = "TestMain";
 
@@ -27,6 +30,7 @@ VAR
     test : Testing.TEST;
 BEGIN
     Traps.Init; Traps.debug := TRUE;
+    
     Testing.Initialize(test, M);
     TestArrayOfByte.Run(test);
     TestArrayOfChar.Run(test);
@@ -46,7 +50,9 @@ BEGIN
     TestADTVector.Run(test);
     TestADTTree.Run(test);
     TestADTStream.Run(test);
+    TestDataConfig.Run(test);
     Testing.Finalize(test);
+
     TRACE(SysMem.AllocSize);
     TRACE(SysMem.FreeMem());
 END TestMain.
