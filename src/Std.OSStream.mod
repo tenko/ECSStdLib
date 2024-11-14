@@ -33,7 +33,11 @@ TYPE
         fh : OSHost.HANDLE;
         type : INTEGER;
     END;
+    StdPtr = POINTER TO VAR Std;
 
+VAR
+    StdOut*, StdIn*, StdErr* : Std;
+    PtrStdOut, PtrStdIn, PtrStdErr : StdPtr;
 (*
  File
 *)
@@ -122,23 +126,50 @@ BEGIN RETURN TRUE END Seekable;
 Open one of the standard streams STDING, STDOUT or STDERR. Return TRUE on success.
 *)
 PROCEDURE (VAR s : Std) Open*(type : INTEGER): BOOLEAN;
+VAR ret : BOOLEAN;
 BEGIN
     s.type := type;
-    RETURN OSHost.StdHandle(s.fh, s.type)
+    ret := OSHost.StdHandle(s.fh, s.type);
+    IF ret THEN
+        CASE type OF
+          STDIN  : PtrStdIn := PTR(StdIn);
+        | STDOUT : PtrStdOut := PTR(StdOut);
+        | STDERR : PtrStdErr := PTR(StdErr);
+        END;
+    END;
+    RETURN ret;
 END Open;
 
 (** Close Stream *)
 PROCEDURE (VAR s : Std) Close*();
-BEGIN END Close;
+BEGIN
+    CASE s.type OF
+          STDIN  : PtrStdIn := NIL;
+        | STDOUT : PtrStdOut := NIL;
+        | STDERR : PtrStdErr := NIL;
+    END;
+END Close;
+
+(** Check if we need to open Stream variables *)
+PROCEDURE (VAR s : Std) Check*();
+BEGIN
+    IF (SYSTEM.ADR(s) = SYSTEM.ADR(StdIn)) &  (PtrStdIn = NIL) THEN
+        IGNORE(s.Open(STDIN))
+    ELSIF (SYSTEM.ADR(s) = SYSTEM.ADR(StdOut)) &  (PtrStdOut = NIL) THEN
+        IGNORE(s.Open(STDOUT))
+    ELSIF (SYSTEM.ADR(s) = SYSTEM.ADR(StdErr)) &  (PtrStdErr = NIL) THEN
+        IGNORE(s.Open(STDERR))
+    END;
+END Check;
 
 (** Read bytes into buffer with start and length. *)
 PROCEDURE (VAR s : Std) ReadBytes*(VAR buffer : ARRAY OF BYTE; start, length : LENGTH): LENGTH;
-BEGIN RETURN OSHost.FileRead(s.fh, SYSTEM.ADR(buffer[start]), length)
+BEGIN s.Check(); RETURN OSHost.FileRead(s.fh, SYSTEM.ADR(buffer[start]), length)
 END ReadBytes;
 
 (** Write bytes from buffer with start and length. *)
 PROCEDURE (VAR s : Std) WriteBytes*(VAR buffer : ARRAY OF BYTE; start, length : LENGTH): LENGTH;
-BEGIN RETURN OSHost.FileStdWrite(s.fh, SYSTEM.ADR(buffer[start]), length)
+BEGIN s.Check(); RETURN OSHost.FileStdWrite(s.fh, SYSTEM.ADR(buffer[start]), length)
 END WriteBytes;
 
 (** Return `TRUE` if Stream is a TTY *)
@@ -147,11 +178,11 @@ BEGIN RETURN TRUE END IsTTY;
 
 (** Return `TRUE` if Stream is readable *)
 PROCEDURE (VAR s : Std) Readable*(): BOOLEAN;
-BEGIN RETURN s.type = STDIN END Readable;
+BEGIN s.Check(); RETURN s.type = STDIN END Readable;
 
 (** Return `TRUE` if Stream is writeable *)
 PROCEDURE (VAR s : Std) Writeable*(): BOOLEAN;
-BEGIN RETURN (s.type = STDOUT) OR (s.type = STDERR) END Writeable;
+BEGIN s.Check(); RETURN (s.type = STDOUT) OR (s.type = STDERR) END Writeable;
 
 (** Return `TRUE` if Stream is seekable *)
 PROCEDURE (VAR s : Std) Seekable*(): BOOLEAN;
