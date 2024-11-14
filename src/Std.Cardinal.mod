@@ -52,7 +52,7 @@ The `Alt` flags prefix binary (base 2) numbers with `0b`,
 octal numbers (base 8) with `0o` and hex decimal numbers
 with either `0x` or `0X` depending on the `Upper` flag.
 *)
-PROCEDURE Format*(VAR Writer : Type.Writer; value : HUGECARD; base, width: INTEGER; flags: SET);
+PROCEDURE Format*(VAR Writer : Type.Stream; value : HUGECARD; base, width: INTEGER; flags: SET);
 VAR
     x, bas: HUGECARD;
     i, digits, len, left, right : LENGTH;

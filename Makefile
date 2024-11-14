@@ -17,7 +17,6 @@ else
 	RTS = 
 endif
 
-CLS = DBSQLite3Dll$(SYS).cpp
 OLS += Const Config$(SYS) Type Char ArrayOfChar$(OPT) OSHost$(SYS) Integer Cardinal $(Real)
 OLS += ArrayOfByte$(OPT) ArrayOfSet DateTime String Regex ADTBasicType ADTStream ADTList ADTVector
 OLS += ADTSet ADTDictionary ADTTree O2Testing O2Timing$(SYS)
@@ -54,6 +53,7 @@ build/Std.OSPath.obf : src/Std.ArrayOfChar$(OPT).mod src/Std.Config$(SYS).mod sr
 build/Std.OSStream.obf : src/Std.Const.mod src/Std.ADTStream.mod src/Std.OSHost$(SYS).mod
 build/Std.Regex.obf : src/Std.ArrayOfChar$(OPT).mod src/Std.ArrayOfSet.mod
 build/Std.String.obf : src/Std.Char.mod src/Std.Config$(SYS).mod src/Std.Type.mod src/Std.ArrayOfChar$(OPT).mod src/Std.Integer.mod src/Std.Cardinal.mod src/Std.DateTime.mod
+build/Std.Type.obf : src/Std.Const.mod src/Std.Config$(SYS).mod
 
 build/%.obf: src/%.mod
 	@echo compiling $< 

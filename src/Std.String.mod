@@ -5,7 +5,7 @@ IN Std IMPORT Char, Config, Type, ArrayOfChar, Integer, Cardinal, DateTime;
 TYPE
     STRING* = Type.STRING;
     (* StringWriter *)
-    StringWriter = RECORD(Type.Writer)
+    StringWriter = RECORD(Type.Stream)
         str* : STRING;
         pos* : LENGTH;
     END;

@@ -508,7 +508,7 @@ Format `DATETIME` according to format string arguments:
 
 Other characters are copied to output.
 *)
-PROCEDURE Format* (VAR Writer : Type.Writer; datetime : DATETIME; fmt- : ARRAY OF CHAR);
+PROCEDURE Format* (VAR Writer : Type.Stream; datetime : DATETIME; fmt- : ARRAY OF CHAR);
 VAR
     year, month, day: INTEGER;
     hour, min, sec, msec: INTEGER;

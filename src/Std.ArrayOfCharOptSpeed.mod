@@ -554,7 +554,7 @@ Format `ARRAY OF CHAR`.
 The `Upper` flag will make the whole string upper case.
 The `Alt` flag will capitalize the string.
 *)
-PROCEDURE Format*(VAR Writer : Type.Writer; str- : ARRAY OF CHAR; width, prec: INTEGER; flags: SET);
+PROCEDURE Format*(VAR Writer : Type.Stream; str- : ARRAY OF CHAR; width, prec: INTEGER; flags: SET);
 VAR i, strlen, left, right: LENGTH;
 BEGIN
     strlen := Length(str);

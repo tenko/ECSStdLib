@@ -14,7 +14,7 @@ The `Spc` flag fills in a blank character for `+` if the number is positive.
 The `Sign` flag fills in a `+` character if the number is positive.
 If both `Spc` and `Sign` are given then `Sign` precedes.
 *)
-PROCEDURE Format*(VAR Writer : Type.Writer; value : HUGEINT; width: LENGTH; flags: SET);
+PROCEDURE Format*(VAR Writer : Type.Stream; value : HUGEINT; width: LENGTH; flags: SET);
 VAR
     val, x : HUGECARD;
     i, len, digits, left, right : LENGTH;
