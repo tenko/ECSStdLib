@@ -144,6 +144,44 @@ perfCompare$(PRG) : misc/perfCompare.mod std.lib
 	@cp build/$@ .
 	@./$@
 
+.PHONY: doc
+doc:
+	@echo Building doc
+	@-rm -f doc/src/*.rst
+	@-mkdir -p doc/src
+	@./tools/docgen.py src/Std.ADTBasicType.mod -o doc/src/Std.ADTBasicType.mod.rst
+	@./tools/docgen.py src/Std.ADTDictionary.mod -o doc/src/Std.ADTDictionary.mod.rst
+	@./tools/docgen.py src/Std.ADTList.mod -o doc/src/Std.ADTList.mod.rst
+	@./tools/docgen.py src/Std.ADTSet.mod -o doc/src/Std.ADTSet.mod.rst
+	@./tools/docgen.py src/Std.ADTStream.mod -o doc/src/Std.ADTStream.mod.rst
+	@./tools/docgen.py src/Std.ADTTree.mod -o doc/src/Std.ADTTree.mod.rst
+	@./tools/docgen.py src/Std.ADTVector.mod -o doc/src/Std.ADTVector.mod.rst
+	@./tools/docgen.py src/Std.ArrayOfByte$(OPT).mod -o doc/src/Std.ArrayOfByte.mod.rst
+	@./tools/docgen.py src/Std.ArrayOfChar$(OPT).mod -o doc/src/Std.ArrayOfChar.mod.rst
+	@./tools/docgen.py src/Std.ArrayOfSet.mod -o doc/src/Std.ArrayOfSet.mod.rst
+	@./tools/docgen.py src/Std.Cardinal.mod -o doc/src/Std.Cardinal.mod.rst
+	@./tools/docgen.py src/Std.Char.mod -o doc/src/Std.Char.mod.rst
+	@./tools/docgen.py src/Std.Config$(SYS).mod -o doc/src/Std.Config.mod.rst
+	@./tools/docgen.py src/Std.Const.mod -o doc/src/Std.Const.mod.rst
+	@./tools/docgen.py src/Std.DataConfig.mod -o doc/src/Std.DataConfig.mod.rst
+	@./tools/docgen.py src/Std.DateTime.mod -o doc/src/Std.DateTime.mod.rst
+	@./tools/docgen.py src/Std.Integer.mod -o doc/src/Std.Integer.mod.rst
+	@./tools/docgen.py src/Std.O2Testing.mod -o doc/src/Std.O2Testing.mod.rst
+	@./tools/docgen.py src/Std.O2Timing$(SYS).mod -o doc/src/Std.O2Timing.mod.rst
+	@./tools/docgen.py src/Std.OS.mod -o doc/src/Std.OS.mod.rst
+	@./tools/docgen.py src/Std.OSDir.mod -o doc/src/Std.OSDir.mod.rst
+	@./tools/docgen.py src/Std.OSFile.mod -o doc/src/Std.OSFile.mod.rst
+	@./tools/docgen.py src/Std.OSHost$(SYS).mod -o doc/src/Std.OSHost.mod.rst
+	@./tools/docgen.py src/Std.OSPath.mod -o doc/src/Std.OSPath.mod.rst
+	@./tools/docgen.py src/Std.OSStream.mod -o doc/src/Std.OSStream.mod.rst
+	@./tools/docgen.py src/Std.$(Real).mod -o doc/src/Std.Real.mod.rst
+	@./tools/docgen.py src/Std.Regex.mod -o doc/src/Std.Regex.mod.rst
+	@./tools/docgen.py src/Std.String.mod -o doc/src/Std.String.mod.rst
+	@./tools/docgen.py src/Std.Type.mod -o doc/src/Std.Type.mod.rst
+	@echo Creating html
+	@make -C doc html
+	@start "" build/doc/html/index.html &
+
 .PHONY: install
 install: std.lib
 	@echo Install
