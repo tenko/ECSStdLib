@@ -1,0 +1,790 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ArrayOfSet &mdash; ECSStdLib 0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=2709fde1"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Cardinal" href="Std.Cardinal.mod.html" />
+    <link rel="prev" title="ArrayOfChar" href="Std.ArrayOfChar.mod.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html">
+            
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Common:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Std.Config.mod.html">Config</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Std.Config.mod.html#const">Const</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Std.Const.mod.html">Const</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Std.Const.mod.html#id2">Const</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Std.Type.mod.html">Type</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Std.Type.mod.html#types">Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Std.Type.mod.html#procedures">Procedures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-haserror">Stream.HasError</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-lasterror">Stream.LastError</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-clearerror">Stream.ClearError</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-readbytes">Stream.ReadBytes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-readbyte">Stream.ReadByte</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-readchar">Stream.ReadChar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-readinteger">Stream.ReadInteger</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-readlongint">Stream.ReadLongInt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-readreal">Stream.ReadReal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-readlongreal">Stream.ReadLongReal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-readline">Stream.ReadLine</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-writebytes">Stream.WriteBytes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-writebyte">Stream.WriteByte</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-writechar">Stream.WriteChar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-writeinteger">Stream.WriteInteger</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-writelongint">Stream.WriteLongInt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-writereal">Stream.WriteReal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-writelongreal">Stream.WriteLongReal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-writestring">Stream.WriteString</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-writenl">Stream.WriteNL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-writestream">Stream.WriteStream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-seek">Stream.Seek</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-tell">Stream.Tell</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-truncate">Stream.Truncate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-flush">Stream.Flush</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-close">Stream.Close</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-closed">Stream.Closed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-istty">Stream.IsTTY</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-readable">Stream.Readable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-writeable">Stream.Writeable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-seekable">Stream.Seekable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-formatstring">Stream.FormatString</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-formatinteger">Stream.FormatInteger</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-formatreal">Stream.FormatReal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-formatcardinal">Stream.FormatCardinal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-formatdatetime">Stream.FormatDateTime</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Basic Data Types:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Std.ArrayOfByte.mod.html">ArrayOfByte</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Std.ArrayOfByte.mod.html#procedures">Procedures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Std.ArrayOfByte.mod.html#fill">Fill</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ArrayOfByte.mod.html#zero">Zero</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ArrayOfByte.mod.html#copy">Copy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ArrayOfByte.mod.html#iszero">IsZero</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ArrayOfByte.mod.html#equal">Equal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ArrayOfByte.mod.html#hash">Hash</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Std.ArrayOfChar.mod.html">ArrayOfChar</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Std.ArrayOfChar.mod.html#procedures">Procedures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Std.ArrayOfChar.mod.html#clear">Clear</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ArrayOfChar.mod.html#nulterminate">NulTerminate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ArrayOfChar.mod.html#capacity">Capacity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ArrayOfChar.mod.html#length">Length</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ArrayOfChar.mod.html#assign">Assign</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ArrayOfChar.mod.html#fillchar">FillChar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ArrayOfChar.mod.html#appendchar">AppendChar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ArrayOfChar.mod.html#append">Append</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ArrayOfChar.mod.html#extract">Extract</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ArrayOfChar.mod.html#compare">Compare</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ArrayOfChar.mod.html#equal">Equal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ArrayOfChar.mod.html#indexchar">IndexChar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ArrayOfChar.mod.html#index">Index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ArrayOfChar.mod.html#delete">Delete</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ArrayOfChar.mod.html#insert">Insert</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ArrayOfChar.mod.html#replace">Replace</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ArrayOfChar.mod.html#lefttrim">LeftTrim</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ArrayOfChar.mod.html#righttrim">RightTrim</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ArrayOfChar.mod.html#leftpad">LeftPad</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ArrayOfChar.mod.html#rightpad">RightPad</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ArrayOfChar.mod.html#trim">Trim</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ArrayOfChar.mod.html#lowercase">LowerCase</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ArrayOfChar.mod.html#uppercase">UpperCase</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ArrayOfChar.mod.html#capitalize">Capitalize</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ArrayOfChar.mod.html#startswith">StartsWith</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ArrayOfChar.mod.html#endswith">EndsWith</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ArrayOfChar.mod.html#match">Match</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ArrayOfChar.mod.html#format">Format</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ArrayOfChar.mod.html#hash">Hash</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ArrayOfSet</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#const">Const</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#procedures">Procedures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#clear">Clear</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fill">Fill</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#copy">Copy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#in">In</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#iszero">IsZero</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#equal">Equal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#issubset">IsSubset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#incl">Incl</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#excl">Excl</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#invert">Invert</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#union">Union</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#difference">Difference</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#intersection">Intersection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#symmetricdifference">SymmetricDifference</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Std.Cardinal.mod.html">Cardinal</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Std.Cardinal.mod.html#procedures">Procedures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Std.Cardinal.mod.html#random">Random</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Cardinal.mod.html#randomrange">RandomRange</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Cardinal.mod.html#format">Format</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Cardinal.mod.html#fromsubstring">FromSubString</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Cardinal.mod.html#fromstring">FromString</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Std.Char.mod.html">Char</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Std.Char.mod.html#const">Const</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Std.Char.mod.html#procedures">Procedures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Std.Char.mod.html#iscontrol">IsControl</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Char.mod.html#isdigit">IsDigit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Char.mod.html#isletter">IsLetter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Char.mod.html#isspace">IsSpace</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Char.mod.html#islower">IsLower</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Char.mod.html#isupper">IsUpper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Char.mod.html#lower">Lower</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Char.mod.html#upper">Upper</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Std.DateTime.mod.html">DateTime</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Std.DateTime.mod.html#const">Const</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Std.DateTime.mod.html#types">Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Std.DateTime.mod.html#procedures">Procedures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Std.DateTime.mod.html#tryencodedate">TryEncodeDate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.DateTime.mod.html#encodedate">EncodeDate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.DateTime.mod.html#tryencodedatetime">TryEncodeDateTime</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.DateTime.mod.html#encodedatetime">EncodeDateTime</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.DateTime.mod.html#decodedate">DecodeDate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.DateTime.mod.html#decodetime">DecodeTime</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.DateTime.mod.html#decodedatetime">DecodeDateTime</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.DateTime.mod.html#datetimetodate">DateTimeToDate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.DateTime.mod.html#incyear">IncYear</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.DateTime.mod.html#decyear">DecYear</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.DateTime.mod.html#incmonth">IncMonth</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.DateTime.mod.html#decmonth">DecMonth</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.DateTime.mod.html#inc">Inc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.DateTime.mod.html#dec">Dec</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.DateTime.mod.html#now">Now</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.DateTime.mod.html#today">Today</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.DateTime.mod.html#extract">Extract</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.DateTime.mod.html#trunc">Trunc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.DateTime.mod.html#diff">Diff</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.DateTime.mod.html#span">Span</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.DateTime.mod.html#format">Format</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.DateTime.mod.html#fromsubstring">FromSubString</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.DateTime.mod.html#fromstring">FromString</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Std.Integer.mod.html">Integer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Std.Integer.mod.html#procedures">Procedures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Std.Integer.mod.html#format">Format</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Integer.mod.html#fromsubstring">FromSubString</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Integer.mod.html#fromstring">FromString</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Std.Real.mod.html">Real</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Std.Real.mod.html#const">Const</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Std.Real.mod.html#procedures">Procedures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Std.Real.mod.html#fpclassify">FPClassify</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Real.mod.html#isnan">IsNan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Real.mod.html#isinf">IsInf</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Real.mod.html#isfinite">IsFinite</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Real.mod.html#iszero">IsZero</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Real.mod.html#isnormal">IsNormal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Real.mod.html#signbit">SignBit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Real.mod.html#copysign">CopySign</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Real.mod.html#abs">Abs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Real.mod.html#floor">Floor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Real.mod.html#round">Round</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Real.mod.html#sin">Sin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Real.mod.html#cos">Cos</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Real.mod.html#arctan">ArcTan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Real.mod.html#arctan2">ArcTan2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Real.mod.html#sqrt">Sqrt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Real.mod.html#log">Log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Real.mod.html#exp">Exp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Real.mod.html#tan">Tan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Real.mod.html#format">Format</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Real.mod.html#fromstring">FromString</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Std.String.mod.html">String</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Std.String.mod.html#types">Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Std.String.mod.html#procedures">Procedures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Std.String.mod.html#reserve">Reserve</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.String.mod.html#assign">Assign</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.String.mod.html#appendchar">AppendChar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.String.mod.html#ln">Ln</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.String.mod.html#append">Append</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.String.mod.html#extract">Extract</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.String.mod.html#compare">Compare</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.String.mod.html#equal">Equal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.String.mod.html#insert">Insert</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.String.mod.html#replace">Replace</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.String.mod.html#new">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.String.mod.html#s">S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.String.mod.html#duplicate">Duplicate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.String.mod.html#dispose">Dispose</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.String.mod.html#formatstring">FormatString</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.String.mod.html#formatinteger">FormatInteger</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.String.mod.html#formatcardinal">FormatCardinal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.String.mod.html#formatdatetime">FormatDateTime</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.String.mod.html#hash">Hash</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Abstract Data Types:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Std.ADTBasicType.mod.html">ADTBasicType</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Std.ADTBasicType.mod.html#procedures">Procedures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTBasicType.mod.html#min">Min</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTBasicType.mod.html#max">Max</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTBasicType.mod.html#swap">Swap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTBasicType.mod.html#compare">Compare</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTBasicType.mod.html#equal">Equal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTBasicType.mod.html#hash">Hash</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Std.ADTDictionary.mod.html">ADTDictionary</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Std.ADTDictionary.mod.html#procedures">Procedures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTDictionary.mod.html#dictionary-init">Dictionary.Init</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTDictionary.mod.html#dictionary-dispose">Dictionary.Dispose</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTDictionary.mod.html#dictionary-set">Dictionary.Set</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTDictionary.mod.html#dictionary-remove">Dictionary.Remove</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTDictionary.mod.html#dictionary-discard">Dictionary.Discard</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTDictionary.mod.html#dictionary-clear">Dictionary.Clear</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTDictionary.mod.html#dictionary-pop">Dictionary.Pop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTDictionary.mod.html#dictionary-popitem">Dictionary.PopItem</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTDictionary.mod.html#iterator-next">Iterator.Next</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTDictionary.mod.html#iterator-nextitem">Iterator.NextItem</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTDictionary.mod.html#iterator-reset">Iterator.Reset</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Std.ADTList.mod.html">ADTList</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Std.ADTList.mod.html#procedures">Procedures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTList.mod.html#list-init">List.Init</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTList.mod.html#list-dispose">List.Dispose</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTList.mod.html#list-apply">List.Apply</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTList.mod.html#list-append">List.Append</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTList.mod.html#list-appendhead">List.AppendHead</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTList.mod.html#list-pop">List.Pop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTList.mod.html#list-pophead">List.PopHead</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTList.mod.html#iterator-next">Iterator.Next</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Std.ADTSet.mod.html">ADTSet</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Std.ADTSet.mod.html#procedures">Procedures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTSet.mod.html#set-init">Set.Init</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTSet.mod.html#set-dispose">Set.Dispose</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTSet.mod.html#set-incl">Set.Incl</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTSet.mod.html#set-excl">Set.Excl</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTSet.mod.html#set-clear">Set.Clear</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTSet.mod.html#set-pop">Set.Pop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTSet.mod.html#iterator-next">Iterator.Next</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTSet.mod.html#iterator-reset">Iterator.Reset</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Std.ADTStream.mod.html">ADTStream</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Std.ADTStream.mod.html#types">Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Std.ADTStream.mod.html#procedures">Procedures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTStream.mod.html#adtstream-formatstring">ADTStream.FormatString</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTStream.mod.html#adtstream-formatinteger">ADTStream.FormatInteger</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTStream.mod.html#adtstream-formatreal">ADTStream.FormatReal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTStream.mod.html#adtstream-formatcardinal">ADTStream.FormatCardinal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTStream.mod.html#adtstream-formatdatetime">ADTStream.FormatDateTime</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTStream.mod.html#nullstream-readbytes">NullStream.ReadBytes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTStream.mod.html#nullstream-writebytes">NullStream.WriteBytes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTStream.mod.html#nullstream-readable">NullStream.Readable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTStream.mod.html#nullstream-writeable">NullStream.Writeable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTStream.mod.html#nullstream-seekable">NullStream.Seekable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTStream.mod.html#memorystream-open">MemoryStream.Open</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTStream.mod.html#memorystream-tostring">MemoryStream.ToString</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTStream.mod.html#memorystream-readbytes">MemoryStream.ReadBytes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTStream.mod.html#memorystream-reserve">MemoryStream.Reserve</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTStream.mod.html#memorystream-shrink">MemoryStream.Shrink</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTStream.mod.html#memorystream-writebytes">MemoryStream.WriteBytes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTStream.mod.html#memorystream-seek">MemoryStream.Seek</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTStream.mod.html#memorystream-tell">MemoryStream.Tell</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTStream.mod.html#memorystream-truncate">MemoryStream.Truncate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTStream.mod.html#memorystream-close">MemoryStream.Close</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTStream.mod.html#memorystream-closed">MemoryStream.Closed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTStream.mod.html#memorystream-readable">MemoryStream.Readable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTStream.mod.html#memorystream-writeable">MemoryStream.Writeable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTStream.mod.html#memorystream-seekable">MemoryStream.Seekable</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Std.ADTTree.mod.html">ADTTree</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Std.ADTTree.mod.html#procedures">Procedures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTTree.mod.html#tree-init">Tree.Init</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTTree.mod.html#tree-dispose">Tree.Dispose</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTTree.mod.html#iterator-next">Iterator.Next</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTTree.mod.html#tree-insert">Tree.Insert</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTTree.mod.html#tree-remove">Tree.Remove</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Std.ADTVector.mod.html">ADTVector</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Std.ADTVector.mod.html#procedures">Procedures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-init">Vector.Init</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-clear">Vector.Clear</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-dispose">Vector.Dispose</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-reserve">Vector.Reserve</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-shrink">Vector.Shrink</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-append">Vector.Append</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-set">Vector.Set</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-get">Vector.Get</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-pop">Vector.Pop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-reverse">Vector.Reverse</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-shuffle">Vector.Shuffle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-sort">Vector.Sort</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Library:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Std.DataConfig.mod.html">DataConfig</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Std.DataConfig.mod.html#types">Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Std.DataConfig.mod.html#procedures">Procedures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Std.DataConfig.mod.html#initparser">InitParser</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.DataConfig.mod.html#parser-dispose">Parser.Dispose</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.DataConfig.mod.html#parser-clear">Parser.Clear</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.DataConfig.mod.html#parser-set">Parser.Set</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.DataConfig.mod.html#parser-delete">Parser.Delete</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.DataConfig.mod.html#parser-read">Parser.Read</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Std.O2Testing.mod.html">O2Testing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Std.O2Testing.mod.html#types">Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Std.O2Testing.mod.html#procedures">Procedures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Std.O2Testing.mod.html#initialize">Initialize</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.O2Testing.mod.html#begin">Begin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.O2Testing.mod.html#end">End</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.O2Testing.mod.html#finalize">Finalize</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.O2Testing.mod.html#assert">Assert</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Std.O2Timing.mod.html">O2Timing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Std.O2Timing.mod.html#procedures">Procedures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Std.O2Timing.mod.html#starttimer">StartTimer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.O2Timing.mod.html#elapsed">Elapsed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.O2Timing.mod.html#timing">Timing</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Std.OS.mod.html">OS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Std.OS.mod.html#const">Const</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Std.OS.mod.html#types">Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Std.OS.mod.html#procedures">Procedures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Std.OS.mod.html#programname">ProgramName</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OS.mod.html#args">Args</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OS.mod.html#arg">Arg</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OS.mod.html#initargument">InitArgument</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OS.mod.html#nextargument">NextArgument</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OS.mod.html#hasenv">HasEnv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OS.mod.html#env">Env</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OS.mod.html#getlasterror">GetLastError</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OS.mod.html#exit">Exit</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Std.OSDir.mod.html">OSDir</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Std.OSDir.mod.html#types">Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Std.OSDir.mod.html#procedures">Procedures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSDir.mod.html#dir-open">Dir.Open</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSDir.mod.html#dir-close">Dir.Close</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSDir.mod.html#dir-next">Dir.Next</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSDir.mod.html#dir-name">Dir.Name</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSDir.mod.html#dir-isdir">Dir.IsDir</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSDir.mod.html#current">Current</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSDir.mod.html#setcurrent">SetCurrent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSDir.mod.html#create">Create</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSDir.mod.html#delete">Delete</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Std.OSFile.mod.html">OSFile</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Std.OSFile.mod.html#procedures">Procedures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSFile.mod.html#exists">Exists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSFile.mod.html#delete">Delete</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSFile.mod.html#rename">Rename</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSFile.mod.html#modifytime">ModifyTime</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Std.OSHost.mod.html">OSHost</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Std.OSHost.mod.html#const">Const</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Std.OSHost.mod.html#types">Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Std.OSHost.mod.html#procedures">Procedures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSHost.mod.html#programnamelength">ProgramNameLength</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSHost.mod.html#programname">ProgramName</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSHost.mod.html#args">Args</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSHost.mod.html#arglength">ArgLength</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSHost.mod.html#arg">Arg</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSHost.mod.html#stdhandle">StdHandle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSHost.mod.html#fileopen">FileOpen</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSHost.mod.html#fileclose">FileClose</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSHost.mod.html#fileread">FileRead</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSHost.mod.html#filewrite">FileWrite</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSHost.mod.html#filestdwrite">FileStdWrite</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSHost.mod.html#fileseek">FileSeek</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSHost.mod.html#filetell">FileTell</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSHost.mod.html#filesetsize">FileSetSize</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSHost.mod.html#filetruncate">FileTruncate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSHost.mod.html#fileflush">FileFlush</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSHost.mod.html#fileexists">FileExists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSHost.mod.html#fileremove">FileRemove</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSHost.mod.html#filerename">FileRename</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSHost.mod.html#filemodificationtime">FileModificationTime</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSHost.mod.html#diropen">DirOpen</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSHost.mod.html#dirclose">DirClose</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSHost.mod.html#dirnext">DirNext</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSHost.mod.html#dirnamelength">DirNameLength</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSHost.mod.html#dirname">DirName</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSHost.mod.html#dirisdir">DirIsDir</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSHost.mod.html#gettime">GetTime</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSHost.mod.html#gettimezoneoffset">GetTimeZoneOffset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSHost.mod.html#cdnamelength">CDNameLength</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSHost.mod.html#cdname">CDName</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSHost.mod.html#setcd">SetCD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSHost.mod.html#createdirectory">CreateDirectory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSHost.mod.html#removedirectory">RemoveDirectory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSHost.mod.html#envvarlength">EnvVarLength</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSHost.mod.html#envvar">EnvVar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSHost.mod.html#exit">Exit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSHost.mod.html#getlasterror">GetLastError</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Std.OSPath.mod.html">OSPath</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Std.OSPath.mod.html#const">Const</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Std.OSPath.mod.html#procedures">Procedures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSPath.mod.html#join">Join</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSPath.mod.html#absolute">Absolute</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSPath.mod.html#filename">FileName</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSPath.mod.html#dirname">DirName</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSPath.mod.html#extension">Extension</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSPath.mod.html#match">Match</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Std.OSStream.mod.html">OSStream</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Std.OSStream.mod.html#const">Const</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Std.OSStream.mod.html#types">Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Std.OSStream.mod.html#procedures">Procedures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSStream.mod.html#file-open">File.Open</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSStream.mod.html#file-close">File.Close</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSStream.mod.html#file-closed">File.Closed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSStream.mod.html#file-readbytes">File.ReadBytes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSStream.mod.html#file-writebytes">File.WriteBytes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSStream.mod.html#file-seek">File.Seek</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSStream.mod.html#file-tell">File.Tell</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSStream.mod.html#file-truncate">File.Truncate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSStream.mod.html#file-flush">File.Flush</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSStream.mod.html#file-readable">File.Readable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSStream.mod.html#file-writeable">File.Writeable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSStream.mod.html#file-seekable">File.Seekable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSStream.mod.html#std-open">Std.Open</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSStream.mod.html#std-close">Std.Close</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSStream.mod.html#std-check">Std.Check</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSStream.mod.html#std-readbytes">Std.ReadBytes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSStream.mod.html#std-writebytes">Std.WriteBytes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSStream.mod.html#std-istty">Std.IsTTY</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSStream.mod.html#std-readable">Std.Readable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSStream.mod.html#std-writeable">Std.Writeable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSStream.mod.html#std-seekable">Std.Seekable</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Std.Regex.mod.html">Regex</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Std.Regex.mod.html#types">Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Std.Regex.mod.html#procedures">Procedures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Std.Regex.mod.html#dispose">Dispose</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Regex.mod.html#compile">Compile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Regex.mod.html#pattern-match">Pattern.Match</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Regex.mod.html#pattern-fullmatch">Pattern.FullMatch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Regex.mod.html#pattern-matchlength">Pattern.MatchLength</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Regex.mod.html#pattern-matchpos">Pattern.MatchPos</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Std.Regex.mod.html#example">Example</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Std.Regex.mod.html#regex-example">Regex Example</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ECSStdLib</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">ArrayOfSet</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/src/Std.ArrayOfSet.mod.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="arrayofset">
+<span id="index-0"></span><span id="id1"></span><h1>ArrayOfSet<a class="headerlink" href="#arrayofset" title="Link to this heading"></a></h1>
+<p>Treat ARRAY OF SET as a large set. Array lengths of must match and array
+must be large enough to match the largest set memeber.</p>
+<p>ETH Oberon, Copyright 1990-2003 Computer Systems Institute, ETH Zurich, CH-8092 Zurich.
+Refer to the license.txt file provided with this distribution.</p>
+<section id="const">
+<h2>Const<a class="headerlink" href="#const" title="Link to this heading"></a></h2>
+<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="n">SETSIZE</span><span class="o">*</span> <span class="o">=</span> <span class="nb">SIZE</span><span class="p">(</span><span class="kr">SET</span><span class="p">)</span> <span class="o">*</span> <span class="mi">8</span><span class="p">;</span>
+</pre></div>
+</div>
+</section>
+<section id="procedures">
+<h2>Procedures<a class="headerlink" href="#procedures" title="Link to this heading"></a></h2>
+<section id="clear">
+<span id="arrayofset-clear"></span><h3>Clear<a class="headerlink" href="#clear" title="Link to this heading"></a></h3>
+<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="n">Clear</span><span class="o">*</span><span class="p">(</span><span class="kr">VAR</span> <span class="n">s</span><span class="p">:</span> <span class="kr">ARRAY</span> <span class="kr">OF</span> <span class="kr">SET</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="fill">
+<span id="arrayofset-fill"></span><h3>Fill<a class="headerlink" href="#fill" title="Link to this heading"></a></h3>
+<blockquote>
+<div><p>Fill content of set</p>
+</div></blockquote>
+<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="n">Fill</span><span class="o">*</span><span class="p">(</span><span class="kr">VAR</span> <span class="n">s</span><span class="p">:</span> <span class="kr">ARRAY</span> <span class="kr">OF</span> <span class="kr">SET</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="copy">
+<span id="arrayofset-copy"></span><h3>Copy<a class="headerlink" href="#copy" title="Link to this heading"></a></h3>
+<blockquote>
+<div><p>Copy src to dst</p>
+</div></blockquote>
+<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="n">Copy</span><span class="o">*</span><span class="p">(</span><span class="kr">VAR</span> <span class="n">dst</span><span class="p">:</span> <span class="kr">ARRAY</span> <span class="kr">OF</span> <span class="kr">SET</span><span class="p">;</span> <span class="n">src</span><span class="o">-</span><span class="p">:</span> <span class="kr">ARRAY</span> <span class="kr">OF</span> <span class="kr">SET</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="in">
+<span id="arrayofset-in"></span><h3>In<a class="headerlink" href="#in" title="Link to this heading"></a></h3>
+<blockquote>
+<div><p>Return TRUE if set contains x</p>
+</div></blockquote>
+<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="n">In</span><span class="o">*</span><span class="p">(</span><span class="n">s</span><span class="o">-</span><span class="p">:</span> <span class="kr">ARRAY</span> <span class="kr">OF</span> <span class="kr">SET</span><span class="p">;</span> <span class="n">x</span><span class="p">:</span> <span class="nb">LENGTH</span><span class="p">):</span> <span class="nb">BOOLEAN</span><span class="p">;</span>
+</pre></div>
+</div>
+</section>
+<section id="iszero">
+<span id="arrayofset-iszero"></span><h3>IsZero<a class="headerlink" href="#iszero" title="Link to this heading"></a></h3>
+<blockquote>
+<div><p>Test if set is all zeros</p>
+</div></blockquote>
+<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="n">IsZero</span><span class="o">*</span> <span class="p">(</span><span class="kr">VAR</span> <span class="n">src</span><span class="o">-</span> <span class="p">:</span> <span class="kr">ARRAY</span> <span class="kr">OF</span> <span class="kr">SET</span><span class="p">):</span> <span class="nb">BOOLEAN</span><span class="p">;</span>
+</pre></div>
+</div>
+</section>
+<section id="equal">
+<span id="arrayofset-equal"></span><h3>Equal<a class="headerlink" href="#equal" title="Link to this heading"></a></h3>
+<blockquote>
+<div><p>Test if <cite>left</cite> and <cite>right</cite> is equal.</p>
+</div></blockquote>
+<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="n">Equal</span><span class="o">*</span> <span class="p">(</span><span class="kr">VAR</span> <span class="n">left</span><span class="o">-</span><span class="p">,</span> <span class="n">right</span><span class="o">-</span> <span class="p">:</span> <span class="kr">ARRAY</span> <span class="kr">OF</span> <span class="kr">SET</span><span class="p">):</span> <span class="nb">BOOLEAN</span><span class="p">;</span>
+</pre></div>
+</div>
+</section>
+<section id="issubset">
+<span id="arrayofset-issubset"></span><h3>IsSubset<a class="headerlink" href="#issubset" title="Link to this heading"></a></h3>
+<blockquote>
+<div><p>Return TRUE if all elements in left is found in right</p>
+</div></blockquote>
+<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="n">IsSubset</span><span class="o">*</span><span class="p">(</span><span class="kr">VAR</span> <span class="n">left</span><span class="o">-</span><span class="p">,</span> <span class="n">right</span><span class="o">-</span> <span class="p">:</span> <span class="kr">ARRAY</span> <span class="kr">OF</span> <span class="kr">SET</span><span class="p">):</span> <span class="nb">BOOLEAN</span><span class="p">;</span>
+</pre></div>
+</div>
+</section>
+<section id="incl">
+<span id="arrayofset-incl"></span><h3>Incl<a class="headerlink" href="#incl" title="Link to this heading"></a></h3>
+<blockquote>
+<div><p>Include x in set</p>
+</div></blockquote>
+<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="n">Incl</span><span class="o">*</span><span class="p">(</span><span class="kr">VAR</span> <span class="n">s</span><span class="p">:</span> <span class="kr">ARRAY</span> <span class="kr">OF</span> <span class="kr">SET</span><span class="p">;</span> <span class="n">x</span><span class="p">:</span> <span class="nb">LENGTH</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="excl">
+<span id="arrayofset-excl"></span><h3>Excl<a class="headerlink" href="#excl" title="Link to this heading"></a></h3>
+<blockquote>
+<div><p>Exlude x from set</p>
+</div></blockquote>
+<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="n">Excl</span><span class="o">*</span><span class="p">(</span><span class="kr">VAR</span> <span class="n">s</span><span class="p">:</span> <span class="kr">ARRAY</span> <span class="kr">OF</span> <span class="kr">SET</span><span class="p">;</span> <span class="n">x</span><span class="p">:</span> <span class="nb">LENGTH</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="invert">
+<span id="arrayofset-invert"></span><h3>Invert<a class="headerlink" href="#invert" title="Link to this heading"></a></h3>
+<blockquote>
+<div><p>Invert set</p>
+</div></blockquote>
+<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="n">Invert</span><span class="o">*</span><span class="p">(</span><span class="kr">VAR</span> <span class="n">dst</span><span class="p">:</span> <span class="kr">ARRAY</span> <span class="kr">OF</span> <span class="kr">SET</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="union">
+<span id="arrayofset-union"></span><h3>Union<a class="headerlink" href="#union" title="Link to this heading"></a></h3>
+<blockquote>
+<div><p>Set dst to elements both in x and y</p>
+</div></blockquote>
+<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="n">Union</span><span class="o">*</span><span class="p">(</span><span class="kr">VAR</span> <span class="n">dst</span><span class="p">:</span> <span class="kr">ARRAY</span> <span class="kr">OF</span> <span class="kr">SET</span><span class="p">;</span> <span class="n">x</span><span class="o">-</span><span class="p">,</span> <span class="n">y</span><span class="o">-</span><span class="p">:</span> <span class="kr">ARRAY</span> <span class="kr">OF</span> <span class="kr">SET</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="difference">
+<span id="arrayofset-difference"></span><h3>Difference<a class="headerlink" href="#difference" title="Link to this heading"></a></h3>
+<blockquote>
+<div><p>Set dst to element in x but not in y</p>
+</div></blockquote>
+<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="n">Difference</span><span class="o">*</span><span class="p">(</span><span class="kr">VAR</span> <span class="n">dst</span><span class="p">:</span> <span class="kr">ARRAY</span> <span class="kr">OF</span> <span class="kr">SET</span><span class="p">;</span> <span class="n">x</span><span class="o">-</span><span class="p">,</span> <span class="n">y</span><span class="o">-</span><span class="p">:</span> <span class="kr">ARRAY</span> <span class="kr">OF</span> <span class="kr">SET</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="intersection">
+<span id="arrayofset-intersection"></span><h3>Intersection<a class="headerlink" href="#intersection" title="Link to this heading"></a></h3>
+<blockquote>
+<div><p>Set dst to element common to x and y</p>
+</div></blockquote>
+<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="n">Intersection</span><span class="o">*</span><span class="p">(</span><span class="kr">VAR</span> <span class="n">dst</span><span class="p">:</span> <span class="kr">ARRAY</span> <span class="kr">OF</span> <span class="kr">SET</span><span class="p">;</span> <span class="n">x</span><span class="o">-</span><span class="p">,</span> <span class="n">y</span><span class="o">-</span><span class="p">:</span> <span class="kr">ARRAY</span> <span class="kr">OF</span> <span class="kr">SET</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="symmetricdifference">
+<span id="arrayofset-symmetricdifference"></span><h3>SymmetricDifference<a class="headerlink" href="#symmetricdifference" title="Link to this heading"></a></h3>
+<blockquote>
+<div><p>Set dst to elements in either x or y, but not in both</p>
+</div></blockquote>
+<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="n">SymmetricDifference</span><span class="o">*</span><span class="p">(</span><span class="kr">VAR</span> <span class="n">dst</span><span class="p">:</span> <span class="kr">ARRAY</span> <span class="kr">OF</span> <span class="kr">SET</span><span class="p">;</span> <span class="n">x</span><span class="o">-</span><span class="p">,</span> <span class="n">y</span><span class="o">-</span><span class="p">:</span> <span class="kr">ARRAY</span> <span class="kr">OF</span> <span class="kr">SET</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Std.ArrayOfChar.mod.html" class="btn btn-neutral float-left" title="ArrayOfChar" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Std.Cardinal.mod.html" class="btn btn-neutral float-right" title="Cardinal" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Runar Tenfjord.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(false);
+      });
+  </script> 
+
+</body>
+</html>
