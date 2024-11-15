@@ -11,10 +11,12 @@ ifdef MSYSTEM
 	PRG = .exe
 	SYS = Win
 	RTS = /c/EigenCompilerSuite/runtime/win64api.obf
+	CONV = unix2dos
 else
 	PRG = 
 	SYS = Lin
 	RTS = 
+	CONV = dos2unix
 endif
 
 OLS += Const Config$(SYS) Type Char ArrayOfChar$(OPT) OSHost$(SYS) Integer Cardinal $(Real)
@@ -91,7 +93,7 @@ build/DataConfig.obf : src/Std.DataConfig.mod src/Std.ADTStream.mod src/Std.Stri
 build/%.obf: tests/%.mod
 	@echo compiling $<
 	@mkdir -p build
-	@cd build && cat $(addprefix ../, $<) | awk '{gsub("__LINE__",NR,$$0);print}' > $(notdir $<)
+	@cd build && cat $(addprefix ../, $<) | awk '{gsub("__LINE__",NR,$$0);print}' | $(CONV) > $(notdir $<)
 	@cd build && ecsd -c $(notdir $<)
 
 TestMain$(PRG) : $(TOBF) std.lib
