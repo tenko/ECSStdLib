@@ -142,7 +142,7 @@ BEGIN
     RETURN 0;
 END Size;
 
-(* Find node equal to element argument. Return NIL if no node is found. *)
+(** Find node equal to element argument. Return NIL if no node is found. *)
 PROCEDURE (VAR this-: Tree) FindNode*(element-: Element) : Node;
 VAR
     node: Node;

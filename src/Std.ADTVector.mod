@@ -142,13 +142,13 @@ BEGIN
     RETURN ret
 END At;
 
-(* Set value at idx *)
+(** Set value at idx *)
 PROCEDURE (VAR this : Vector) Set*(idx : LENGTH; value- : Element);
 BEGIN
     this.duplicate(this.storage[idx], value)
 END Set;
 
-(* Get value at idx *)
+(** Get value at idx *)
 PROCEDURE (VAR this : Vector) Get*(idx : LENGTH; VAR value : Element);
 BEGIN
     this.duplicate(value, this.storage[idx])

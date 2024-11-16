@@ -213,7 +213,7 @@ BEGIN
     INC(this.size)
 END Incl;
 
-(* Remove element from set. *)
+(** Remove element from set. *)
 PROCEDURE (VAR this : Set) Excl*(element- : Element);
 VAR
     current, tmp : Entry;

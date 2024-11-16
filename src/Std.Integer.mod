@@ -8,7 +8,7 @@ Format `HUGEINT`.
 
 * `width` : Total field with. Can overflow if number is bigger.
 
-The formatting flags defaults to `Right` alignment.
+The alignment formatting flags are `Left`, `Right` & `Center` .
 The `Zero` flag fills with 0 of the formatting is right aligned.
 The `Spc` flag fills in a blank character for `+` if the number is positive.
 The `Sign` flag fills in a `+` character if the number is positive.

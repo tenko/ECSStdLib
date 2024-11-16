@@ -11,22 +11,22 @@ IMPORT ArrayOfByte IN Std;
 
 CONST SETSIZE* = SIZE(SET) * 8;
 
-(* Clear content of set *)
+(** Clear content of set *)
 PROCEDURE Clear*(VAR s: ARRAY OF SET);
 BEGIN ArrayOfByte.Zero(s)
 END Clear;
 
-(* Fill content of set *)
+(** Fill content of set *)
 PROCEDURE Fill*(VAR s: ARRAY OF SET);
 BEGIN ArrayOfByte.Fill(s, 0FFX)
 END Fill;
 
-(* Copy src to dst *)
+(** Copy src to dst *)
 PROCEDURE Copy*(VAR dst: ARRAY OF SET; src-: ARRAY OF SET);
 BEGIN ArrayOfByte.Copy(dst, src, LEN(dst))
 END Copy;
 
-(* Return TRUE if set contains x *)
+(** Return TRUE if set contains x *)
 PROCEDURE In*(s-: ARRAY OF SET; x: LENGTH): BOOLEAN;
 BEGIN RETURN x MOD SETSIZE IN s[x DIV SETSIZE]
 END In;
@@ -41,7 +41,7 @@ PROCEDURE Equal* (VAR left-, right- : ARRAY OF SET): BOOLEAN;
 BEGIN RETURN ArrayOfByte.Equal(left, right)
 END Equal;
 
-(* Return TRUE if all elements in left is found in right *)
+(** Return TRUE if all elements in left is found in right *)
 PROCEDURE IsSubset*(VAR left-, right- : ARRAY OF SET): BOOLEAN;
 VAR i : LENGTH;
 BEGIN
@@ -53,17 +53,17 @@ BEGIN
     RETURN TRUE
 END IsSubset;
 
-(* Include x in set *)
+(** Include x in set *)
 PROCEDURE Incl*(VAR s: ARRAY OF SET; x: LENGTH);
 BEGIN INCL(s[x DIV SETSIZE], x MOD SETSIZE)
 END Incl;
 
-(* Exlude x from set *)
+(** Exlude x from set *)
 PROCEDURE Excl*(VAR s: ARRAY OF SET; x: LENGTH);
 BEGIN EXCL(s[x DIV SETSIZE], x MOD SETSIZE)
 END Excl;
 
-(* Invert set *)
+(** Invert set *)
 PROCEDURE Invert*(VAR dst: ARRAY OF SET);
 VAR i : LENGTH;
 BEGIN
@@ -72,7 +72,7 @@ BEGIN
     END;
 END Invert;
 
-(* Set dst to elements both in x and y *)
+(** Set dst to elements both in x and y *)
 PROCEDURE Union*(VAR dst: ARRAY OF SET; x-, y-: ARRAY OF SET);
 VAR i : LENGTH;
 BEGIN
@@ -81,7 +81,7 @@ BEGIN
     END;
 END Union;
 
-(* Set dst to element in x but not in y *)
+(** Set dst to element in x but not in y *)
 PROCEDURE Difference*(VAR dst: ARRAY OF SET; x-, y-: ARRAY OF SET);
 VAR i : LENGTH;
 BEGIN
@@ -90,7 +90,7 @@ BEGIN
     END;
 END Difference;
 
-(* Set dst to element common to x and y *)
+(** Set dst to element common to x and y *)
 PROCEDURE Intersection*(VAR dst: ARRAY OF SET; x-, y-: ARRAY OF SET);
 VAR i : LENGTH;
 BEGIN
@@ -99,7 +99,7 @@ BEGIN
     END;
 END Intersection;
 
-(* Set dst to elements in either x or y, but not in both *)
+(** Set dst to elements in either x or y, but not in both *)
 PROCEDURE SymmetricDifference*(VAR dst: ARRAY OF SET; x-, y-: ARRAY OF SET);
 VAR i : LENGTH;
 BEGIN

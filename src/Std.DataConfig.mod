@@ -1,3 +1,7 @@
+(**
+`INI` file format config parser with similar functions to Python
+version except for multiline values.
+*)
 MODULE DataConfig IN Std;
 
 IN Std IMPORT Char, Str := ArrayOfChar, String, Type;

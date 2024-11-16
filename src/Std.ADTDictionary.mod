@@ -303,7 +303,7 @@ BEGIN
     RETURN TRUE;
 END Remove;
 
-(* Remove item from dictionary if present *)
+(** Remove item from dictionary if present *)
 PROCEDURE (VAR this : Dictionary) Discard*(key- : Key);
 BEGIN IGNORE(this.Remove(key))
 END Discard;

@@ -130,7 +130,7 @@ PROCEDURE Equal* (left-, right- : ARRAY OF CHAR): BOOLEAN;
 BEGIN RETURN Compare(left, right) = 0
 END Equal;
 
-(** Index of `char` in `str`. One based index with zero indicating `char` not found *)
+(** Index of `char` in `str`. zero based index with -1 indicating `char` not found *)
 PROCEDURE IndexChar* (ch : CHAR; str- : ARRAY OF CHAR; start: LENGTH): LENGTH;
 VAR i: LENGTH;
 BEGIN
@@ -370,8 +370,8 @@ Format `ARRAY OF CHAR`.
 
 * `width` : Total field with. Can overflow if string is bigger.
 * `prec` : The number of characters in string to add (if prec > 0)
-* `flags` : The formatting flags defaults to `Left` alignment.
 
+The alignment formatting flags are `Left`, `Right` & `Center` .
 The `Upper` flag will make the whole string upper case.
 The `Alt` flag will capitalize the string.
 *)

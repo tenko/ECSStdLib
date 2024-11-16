@@ -1,7 +1,7 @@
 (**
 Module for timing of procedure execution.
 
-Reference files the perf directory for usage examples.
+Reference files the misc folder for usage examples.
 *)
 MODULE O2Timing IN Std;
 

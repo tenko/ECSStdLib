@@ -1,7 +1,6 @@
 (* Module for OS path operations.*)
 MODULE OSPath IN Std;
 
-IMPORT SYSTEM;
 IN Std IMPORT Const, Config, Char, ArrayOfChar, String, OSDir;
 
 CONST

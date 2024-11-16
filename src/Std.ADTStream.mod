@@ -1,8 +1,28 @@
+(**
+Stream classes which implements concrete streams
+according to the interface defined in :ref:`Type`.
+
+The following classes are implemented
+ * `NullStream` - Swallow any write operation and return 0 on read operations.
+ * `MemoryStream` - Allocate dynamic memory as needed for operations.
+
+Some methods are inherited from abstract `Stream` in :ref:`Type`.
+Formatting methods are implemented in this module due to the need
+to avoid circular import in `Type`.
+*)
 MODULE ADTStream IN Std;
 
 IMPORT SYSTEM;
 IN Std IMPORT Config, Type, Const, Integer, Cardinal, Real;
 IN Std IMPORT ArrayOfByte, ArrayOfChar, String, DateTime;
+
+CONST
+    (* Stream Seek *)
+    SeekSet* = Const.SeekSet;
+    SeekCur* = Const.SeekCur;
+    SeekEnd* = Const.SeekEnd;
+    (* Stream Error *)
+    OK* = Const.OK;
 
 TYPE
     BYTE = SYSTEM.BYTE;
@@ -27,8 +47,8 @@ Format `ARRAY OF CHAR`.
 
 * `width` : Total field with. Can overflow if string is bigger.
 * `prec` : The number of characters in string to add (if prec > 0)
-* `flags` : The formatting flags defaults to `Left` alignment.
 
+The alignment formatting flags are `Left`, `Right` & `Center` .
 The `Upper` flag will make the whole string upper case.
 The `Alt` flag will capitalize the string.
 *)
@@ -41,7 +61,7 @@ Format `HUGEINT`.
 
 * `width` : Total field with. Can overflow if number is bigger.
 
-The formatting flags defaults to `Right` alignment.
+The alignment formatting flags are `Left`, `Right` & `Center` .
 The `Zero` flag fills with 0 of the formatting is right aligned.
 The `Spc` flag fills in a blank character for `+` if the number is positive.
 The `Sign` flag fills in a `+` character if the number is positive.
@@ -56,9 +76,9 @@ Format `REAL`.
 
 * `prec` : Precision or zero for default value.
 * `width` : Total field with. Can overflow if number is bigger.
-* `flags` : `Exp` or `Fix` formatting supported. Defaults to `Fix`
+* `flags` : `Exp` or `Fix` formatting supported.
 
-The formatting flags defaults to `Right` alignment.
+The alignment formatting flags are `Left`, `Right` & `Center` .
 The `Spc` flag fills in a blank character for `+` if the number is positive.
 The `Sign` flag fills in a `+` character if the number is positive.
 If both `Spc` and `Sign` are given then `Sign` precedes.
@@ -70,10 +90,10 @@ END FormatReal;
 (**
 Format `HUGECARD`.
 
-* `base` : Number base. Defalts to 10.
+* `base` : Number base.
 * `width` : Total field with. Can overflow if number is bigger.
 
-The formatting flags defaults to `Right` alignment.
+The alignment formatting flags are `Left`, `Right` & `Center` .
 The `Zero` flag fills with 0 of the formatting is right aligned.
 The `Upper` flag the hex decimal letters are upper case.
 

@@ -7,7 +7,7 @@ Ported from Oberon System 3/4:
 
 Floating point format according to the IEEE standard:
 
-Single precision: S EEEEEEEE MMMMMMMMMMMMMMMMMMMMMMM
+Single precision:
     1 bit for the sign
     8 bits for the exponent
     23 bits for the mantissa
@@ -375,9 +375,9 @@ Format `REAL`.
 
 * `prec` : Precision or zero for default value.
 * `width` : Total field with. Can overflow if number is bigger.
-* `flags` : `Exp` or `Fix` formatting supported. Defaults to `Fix`
+* `flags` : `Exp` or `Fix` formatting supported.
 
-The formatting flags defaults to `Right` alignment.
+The alignment formatting flags are `Left`, `Right` & `Center` .
 The `Spc` flag fills in a blank character for `+` if the number is positive.
 The `Sign` flag fills in a `+` character if the number is positive.
 If both `Spc` and `Sign` are given then `Sign` precedes.

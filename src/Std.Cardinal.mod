@@ -41,10 +41,10 @@ END RandomRange;
 (**
 Format `HUGECARD`.
 
-* `base` : Number base. Defalts to 10.
+* `base` : Number base.
 * `width` : Total field with. Can overflow if number is bigger.
 
-The formatting flags defaults to `Right` alignment.
+The alignment formatting flags are `Left`, `Right` & `Center` .
 The `Zero` flag fills with 0 of the formatting is right aligned.
 The `Upper` flag the hex decimal letters are upper case.
 

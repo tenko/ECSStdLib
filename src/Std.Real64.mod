@@ -5,7 +5,7 @@ Ported from Oberon System 3/4:
   ETH Oberon, Copyright 2001 ETH Zuerich Institut fuer Computersysteme, ETH Zentrum, CH-8092 Zuerich.
   Refer to the "General ETH Oberon System Source License" contract available at: http://www.oberon.ethz.ch/
 
-Double precision: S EEEEEEEEEEE MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+Double precision:
     1 bit for the sign
     11 bits for the exponent
     52 bits for the mantissa
@@ -415,9 +415,9 @@ Format `REAL`.
 
 * `prec` : Precision or zero for default value.
 * `width` : Total field with. Can overflow if number is bigger.
-* `flags` : `Exp` or `Fix` formatting supported. Defaults to `Fix`
+* `flags` : `Exp` or `Fix` formatting supported.
 
-The formatting flags defaults to `Right` alignment.
+The alignment formatting flags are `Left`, `Right` & `Center` .
 The `Spc` flag fills in a blank character for `+` if the number is positive.
 The `Sign` flag fills in a `+` character if the number is positive.
 If both `Spc` and `Sign` are given then `Sign` precedes.

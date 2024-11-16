@@ -1,5 +1,7 @@
 (**
 Module for unit testing.
+
+Reference to tests folder for usage.
 *)
 MODULE O2Testing IN Std;
 

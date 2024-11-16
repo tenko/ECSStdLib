@@ -1,6 +1,13 @@
+(**
+Dynamic `STRING` type.
+Strings are always `NUL` terminated and possible
+resized to accomodate content.
+
+For further operations on `STRING` type check :ref:`ArrayOfChar`.
+*)
 MODULE String IN Std;
 
-IN Std IMPORT Char, Config, Type, ArrayOfChar, Integer, Cardinal, DateTime;
+IN Std IMPORT Char, Config, Type, ArrayOfChar, Integer, Cardinal, Real, DateTime;
 
 TYPE
     STRING* = Type.STRING;
@@ -175,8 +182,8 @@ Format `ARRAY OF CHAR`.
 
 * `width` : Total field with. Can overflow if string is bigger.
 * `prec` : The number of characters in string to add (if prec > 0)
-* `flags` : The formatting flags defaults to `Left` alignment.
 
+The alignment formatting flags are `Left`, `Right` & `Center` .
 The `Upper` flag will make the whole string upper case.
 The `Alt` flag will capitalize the string.
 *)
@@ -195,8 +202,8 @@ END FormatString;
 Format `HUGEINT`.
 
 * `width` : Total field with. Can overflow if number is bigger.
-* `flags` : The formatting flags defaults to `Right` alignment.
 
+The alignment formatting flags are `Left`, `Right` & `Center` .
 The `Zero` flag fills with 0 of the formatting is right aligned.
 The `Spc` flag fills in a blank character for `+` if the number is positive.
 The `Sign` flag fills in a `+` character if the number is positive.
@@ -214,12 +221,35 @@ BEGIN
 END FormatInteger;
 
 (**
+Format `REAL`.
+
+* `prec` : Precision or zero for default value.
+* `width` : Total field with. Can overflow if number is bigger.
+* `flags` : `Exp` or `Fix` formatting supported.
+
+The alignment formatting flags are `Left`, `Right` & `Center` .
+The `Spc` flag fills in a blank character for `+` if the number is positive.
+The `Sign` flag fills in a `+` character if the number is positive.
+If both `Spc` and `Sign` are given then `Sign` precedes.
+*)
+PROCEDURE FormatReal*(VAR dst: STRING; value : REAL; prec: INTEGER; width: LENGTH; flags: SET);
+VAR writer : StringWriter;
+BEGIN
+    writer.str := dst;
+    IF dst # NIL THEN writer.pos := ArrayOfChar.Length(dst^)
+    ELSE writer.pos := 0;
+    END;
+    Real.Format(writer, value, prec, width, flags);
+    dst := writer.str;
+END FormatReal;
+
+(**
 Format `HUGECARD`.
 
-* `base` : Number base. Defalts to 10.
+* `base` : Number base.
 * `width` : Total field with. Can overflow if number is bigger.
 
-The formatting flags defaults to `Right` alignment.
+The alignment formatting flags are `Left`, `Right` & `Center` .
 The `Zero` flag fills with 0 of the formatting is right aligned.
 The `Upper` flag the hex decimal letters are upper case.
 
