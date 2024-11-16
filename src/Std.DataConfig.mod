@@ -42,6 +42,30 @@ BEGIN
     this.entries.Clear();
 END Clear;
 
+(* Helper to make key from section and key string *)
+PROCEDURE TryMakeKey(VAR ret : String.STRING; section-, key- : ARRAY OF CHAR) : BOOLEAN;
+VAR
+    ch : CHAR;
+    i : LENGTH;
+BEGIN
+    String.Reserve(ret, Str.Length(section) + Str.Length(key) + 1, FALSE);
+    Str.Clear(ret^);
+    FOR i := 0 TO Str.Length(section) - 1 DO
+        ch := section[i];
+        IF ch = "=" THEN RETURN FALSE END;
+        String.AppendChar(ret, Char.Lower(ch))
+    END;
+    IF i = 0 THEN RETURN FALSE END;
+    String.AppendChar(ret, "=");
+    FOR i := 0 TO Str.Length(key) - 1 DO
+        ch := key[i];
+        IF ch = "=" THEN RETURN FALSE END;
+        String.AppendChar(ret, Char.Lower(key[i]))
+    END;
+    IF i = 0 THEN RETURN FALSE END;
+    RETURN TRUE
+END TryMakeKey;
+
 (**
 Get config value.
 Return `TRUE` if success.
@@ -49,19 +73,11 @@ Return `TRUE` if success.
 PROCEDURE (VAR this- : Parser) Get*(VAR value : String.STRING; section-, key- : ARRAY OF CHAR) : BOOLEAN;
 VAR
     ikey : String.STRING;
-    i : LENGTH;
     ret : BOOLEAN;
 BEGIN
-    IF (Str.Length(section) = 0) OR (Str.Length(key) = 0) THEN RETURN FALSE END;
-    IF Str.IndexChar("=", section, 0) # -1 THEN RETURN FALSE END;
-    IF Str.IndexChar("=", key, 0) # -1 THEN RETURN FALSE END;
-    String.Reserve(ikey, Str.Length(section) + Str.Length(key) + 1, FALSE);
-    FOR i := 0 TO Str.Length(section) - 1 DO
-        String.AppendChar(ikey, Char.Lower(section[i]))
-    END;
-    String.AppendChar(ikey, "=");
-    FOR i := 0 TO Str.Length(key) - 1 DO
-        String.AppendChar(ikey, Char.Lower(key[i]))
+    IF ~TryMakeKey(ikey, section, key) THEN
+        String.Dispose(ikey);
+        RETURN FALSE
     END;
     ret := this.entries.Get(ikey, value);
     String.Dispose(ikey);
@@ -76,24 +92,16 @@ PROCEDURE (VAR this : Parser) Set*(section-, key-, value- : ARRAY OF CHAR) : BOO
 VAR
     tmp, ikey : String.STRING;
 BEGIN
-    IF (Str.Length(section) = 0) OR (Str.Length(key) = 0) THEN RETURN FALSE END;
-    IF Str.IndexChar("=", section, 0) # -1 THEN RETURN FALSE END;
-    IF Str.IndexChar("=", key, 0) # -1 THEN RETURN FALSE END;
-    String.Reserve(ikey, Str.Length(section) + Str.Length(key) + 1, FALSE);
-    (* Remove surrounding white space and transform to lower case *)
     String.Assign(ikey, section);
-    Str.Trim(ikey^);
     Str.LowerCase(ikey^);
     (* add section if missing *)
     IF ~this.sections.In(ikey) THEN
         this.sections.Incl(ikey);
     END;
-    String.AppendChar(ikey, "=");
-    (* Remove surrounding white space and transform to lower case *)
-    String.Assign(tmp, key);
-    Str.Trim(tmp^);
-    Str.LowerCase(tmp^);
-    String.Append(ikey, tmp^);
+    IF ~TryMakeKey(ikey, section, key) THEN
+        String.Dispose(ikey);
+        RETURN FALSE
+    END;
     (* update or set value *)
     this.entries.Set(ikey, String.S(tmp, value));
     String.Dispose(tmp); 
@@ -108,19 +116,11 @@ Return `TRUE` if success.
 PROCEDURE (VAR this : Parser) Delete*(section-, key- : ARRAY OF CHAR) : BOOLEAN;
 VAR
     ikey : String.STRING;
-    i : LENGTH;
     ret : BOOLEAN;
 BEGIN
-    IF (Str.Length(section) = 0) OR (Str.Length(key) = 0) THEN RETURN FALSE END;
-    IF Str.IndexChar("=", section, 0) # -1 THEN RETURN FALSE END;
-    IF Str.IndexChar("=", key, 0) # -1 THEN RETURN FALSE END;
-    String.Reserve(ikey, Str.Length(section) + Str.Length(key) + 1, FALSE);
-    FOR i := 0 TO Str.Length(section) - 1 DO
-        String.AppendChar(ikey, Char.Lower(section[i]))
-    END;
-    String.AppendChar(ikey, "=");
-    FOR i := 0 TO Str.Length(key) - 1 DO
-        String.AppendChar(ikey, Char.Lower(key[i]))
+    IF ~TryMakeKey(ikey, section, key) THEN
+        String.Dispose(ikey);
+        RETURN FALSE
     END;
     ret := this.entries.Remove(ikey);
     String.Dispose(ikey);
