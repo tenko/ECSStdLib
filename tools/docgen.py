@@ -230,22 +230,40 @@ def parse(st):
                     elif current.value == 'VAR':
                         current = next(iter)
                         while True:
-                            while current.type == Type.NEWLINE:
-                                current = next(iter)
+                            current, comment = skip(current)
                             if current.type != Type.IDENTIFIER:
                                 break
-                            start = current.span.start
-                            name = current.value
+                            names = []
+                            while True:
+                                if current.type != Type.IDENTIFIER or current.value == ':':
+                                    break
+                                start = current.span.start
+                                name = current.value
+                                
+                                current = next(iter)
+                                export = False
+                                if current.value == '*':
+                                    names.append(name)
+                                
+                                current = next(iter)
+                                if current.value == ',':
+                                    current = next(iter)
+
                             current = next(iter)
-                            if current.type != Type.OPERATOR or current.value != ':':
+                            if current.type != Type.IDENTIFIER:
                                 break
-                            current = next(iter)
+
                             while True:
                                 if current.type == Type.SEMI:
                                     break
                                 current = next(iter)
-                            module.entries.append(Entry(EntryType.VAR, name, Span(start, current.span.end), None, None))
+                            
+                            if names:
+                                for name in names:
+                                    print(name)
+                                    module.entries.append(Entry(EntryType.VAR, name, Span(start, current.span.end), None, None))
                             current = next(iter)
+                            
                         comment = None
                         continue
 
@@ -273,6 +291,9 @@ def parse(st):
                                 continue
                             
                             current = next(iter)
+                            if current.value == '-':
+                                current = next(iter)
+                            
                             if current.type != Type.OPERATOR or current.value != ':':
                                 continue
                             
@@ -412,11 +433,11 @@ def main():
             code(item.span)
     
     # Vars
-    #var = filtered(EntryType.VAR)
-    #if var:
-    #    heading("Vars", '=')
-    #    for item in var:
-    #        code(item.span)
+    var = filtered(EntryType.VAR)
+    if var:
+        heading("Vars", '=')
+        for item in var:
+            code(item.span)
 
     # Procedures
     proc = filtered(EntryType.PROCEDURE)
