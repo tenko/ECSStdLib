@@ -62,8 +62,7 @@ BEGIN
         IF ch = "=" THEN RETURN FALSE END;
         String.AppendChar(ret, Char.Lower(key[i]))
     END;
-    IF i = 0 THEN RETURN FALSE END;
-    RETURN TRUE
+    RETURN i > 0
 END TryMakeKey;
 
 (**

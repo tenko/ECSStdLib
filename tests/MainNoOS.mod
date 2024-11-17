@@ -21,7 +21,7 @@ IMPORT TestADTStream;
 IMPORT TestDataConfig;
 
 IMPORT SysMem IN Std;
-IN Micro IMPORT Traps := ARMv7MTraps;
+(* IN Micro IMPORT Traps := ARMv7MTraps; *)
 
 CONST
     M = "TestMain";
@@ -29,7 +29,7 @@ CONST
 VAR
     test : Testing.TEST;
 BEGIN
-    Traps.Init; Traps.debug := TRUE;
+    (* Traps.Init; Traps.debug := TRUE; *)
     
     Testing.Initialize(test, M);
     TestArrayOfByte.Run(test);

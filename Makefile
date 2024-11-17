@@ -88,7 +88,7 @@ build/TestOS.obf : src/Std.String.mod src/Std.OSStream.mod src/Std.OSPath.mod sr
 build/TestOSPath.obf : src/Std.OSPath.mod
 build/TestRegex.obf : src/Std.Regex.mod
 build/TestString.obf : src/Std.String.mod
-build/DataConfig.obf : src/Std.DataConfig.mod src/Std.ADTStream.mod src/Std.String.mod
+build/TestDataConfig.obf : src/Std.DataConfig.mod src/Std.ADTStream.mod src/Std.String.mod
 
 build/%.obf: tests/%.mod
 	@echo compiling $<

@@ -217,9 +217,6 @@ BEGIN
         ELSIF current.deleted & (deleted = SENTINEL) THEN
             deleted := index
         ELSIF Equal(current.key, key) THEN
-            this.disposeKey(current.key);
-            this.duplicateKey(current.key, key);
-            this.disposeValue(current.value);
             this.duplicateValue(current.value, value);
             RETURN
         END;
@@ -230,9 +227,7 @@ BEGIN
     current := this.storage[index];
     IF current = NIL THEN RETURN END;
     current.deleted := FALSE;
-    this.disposeKey(current.key);
     this.duplicateKey(current.key, key);
-    this.disposeValue(current.value);
     this.duplicateValue(current.value, value);
     INC(this.size)
 END Set;

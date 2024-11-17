@@ -197,8 +197,6 @@ BEGIN
         ELSIF current.deleted & (deleted = SENTINEL) THEN
             deleted := index
         ELSIF Equal(current.element, element) THEN
-            this.dispose(current.element);
-            this.duplicate(current.element, element);
             RETURN
         END;
         index := LENGTH(WSET(index + 1) * WSET(this.capacity - 1));
@@ -208,7 +206,6 @@ BEGIN
     current := this.storage[index];
     IF current = NIL THEN RETURN END;
     current.deleted := FALSE;
-    this.dispose(current.element);
     this.duplicate(current.element, element);
     INC(this.size)
 END Incl;
