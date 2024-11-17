@@ -34,6 +34,12 @@ OTS += TestDataConfig
 TMOD = $(addprefix tests/, $(addsuffix .mod, $(OTS)))
 TOBF = $(addprefix build/, $(addsuffix .obf, $(OTS)))
 
+DOC = ADTBasicType ADTDictionary ADTList ADTSet ADTStream ADTTree ADTVector ArrayOfByte
+DOC += ArrayOfChar ArrayOfSet Cardinal Char Config Const DataConfig DateTime Integer
+DOC += O2Testing O2Timing OS OSDir OSFile OSHost OSPath OSStream Real Regex String Type
+
+DRST = $(addprefix doc/src/Std., $(addsuffix .mod.rst, $(DOC)))
+
 .PHONY: all
 all : std.lib
 
@@ -144,41 +150,125 @@ perfCompare$(PRG) : misc/perfCompare.mod std.lib
 	@cp build/$@ .
 	@./$@
 
-.PHONY: doc
-doc:
-	@echo Building doc
-	@-rm -f doc/src/*.rst
+doc/src/Std.ADTBasicType.mod.rst : src/Std.ADTBasicType.mod
 	@-mkdir -p doc/src
-	@./tools/docgen.py src/Std.ADTBasicType.mod -o doc/src/Std.ADTBasicType.mod.rst
-	@./tools/docgen.py src/Std.ADTDictionary.mod -o doc/src/Std.ADTDictionary.mod.rst
-	@./tools/docgen.py src/Std.ADTList.mod -o doc/src/Std.ADTList.mod.rst
-	@./tools/docgen.py src/Std.ADTSet.mod -o doc/src/Std.ADTSet.mod.rst
-	@./tools/docgen.py src/Std.ADTStream.mod -o doc/src/Std.ADTStream.mod.rst
-	@./tools/docgen.py src/Std.ADTTree.mod -o doc/src/Std.ADTTree.mod.rst
-	@./tools/docgen.py src/Std.ADTVector.mod -o doc/src/Std.ADTVector.mod.rst
-	@./tools/docgen.py src/Std.ArrayOfByte$(OPT).mod -o doc/src/Std.ArrayOfByte.mod.rst
-	@./tools/docgen.py src/Std.ArrayOfChar$(OPT).mod -o doc/src/Std.ArrayOfChar.mod.rst
-	@./tools/docgen.py src/Std.ArrayOfSet.mod -o doc/src/Std.ArrayOfSet.mod.rst
-	@./tools/docgen.py src/Std.Cardinal.mod -o doc/src/Std.Cardinal.mod.rst
-	@./tools/docgen.py src/Std.Char.mod -o doc/src/Std.Char.mod.rst
-	@./tools/docgen.py src/Std.Config$(SYS).mod -o doc/src/Std.Config.mod.rst
-	@./tools/docgen.py src/Std.Const.mod -o doc/src/Std.Const.mod.rst
-	@./tools/docgen.py src/Std.DataConfig.mod -o doc/src/Std.DataConfig.mod.rst
-	@./tools/docgen.py src/Std.DateTime.mod -o doc/src/Std.DateTime.mod.rst
-	@./tools/docgen.py src/Std.Integer.mod -o doc/src/Std.Integer.mod.rst
-	@./tools/docgen.py src/Std.O2Testing.mod -o doc/src/Std.O2Testing.mod.rst
-	@./tools/docgen.py src/Std.O2Timing$(SYS).mod -o doc/src/Std.O2Timing.mod.rst
-	@./tools/docgen.py src/Std.OS.mod -o doc/src/Std.OS.mod.rst
-	@./tools/docgen.py src/Std.OSDir.mod -o doc/src/Std.OSDir.mod.rst
-	@./tools/docgen.py src/Std.OSFile.mod -o doc/src/Std.OSFile.mod.rst
-	@./tools/docgen.py src/Std.OSHost$(SYS).mod -o doc/src/Std.OSHost.mod.rst
-	@./tools/docgen.py src/Std.OSPath.mod -o doc/src/Std.OSPath.mod.rst
-	@./tools/docgen.py src/Std.OSStream.mod -o doc/src/Std.OSStream.mod.rst
-	@./tools/docgen.py src/Std.$(Real).mod -o doc/src/Std.Real.mod.rst
-	@./tools/docgen.py src/Std.Regex.mod -o doc/src/Std.Regex.mod.rst
-	@./tools/docgen.py src/Std.String.mod -o doc/src/Std.String.mod.rst
-	@./tools/docgen.py src/Std.Type.mod -o doc/src/Std.Type.mod.rst
-	@echo Creating html
+	@./tools/docgen.py $< -o $@
+
+doc/src/Std.ADTDictionary.mod.rst : src/Std.ADTDictionary.mod
+	@-mkdir -p doc/src
+	@./tools/docgen.py $< -o $@
+
+doc/src/Std.ADTList.mod.rst : src/Std.ADTList.mod
+	@-mkdir -p doc/src
+	@./tools/docgen.py $< -o $@
+
+doc/src/Std.ADTSet.mod.rst : src/Std.ADTSet.mod
+	@-mkdir -p doc/src
+	@./tools/docgen.py $< -o $@
+
+doc/src/Std.ADTStream.mod.rst : src/Std.ADTStream.mod
+	@-mkdir -p doc/src
+	@./tools/docgen.py $< -o $@
+
+doc/src/Std.ADTTree.mod.rst : src/Std.ADTTree.mod
+	@-mkdir -p doc/src
+	@./tools/docgen.py $< -o $@
+
+doc/src/Std.ADTVector.mod.rst : src/Std.ADTVector.mod
+	@-mkdir -p doc/src
+	@./tools/docgen.py $< -o $@
+
+doc/src/Std.ArrayOfByte.mod.rst : src/Std.ArrayOfByte$(OPT).mod
+	@-mkdir -p doc/src
+	@./tools/docgen.py $< -o $@
+
+doc/src/Std.ArrayOfChar.mod.rst : src/Std.ArrayOfChar$(OPT).mod
+	@-mkdir -p doc/src
+	@./tools/docgen.py $< -o $@
+
+doc/src/Std.ArrayOfSet.mod.rst : src/Std.ArrayOfSet.mod
+	@-mkdir -p doc/src
+	@./tools/docgen.py $< -o $@
+
+doc/src/Std.Cardinal.mod.rst : src/Std.Cardinal.mod
+	@-mkdir -p doc/src
+	@./tools/docgen.py $< -o $@
+
+doc/src/Std.Char.mod.rst : src/Std.Char.mod
+	@-mkdir -p doc/src
+	@./tools/docgen.py $< -o $@
+
+doc/src/Std.Config.mod.rst : src/Std.Config$(SYS).mod
+	@-mkdir -p doc/src
+	@./tools/docgen.py $< -o $@
+
+doc/src/Std.Const.mod.rst : src/Std.Const.mod
+	@-mkdir -p doc/src
+	@./tools/docgen.py $< -o $@
+
+doc/src/Std.DataConfig.mod.rst : src/Std.DataConfig.mod
+	@-mkdir -p doc/src
+	@./tools/docgen.py $< -o $@
+
+doc/src/Std.DateTime.mod.rst : src/Std.DateTime.mod
+	@-mkdir -p doc/src
+	@./tools/docgen.py $< -o $@
+
+doc/src/Std.Integer.mod.rst : src/Std.Integer.mod
+	@-mkdir -p doc/src
+	@./tools/docgen.py $< -o $@
+
+doc/src/Std.O2Testing.mod.rst : src/Std.O2Testing.mod
+	@-mkdir -p doc/src
+	@./tools/docgen.py $< -o $@
+
+doc/src/Std.O2Timing.mod.rst : src/Std.O2Timing$(SYS).mod
+	@-mkdir -p doc/src
+	@./tools/docgen.py $< -o $@
+
+doc/src/Std.OS.mod.rst : src/Std.OS.mod
+	@-mkdir -p doc/src
+	@./tools/docgen.py $< -o $@
+
+doc/src/Std.OSDir.mod.rst : src/Std.OSDir.mod
+	@-mkdir -p doc/src
+	@./tools/docgen.py $< -o $@
+
+doc/src/Std.OSFile.mod.rst : src/Std.OSFile.mod
+	@-mkdir -p doc/src
+	@./tools/docgen.py $< -o $@
+
+doc/src/Std.OSHost.mod.rst : src/Std.OSHost$(SYS).mod
+	@-mkdir -p doc/src
+	@./tools/docgen.py $< -o $@
+
+doc/src/Std.OSPath.mod.rst : src/Std.OSPath.mod
+	@-mkdir -p doc/src
+	@./tools/docgen.py $< -o $@
+
+doc/src/Std.OSStream.mod.rst : src/Std.OSStream.mod
+	@-mkdir -p doc/src
+	@./tools/docgen.py $< -o $@
+
+doc/src/Std.Real.mod.rst : src/Std.$(Real).mod
+	@-mkdir -p doc/src
+	@./tools/docgen.py $< -o $@
+
+doc/src/Std.Regex.mod.rst : src/Std.Regex.mod
+	@-mkdir -p doc/src
+	@./tools/docgen.py $< -o $@
+
+doc/src/Std.String.mod.rst : src/Std.String.mod
+	@-mkdir -p doc/src
+	@./tools/docgen.py $< -o $@
+
+doc/src/Std.Type.mod.rst : src/Std.Type.mod
+	@-mkdir -p doc/src
+	@./tools/docgen.py $< -o $@
+
+.PHONY: doc
+doc: $(DRST)
+	@echo Building doc
 	@make -C doc html
 	@start "" build/doc/html/index.html &
 
@@ -191,5 +281,6 @@ install: std.lib
 .PHONY: clean
 clean:
 	@echo Clean
-	@-rm -rf build
+	@-rm -rf build doc/src
+	@-rm -rf doc/src
 	@-rm TestMain$(PRG) Test$(PRG) perfLength$(PRG) perfIndex$(PRG) perfFillChar$(PRG) perfCompare$(PRG)

@@ -260,7 +260,6 @@ def parse(st):
                             
                             if names:
                                 for name in names:
-                                    print(name)
                                     module.entries.append(Entry(EntryType.VAR, name, Span(start, current.span.end), None, None))
                             current = next(iter)
                             
@@ -372,7 +371,6 @@ def main():
     if not args.output:
         fh = sys.stdout
     else:
-        print(args.output)
         fh = open(args.output, 'w')
     
     def ref(module, ref, name):
