@@ -167,6 +167,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="Std.Cardinal.mod.html">Cardinal</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Std.Cardinal.mod.html#vars">Vars</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Std.Cardinal.mod.html#procedures">Procedures</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Std.Cardinal.mod.html#random">Random</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.Cardinal.mod.html#randomrange">RandomRange</a></li>
@@ -279,6 +280,7 @@
 <li class="toctree-l3"><a class="reference internal" href="Std.String.mod.html#dispose">Dispose</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.String.mod.html#formatstring">FormatString</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.String.mod.html#formatinteger">FormatInteger</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.String.mod.html#formatreal">FormatReal</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.String.mod.html#formatcardinal">FormatCardinal</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.String.mod.html#formatdatetime">FormatDateTime</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.String.mod.html#hash">Hash</a></li>
@@ -305,12 +307,18 @@
 <li class="toctree-l2"><a class="reference internal" href="#procedures">Procedures</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#dictionary-init">Dictionary.Init</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#dictionary-dispose">Dictionary.Dispose</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dictionary-size">Dictionary.Size</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dictionary-haskey">Dictionary.HasKey</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#dictionary-set">Dictionary.Set</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dictionary-get">Dictionary.Get</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#dictionary-remove">Dictionary.Remove</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#dictionary-discard">Dictionary.Discard</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#dictionary-clear">Dictionary.Clear</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#dictionary-pop">Dictionary.Pop</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#dictionary-popitem">Dictionary.PopItem</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dictionary-keys">Dictionary.Keys</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dictionary-values">Dictionary.Values</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dictionary-first">Dictionary.First</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#iterator-next">Iterator.Next</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#iterator-nextitem">Iterator.NextItem</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#iterator-reset">Iterator.Reset</a></li>
@@ -322,11 +330,15 @@
 <li class="toctree-l2"><a class="reference internal" href="Std.ADTList.mod.html#procedures">Procedures</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTList.mod.html#list-init">List.Init</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTList.mod.html#list-dispose">List.Dispose</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTList.mod.html#list-size">List.Size</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTList.mod.html#list-isempty">List.IsEmpty</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTList.mod.html#list-apply">List.Apply</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTList.mod.html#list-append">List.Append</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTList.mod.html#list-appendhead">List.AppendHead</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTList.mod.html#list-pop">List.Pop</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTList.mod.html#list-pophead">List.PopHead</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTList.mod.html#list-first">List.First</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTList.mod.html#list-last">List.Last</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTList.mod.html#iterator-next">Iterator.Next</a></li>
 </ul>
 </li>
@@ -336,10 +348,14 @@
 <li class="toctree-l2"><a class="reference internal" href="Std.ADTSet.mod.html#procedures">Procedures</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTSet.mod.html#set-init">Set.Init</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTSet.mod.html#set-dispose">Set.Dispose</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTSet.mod.html#set-size">Set.Size</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTSet.mod.html#set-in">Set.In</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTSet.mod.html#set-incl">Set.Incl</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTSet.mod.html#set-excl">Set.Excl</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTSet.mod.html#set-clear">Set.Clear</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTSet.mod.html#set-pop">Set.Pop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTSet.mod.html#set-elements">Set.Elements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTSet.mod.html#set-first">Set.First</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTSet.mod.html#iterator-next">Iterator.Next</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTSet.mod.html#iterator-reset">Iterator.Reset</a></li>
 </ul>
@@ -347,6 +363,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="Std.ADTStream.mod.html">ADTStream</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Std.ADTStream.mod.html#const">Const</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Std.ADTStream.mod.html#types">Types</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Std.ADTStream.mod.html#procedures">Procedures</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTStream.mod.html#adtstream-formatstring">ADTStream.FormatString</a></li>
@@ -381,6 +398,13 @@
 <li class="toctree-l2"><a class="reference internal" href="Std.ADTTree.mod.html#procedures">Procedures</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTTree.mod.html#tree-init">Tree.Init</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTTree.mod.html#tree-dispose">Tree.Dispose</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTTree.mod.html#tree-size">Tree.Size</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTTree.mod.html#tree-findnode">Tree.FindNode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTTree.mod.html#tree-haselement">Tree.HasElement</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTTree.mod.html#tree-first">Tree.First</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTTree.mod.html#tree-last">Tree.Last</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTTree.mod.html#tree-findforward">Tree.FindForward</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTTree.mod.html#tree-findreverse">Tree.FindReverse</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTTree.mod.html#iterator-next">Iterator.Next</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTTree.mod.html#tree-insert">Tree.Insert</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTTree.mod.html#tree-remove">Tree.Remove</a></li>
@@ -391,17 +415,21 @@
 <li class="toctree-l1"><a class="reference internal" href="Std.ADTVector.mod.html">ADTVector</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="Std.ADTVector.mod.html#procedures">Procedures</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-init">Vector.Init</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-size">Vector.Size</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-capacity">Vector.Capacity</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-clear">Vector.Clear</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-dispose">Vector.Dispose</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-reserve">Vector.Reserve</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-shrink">Vector.Shrink</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-append">Vector.Append</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-at">Vector.At</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-set">Vector.Set</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-get">Vector.Get</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-pop">Vector.Pop</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-reverse">Vector.Reverse</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-shuffle">Vector.Shuffle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-sort">Vector.Sort</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-find">Vector.Find</a></li>
 </ul>
 </li>
 </ul>
@@ -415,8 +443,12 @@
 <li class="toctree-l3"><a class="reference internal" href="Std.DataConfig.mod.html#initparser">InitParser</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.DataConfig.mod.html#parser-dispose">Parser.Dispose</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.DataConfig.mod.html#parser-clear">Parser.Clear</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.DataConfig.mod.html#parser-get">Parser.Get</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.DataConfig.mod.html#parser-set">Parser.Set</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.DataConfig.mod.html#parser-delete">Parser.Delete</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.DataConfig.mod.html#parser-hassection">Parser.HasSection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.DataConfig.mod.html#parser-sections">Parser.Sections</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.DataConfig.mod.html#parser-write">Parser.Write</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.DataConfig.mod.html#parser-read">Parser.Read</a></li>
 </ul>
 </li>
@@ -547,6 +579,7 @@
 <li class="toctree-l1"><a class="reference internal" href="Std.OSStream.mod.html">OSStream</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="Std.OSStream.mod.html#const">Const</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Std.OSStream.mod.html#types">Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Std.OSStream.mod.html#vars">Vars</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Std.OSStream.mod.html#procedures">Procedures</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Std.OSStream.mod.html#file-open">File.Open</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.OSStream.mod.html#file-close">File.Close</a></li>
@@ -642,12 +675,39 @@ Capacity will be rounded up to nearest exponent of 2 size.</p>
 </pre></div>
 </div>
 </section>
+<section id="dictionary-size">
+<span id="adtdictionary-dictionary-size"></span><h3>Dictionary.Size<a class="headerlink" href="#dictionary-size" title="Link to this heading"></a></h3>
+<blockquote>
+<div><p>Return size of dictionary</p>
+</div></blockquote>
+<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="p">(</span><span class="kr">VAR</span> <span class="n">this</span><span class="o">-</span> <span class="p">:</span> <span class="n">Dictionary</span><span class="p">)</span> <span class="n">Size</span><span class="o">*</span><span class="p">():</span> <span class="nb">LENGTH</span><span class="p">;</span>
+</pre></div>
+</div>
+</section>
+<section id="dictionary-haskey">
+<span id="adtdictionary-dictionary-haskey"></span><h3>Dictionary.HasKey<a class="headerlink" href="#dictionary-haskey" title="Link to this heading"></a></h3>
+<blockquote>
+<div><p>Return TRUE if dictionary has item with given key</p>
+</div></blockquote>
+<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="p">(</span><span class="kr">VAR</span> <span class="n">this</span><span class="o">-</span> <span class="p">:</span> <span class="n">Dictionary</span><span class="p">)</span> <span class="n">HasKey</span><span class="o">*</span><span class="p">(</span><span class="n">key</span><span class="o">-</span> <span class="p">:</span> <span class="n">Key</span><span class="p">):</span> <span class="nb">BOOLEAN</span><span class="p">;</span>
+</pre></div>
+</div>
+</section>
 <section id="dictionary-set">
 <span id="adtdictionary-dictionary-set"></span><h3>Dictionary.Set<a class="headerlink" href="#dictionary-set" title="Link to this heading"></a></h3>
 <blockquote>
 <div><p>Set or update item with given key to value</p>
 </div></blockquote>
 <div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="p">(</span><span class="kr">VAR</span> <span class="n">this</span> <span class="p">:</span> <span class="n">Dictionary</span><span class="p">)</span> <span class="n">Set</span><span class="o">*</span> <span class="p">(</span><span class="n">key</span><span class="o">-</span> <span class="p">:</span> <span class="n">Key</span><span class="p">;</span> <span class="n">value</span><span class="o">-</span> <span class="p">:</span> <span class="n">Value</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="dictionary-get">
+<span id="adtdictionary-dictionary-get"></span><h3>Dictionary.Get<a class="headerlink" href="#dictionary-get" title="Link to this heading"></a></h3>
+<p>Get value and return TRUE if dictionary has item with given key.
+Note this may be duplicate the value and the caller would be
+responsible for the lifetime of the value.</p>
+<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="p">(</span><span class="kr">VAR</span> <span class="n">this</span><span class="o">-</span> <span class="p">:</span> <span class="n">Dictionary</span><span class="p">)</span> <span class="n">Get</span><span class="o">*</span><span class="p">(</span><span class="n">key</span><span class="o">-</span> <span class="p">:</span> <span class="n">Key</span><span class="p">;</span> <span class="kr">VAR</span> <span class="n">value</span> <span class="p">:</span> <span class="n">Value</span><span class="p">):</span> <span class="nb">BOOLEAN</span><span class="p">;</span>
 </pre></div>
 </div>
 </section>
@@ -695,6 +755,33 @@ Return FALSE if dictionary is empty.
 Note this may be duplicate the key and/or value and the caller would be
 responsible for the lifetime.</p>
 <div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="p">(</span><span class="kr">VAR</span> <span class="n">this</span> <span class="p">:</span> <span class="n">Dictionary</span><span class="p">)</span> <span class="n">PopItem</span><span class="o">*</span><span class="p">(</span><span class="kr">VAR</span> <span class="n">key</span> <span class="p">:</span> <span class="n">Key</span><span class="p">;</span> <span class="kr">VAR</span> <span class="n">value</span> <span class="p">:</span> <span class="n">Value</span><span class="p">):</span> <span class="nb">BOOLEAN</span><span class="p">;</span>
+</pre></div>
+</div>
+</section>
+<section id="dictionary-keys">
+<span id="adtdictionary-dictionary-keys"></span><h3>Dictionary.Keys<a class="headerlink" href="#dictionary-keys" title="Link to this heading"></a></h3>
+<p>Return Vector of keys.
+Note this may be duplicate the keys and the caller would be
+responsible for the lifetime of the keys.</p>
+<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="p">(</span><span class="kr">VAR</span> <span class="n">this</span><span class="o">-</span> <span class="p">:</span> <span class="n">Dictionary</span><span class="p">)</span> <span class="n">Keys</span><span class="o">*</span><span class="p">():</span> <span class="n">KeyVector</span><span class="p">;</span>
+</pre></div>
+</div>
+</section>
+<section id="dictionary-values">
+<span id="adtdictionary-dictionary-values"></span><h3>Dictionary.Values<a class="headerlink" href="#dictionary-values" title="Link to this heading"></a></h3>
+<p>Return Vector of values.
+Note this may be duplicate the values and the caller would be
+responsible for the lifetime of the values.</p>
+<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="p">(</span><span class="kr">VAR</span> <span class="n">this</span><span class="o">-</span> <span class="p">:</span> <span class="n">Dictionary</span><span class="p">)</span> <span class="n">Values</span><span class="o">*</span><span class="p">():</span> <span class="n">ValueVector</span><span class="p">;</span>
+</pre></div>
+</div>
+</section>
+<section id="dictionary-first">
+<span id="adtdictionary-dictionary-first"></span><h3>Dictionary.First<a class="headerlink" href="#dictionary-first" title="Link to this heading"></a></h3>
+<blockquote>
+<div><p>Returns an iterator for the dictionary.</p>
+</div></blockquote>
+<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="p">(</span><span class="kr">VAR</span> <span class="n">this</span><span class="o">-</span> <span class="p">:</span> <span class="n">Dictionary</span><span class="p">)</span> <span class="n">First</span><span class="o">*</span> <span class="p">(</span><span class="kr">VAR</span> <span class="n">iterator</span><span class="p">:</span> <span class="n">Iterator</span><span class="p">);</span>
 </pre></div>
 </div>
 </section>

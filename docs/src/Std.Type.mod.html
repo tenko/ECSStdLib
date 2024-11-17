@@ -167,6 +167,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="Std.Cardinal.mod.html">Cardinal</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Std.Cardinal.mod.html#vars">Vars</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Std.Cardinal.mod.html#procedures">Procedures</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Std.Cardinal.mod.html#random">Random</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.Cardinal.mod.html#randomrange">RandomRange</a></li>
@@ -279,6 +280,7 @@
 <li class="toctree-l3"><a class="reference internal" href="Std.String.mod.html#dispose">Dispose</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.String.mod.html#formatstring">FormatString</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.String.mod.html#formatinteger">FormatInteger</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.String.mod.html#formatreal">FormatReal</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.String.mod.html#formatcardinal">FormatCardinal</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.String.mod.html#formatdatetime">FormatDateTime</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.String.mod.html#hash">Hash</a></li>
@@ -305,12 +307,18 @@
 <li class="toctree-l2"><a class="reference internal" href="Std.ADTDictionary.mod.html#procedures">Procedures</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTDictionary.mod.html#dictionary-init">Dictionary.Init</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTDictionary.mod.html#dictionary-dispose">Dictionary.Dispose</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTDictionary.mod.html#dictionary-size">Dictionary.Size</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTDictionary.mod.html#dictionary-haskey">Dictionary.HasKey</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTDictionary.mod.html#dictionary-set">Dictionary.Set</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTDictionary.mod.html#dictionary-get">Dictionary.Get</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTDictionary.mod.html#dictionary-remove">Dictionary.Remove</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTDictionary.mod.html#dictionary-discard">Dictionary.Discard</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTDictionary.mod.html#dictionary-clear">Dictionary.Clear</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTDictionary.mod.html#dictionary-pop">Dictionary.Pop</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTDictionary.mod.html#dictionary-popitem">Dictionary.PopItem</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTDictionary.mod.html#dictionary-keys">Dictionary.Keys</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTDictionary.mod.html#dictionary-values">Dictionary.Values</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTDictionary.mod.html#dictionary-first">Dictionary.First</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTDictionary.mod.html#iterator-next">Iterator.Next</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTDictionary.mod.html#iterator-nextitem">Iterator.NextItem</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTDictionary.mod.html#iterator-reset">Iterator.Reset</a></li>
@@ -322,11 +330,15 @@
 <li class="toctree-l2"><a class="reference internal" href="Std.ADTList.mod.html#procedures">Procedures</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTList.mod.html#list-init">List.Init</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTList.mod.html#list-dispose">List.Dispose</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTList.mod.html#list-size">List.Size</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTList.mod.html#list-isempty">List.IsEmpty</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTList.mod.html#list-apply">List.Apply</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTList.mod.html#list-append">List.Append</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTList.mod.html#list-appendhead">List.AppendHead</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTList.mod.html#list-pop">List.Pop</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTList.mod.html#list-pophead">List.PopHead</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTList.mod.html#list-first">List.First</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTList.mod.html#list-last">List.Last</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTList.mod.html#iterator-next">Iterator.Next</a></li>
 </ul>
 </li>
@@ -336,10 +348,14 @@
 <li class="toctree-l2"><a class="reference internal" href="Std.ADTSet.mod.html#procedures">Procedures</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTSet.mod.html#set-init">Set.Init</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTSet.mod.html#set-dispose">Set.Dispose</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTSet.mod.html#set-size">Set.Size</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTSet.mod.html#set-in">Set.In</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTSet.mod.html#set-incl">Set.Incl</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTSet.mod.html#set-excl">Set.Excl</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTSet.mod.html#set-clear">Set.Clear</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTSet.mod.html#set-pop">Set.Pop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTSet.mod.html#set-elements">Set.Elements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTSet.mod.html#set-first">Set.First</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTSet.mod.html#iterator-next">Iterator.Next</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTSet.mod.html#iterator-reset">Iterator.Reset</a></li>
 </ul>
@@ -347,6 +363,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="Std.ADTStream.mod.html">ADTStream</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Std.ADTStream.mod.html#const">Const</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Std.ADTStream.mod.html#types">Types</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Std.ADTStream.mod.html#procedures">Procedures</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTStream.mod.html#adtstream-formatstring">ADTStream.FormatString</a></li>
@@ -381,6 +398,13 @@
 <li class="toctree-l2"><a class="reference internal" href="Std.ADTTree.mod.html#procedures">Procedures</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTTree.mod.html#tree-init">Tree.Init</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTTree.mod.html#tree-dispose">Tree.Dispose</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTTree.mod.html#tree-size">Tree.Size</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTTree.mod.html#tree-findnode">Tree.FindNode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTTree.mod.html#tree-haselement">Tree.HasElement</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTTree.mod.html#tree-first">Tree.First</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTTree.mod.html#tree-last">Tree.Last</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTTree.mod.html#tree-findforward">Tree.FindForward</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTTree.mod.html#tree-findreverse">Tree.FindReverse</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTTree.mod.html#iterator-next">Iterator.Next</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTTree.mod.html#tree-insert">Tree.Insert</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTTree.mod.html#tree-remove">Tree.Remove</a></li>
@@ -391,17 +415,21 @@
 <li class="toctree-l1"><a class="reference internal" href="Std.ADTVector.mod.html">ADTVector</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="Std.ADTVector.mod.html#procedures">Procedures</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-init">Vector.Init</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-size">Vector.Size</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-capacity">Vector.Capacity</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-clear">Vector.Clear</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-dispose">Vector.Dispose</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-reserve">Vector.Reserve</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-shrink">Vector.Shrink</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-append">Vector.Append</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-at">Vector.At</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-set">Vector.Set</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-get">Vector.Get</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-pop">Vector.Pop</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-reverse">Vector.Reverse</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-shuffle">Vector.Shuffle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-sort">Vector.Sort</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-find">Vector.Find</a></li>
 </ul>
 </li>
 </ul>
@@ -415,8 +443,12 @@
 <li class="toctree-l3"><a class="reference internal" href="Std.DataConfig.mod.html#initparser">InitParser</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.DataConfig.mod.html#parser-dispose">Parser.Dispose</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.DataConfig.mod.html#parser-clear">Parser.Clear</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.DataConfig.mod.html#parser-get">Parser.Get</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.DataConfig.mod.html#parser-set">Parser.Set</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.DataConfig.mod.html#parser-delete">Parser.Delete</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.DataConfig.mod.html#parser-hassection">Parser.HasSection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.DataConfig.mod.html#parser-sections">Parser.Sections</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.DataConfig.mod.html#parser-write">Parser.Write</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.DataConfig.mod.html#parser-read">Parser.Read</a></li>
 </ul>
 </li>
@@ -547,6 +579,7 @@
 <li class="toctree-l1"><a class="reference internal" href="Std.OSStream.mod.html">OSStream</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="Std.OSStream.mod.html#const">Const</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Std.OSStream.mod.html#types">Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Std.OSStream.mod.html#vars">Vars</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Std.OSStream.mod.html#procedures">Procedures</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Std.OSStream.mod.html#file-open">File.Open</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.OSStream.mod.html#file-close">File.Close</a></li>
@@ -619,7 +652,7 @@
   <section id="type">
 <span id="index-0"></span><span id="id1"></span><h1>Type<a class="headerlink" href="#type" title="Link to this heading"></a></h1>
 <blockquote>
-<div><p>Module with common types.</p>
+<div><p>Module with library wide common types.</p>
 </div></blockquote>
 <section id="types">
 <h2>Types<a class="headerlink" href="#types" title="Link to this heading"></a></h2>
@@ -924,9 +957,9 @@ Return new size or -1 in case of failure.</p>
 <ul class="simple">
 <li><p><cite>width</cite> : Total field with. Can overflow if string is bigger.</p></li>
 <li><p><cite>prec</cite> : The number of characters in string to add (if prec &gt; 0)</p></li>
-<li><p><cite>flags</cite> : The formatting flags defaults to <cite>Left</cite> alignment.</p></li>
 </ul>
-<p>The <cite>Upper</cite> flag will make the whole string upper case.
+<p>The alignment formatting flags are <cite>Left</cite>, <cite>Right</cite> &amp; <cite>Center</cite> .
+The <cite>Upper</cite> flag will make the whole string upper case.
 The <cite>Alt</cite> flag will capitalize the string.</p>
 <div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="p">(</span><span class="kr">VAR</span> <span class="n">s</span> <span class="p">:</span> <span class="n">Stream</span><span class="p">)</span> <span class="n">FormatString</span><span class="o">*</span><span class="p">(</span><span class="n">str</span><span class="o">-</span> <span class="p">:</span> <span class="kr">ARRAY</span> <span class="kr">OF</span> <span class="nb">CHAR</span><span class="p">;</span> <span class="n">width</span><span class="p">,</span> <span class="n">prec</span><span class="p">:</span> <span class="nb">INTEGER</span><span class="p">;</span> <span class="n">flags</span><span class="p">:</span> <span class="kr">SET</span><span class="p">);</span>
 </pre></div>
@@ -938,7 +971,7 @@ The <cite>Alt</cite> flag will capitalize the string.</p>
 <ul class="simple">
 <li><p><cite>width</cite> : Total field with. Can overflow if number is bigger.</p></li>
 </ul>
-<p>The formatting flags defaults to <cite>Right</cite> alignment.
+<p>The alignment formatting flags are <cite>Left</cite>, <cite>Right</cite> &amp; <cite>Center</cite> .
 The <cite>Zero</cite> flag fills with 0 of the formatting is right aligned.
 The <cite>Spc</cite> flag fills in a blank character for <cite>+</cite> if the number is positive.
 The <cite>Sign</cite> flag fills in a <cite>+</cite> character if the number is positive.
@@ -953,9 +986,9 @@ If both <cite>Spc</cite> and <cite>Sign</cite> are given then <cite>Sign</cite> 
 <ul class="simple">
 <li><p><cite>prec</cite> : Precision or zero for default value.</p></li>
 <li><p><cite>width</cite> : Total field with. Can overflow if number is bigger.</p></li>
-<li><p><cite>flags</cite> : <cite>Exp</cite> or <cite>Fix</cite> formatting supported. Defaults to <cite>Fix</cite></p></li>
+<li><p><cite>flags</cite> : <cite>Exp</cite> or <cite>Fix</cite> formatting supported.</p></li>
 </ul>
-<p>The formatting flags defaults to <cite>Right</cite> alignment.
+<p>The alignment formatting flags are <cite>Left</cite>, <cite>Right</cite> &amp; <cite>Center</cite> .
 The <cite>Spc</cite> flag fills in a blank character for <cite>+</cite> if the number is positive.
 The <cite>Sign</cite> flag fills in a <cite>+</cite> character if the number is positive.
 If both <cite>Spc</cite> and <cite>Sign</cite> are given then <cite>Sign</cite> precedes.</p>
@@ -967,10 +1000,10 @@ If both <cite>Spc</cite> and <cite>Sign</cite> are given then <cite>Sign</cite> 
 <span id="type-stream-formatcardinal"></span><h3>Stream.FormatCardinal<a class="headerlink" href="#stream-formatcardinal" title="Link to this heading"></a></h3>
 <p>Format <cite>HUGECARD</cite>.</p>
 <ul class="simple">
-<li><p><cite>base</cite> : Number base. Defalts to 10.</p></li>
+<li><p><cite>base</cite> : Number base.</p></li>
 <li><p><cite>width</cite> : Total field with. Can overflow if number is bigger.</p></li>
 </ul>
-<p>The formatting flags defaults to <cite>Right</cite> alignment.
+<p>The alignment formatting flags are <cite>Left</cite>, <cite>Right</cite> &amp; <cite>Center</cite> .
 The <cite>Zero</cite> flag fills with 0 of the formatting is right aligned.
 The <cite>Upper</cite> flag the hex decimal letters are upper case.</p>
 <p>The <cite>Alt</cite> flags prefix binary (base 2) numbers with <cite>0b</cite>,
