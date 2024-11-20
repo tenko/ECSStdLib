@@ -195,8 +195,7 @@ PROCEDURE (VAR s : MemoryStream) ToString*(VAR str : Type.STRING);
 VAR i : LENGTH;
 BEGIN
     String.Reserve(str, s.last + 1, FALSE);
-    (* ArrayOfByte.Copy(str^, s.storage, s.last); *)
-    FOR i := 0 TO s.last - 1 DO str[i] := CHAR(s.storage[i]) END;
+    ArrayOfByte.Copy(str^, s.storage^, s.last);
     str[s.last] := 00X;
 END ToString;
 
@@ -225,7 +224,7 @@ BEGIN
         WHILE cap < capacity DO cap := cap * 2 END;
         NEW(storage, cap);
         IF s.last > 0 THEN
-            ArrayOfByte.Copy(storage, s.storage, s.last);
+            ArrayOfByte.Copy(storage^, s.storage^, s.last);
         END;
         DISPOSE(s.storage);
         s.storage := storage
@@ -244,7 +243,7 @@ BEGIN
         IF cap < s.last THEN cap := cap * 2 END;
         NEW(storage, cap);
         IF s.last > 0 THEN
-            ArrayOfByte.Copy(storage, s.storage, s.last);
+            ArrayOfByte.Copy(storage^, s.storage^, s.last);
         END;
         DISPOSE(s.storage);
         s.storage := storage;
