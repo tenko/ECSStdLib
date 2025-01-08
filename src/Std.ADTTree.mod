@@ -1,9 +1,7 @@
-(** 
-AVL tree (Adelson-Velsky and Landis) is a self-balancing binary
-search tree.
-
-AVL trees keep the order of nodes on insertion/delete and allow
-for fast find operations (average and worst case O(log n)).
+(**
+A RBTree (red-black) is a variant of binary search tree.
+The trees keep the order of nodes on insertion/delete and allow
+for fast find operations. It has O(log n) worst-case time for each operation.
 
 If life time handling of allocated elements is needed
 the callback procedures duplicate and dispose can be used.
@@ -11,24 +9,28 @@ the callback procedures duplicate and dispose can be used.
 By default the tree only takes references of elements and
 the caller is responsible for keeping elements alive.
 
-Copyright (c) 1993 xTech Ltd, Russia. All Rights Reserved.
-Tenko : Modified for inclusion in library
-
-TODO : Find safe way to free all nodes.
+Reference to Wikipedia page on the subject for implementation details.
+Adapted from https://github.com/sakeven/RbTree License MIT.
 *)
 MODULE ADTTree (Element*, Compare*) IN Std;
 
+CONST
+	BLACK = FALSE;
+	RED = TRUE;
+
 TYPE
+	Color = BOOLEAN;
     DuplicateElementProc = PROCEDURE(VAR dst: Element; src-: Element);
     DisposeElementProc = PROCEDURE(VAR dst: Element);
+    
     Node = POINTER TO NodeDesc;
     NodeDesc = RECORD-
+    	left, right, parent: Node;
         element: Element;
-        left, right, up: Node;
-        bal : INTEGER;
+        color : Color;
     END;
     Tree* = RECORD-
-        up: Node;
+        root: Node;
         duplicate* : DuplicateElementProc;
         dispose* : DisposeElementProc;
         size: LENGTH;
@@ -46,117 +48,126 @@ END DefaultDuplicateElement;
 PROCEDURE DefaultDisposeElement (VAR dst: Element);
 BEGIN END DefaultDisposeElement;
 
-(* Return next node or NIL if last *)
-PROCEDURE NextNode(current : Node) : Node;
-VAR node, ret : Node;
-BEGIN
-    IF current = NIL THEN RETURN NIL END;
-    IF current.right # NIL THEN
-        ret := current.right;
-        WHILE ret.left # NIL DO ret := ret.left END;
-    ELSE
-        node := current;
-        ret := node.up;
-        WHILE (ret # NIL) & (node = ret.right) DO
-            node := ret;
-            ret := ret.up;
-        END;
-    END;
-    RETURN ret;
-END NextNode;
-
-(* Return previous node or NIL if first *)
-PROCEDURE PrevNode(current : Node) : Node;
-VAR node, ret : Node;
-BEGIN
-    IF current = NIL THEN RETURN NIL END;
-    IF current.left # NIL THEN
-        ret := current.left;
-        WHILE ret.right # NIL DO ret := ret.right END;
-    ELSE
-        node := current;
-        ret := node.up;
-        WHILE (ret # NIL) & (node = ret.left) DO
-            node := ret;
-            ret := ret.up;
-        END;
-    END;
-    RETURN ret;
-END PrevNode;
-
 (** Initialize  *)
 PROCEDURE (VAR this : Tree) Init*;
 BEGIN
     this.duplicate := DefaultDuplicateElement;
     this.dispose := DefaultDisposeElement;
-    this.size := 0;
+    this.size := 0
 END Init;
+
+(** Returns the size of the tree. *)
+PROCEDURE (VAR this-: Tree) Size* (): LENGTH;
+BEGIN
+    IF this.root # NIL THEN RETURN this.size END;
+    RETURN 0;
+END Size;
+
+(* Return lefmost node *)
+PROCEDURE MinNode(x : Node) : Node;
+BEGIN
+	IF x = NIL THEN RETURN NIL END;
+	WHILE x.left # NIL DO x := x.left END;
+	RETURN x
+END MinNode;
+
+(* Return rightmost node *)
+PROCEDURE MaxNode(x : Node) : Node;
+BEGIN
+	IF x = NIL THEN RETURN NIL END;
+	WHILE x.right # NIL DO x := x.right END;
+	RETURN x
+END MaxNode;
+
+(* Return next node or NIL if last *)
+PROCEDURE NextNode(x : Node) : Node;
+VAR y : Node;
+BEGIN
+    IF x = NIL THEN RETURN NIL END;
+	IF x.right # NIL THEN
+		RETURN MinNode(x.right)
+	END;
+	y := x.parent;
+	WHILE (y # NIL) & (x = y.right) DO
+		x := y;
+		y := x.parent
+	END;
+	RETURN y
+END NextNode;
+
+(* Return previous node or NIL if last *)
+PROCEDURE PrevNode(x : Node) : Node;
+VAR y : Node;
+BEGIN
+    IF x = NIL THEN RETURN NIL END;
+	IF x.left # NIL THEN
+		RETURN MaxNode(x.left)
+	END;
+	y := x.parent;
+	WHILE (y # NIL) & (x = y.left) DO
+		x := y;
+		y := x.parent
+	END;
+	RETURN y
+END PrevNode;
 
 (** Removes all elements from the tree. *)
 PROCEDURE (VAR this: Tree) Dispose*;
-VAR node, left, right, up : Node;
+VAR node, left, right, parent : Node;
 BEGIN
-    node := this.up;
-    up := NIL;
+	(* Ref : https://codegolf.stackexchange.com/questions/478/free-a-binary-tree *)
+    node := this.root;
+    parent := NIL;
     WHILE node # NIL DO
         IF node.left # NIL THEN
             left := node.left;
-            node.left := up;
-            up := node;
+            node.left := parent;
+            parent := node;
             node := left;
         ELSIF node.right # NIL THEN
             right := node.right;
-            node.left := up;
+            node.left := parent;
             node.right := NIL;
-            up := node;
+            parent := node;
             node := right;
         ELSE
-            IF up = NIL THEN
+            IF parent = NIL THEN
                 this.dispose(node.element);
                 DISPOSE(node);
             ELSE
                 LOOP
-                    IF up = NIL THEN EXIT END;
+                    IF parent = NIL THEN EXIT END;
                     this.dispose(node.element);
                     DISPOSE(node);
-                    IF up.right # NIL THEN
-                        node := up.right;
-                        up.right := NIL;
+                    IF parent.right # NIL THEN
+                        node := parent.right;
+                        parent.right := NIL;
                         EXIT
                     ELSE
-                        node := up;
-                        up := up.left
+                        node := parent;
+                        parent := parent.left
                     END
                 END;
             END;
         END;
     END;
-    this.up := NIL;
+    this.root := NIL;
     this.size := 0;
 END Dispose;
-
-(** Returns the size of the tree. *)
-PROCEDURE (VAR this-: Tree) Size* (): LENGTH;
-BEGIN
-    IF this.up # NIL THEN RETURN this.size END;
-    RETURN 0;
-END Size;
 
 (** Find node equal to element argument. Return NIL if no node is found. *)
 PROCEDURE (VAR this-: Tree) FindNode*(element-: Element) : Node;
 VAR
-    node: Node;
-    i : INTEGER;
+	x : Node;
+	i : INTEGER;
 BEGIN
-    IF this.up = NIL THEN RETURN NIL END;
-    node := this.up;
-    WHILE node # NIL DO
-        i := Compare(element, node.element);
-        IF i = 0 THEN RETURN node
-        ELSIF i > 0 THEN node := node.right
-        ELSE node := node.left
-        END;
-    END;
+	x := this.root;
+	WHILE x # NIL DO
+		i := Compare(element, x.element);
+		IF i = 0 THEN RETURN x
+		ELSIF i < 0 THEN x := x.left
+		ELSE x := x.right END;
+	END;
     RETURN NIL
 END FindNode;
 
@@ -170,12 +181,9 @@ PROCEDURE (VAR this-: Tree) First* (VAR iterator: Iterator);
 VAR node: Node;
 BEGIN
     iterator.reverse := FALSE;
-    node := this.up;
-    IF node # NIL THEN
-        WHILE node.left # NIL DO node := node.left END
-    END;
+    node := MinNode(this.root);
     iterator.current := node;
-    iterator.duplicate := this.duplicate;
+    iterator.duplicate := this.duplicate
 END First;
 
 (** Reverse iterator for the tree. *)
@@ -184,11 +192,8 @@ VAR node: Node;
 BEGIN
     iterator.reverse := TRUE;
     iterator.duplicate := this.duplicate;
-    node := this.up;
-    IF node # NIL THEN
-        WHILE node.right # NIL DO node := node.right END
-    END;
-    iterator.current := node;
+    node := MaxNode(this.root);
+    iterator.current := node
 END Last;
 
 (** Forward iterator where element is found. *)
@@ -196,7 +201,7 @@ PROCEDURE (VAR this-: Tree) FindForward* (VAR iterator: Iterator; element- : Ele
 BEGIN
     iterator.reverse := FALSE;
     iterator.duplicate := this.duplicate;
-    iterator.current := this.FindNode(element);
+    iterator.current := this.FindNode(element)
 END FindForward;
 
 (** Reverse iterator where element is found. *)
@@ -204,7 +209,7 @@ PROCEDURE (VAR this-: Tree) FindReverse* (VAR iterator: Iterator; element- : Ele
 BEGIN
     iterator.reverse := TRUE;
     iterator.duplicate := this.duplicate;
-    iterator.current := this.FindNode(element);
+    iterator.current := this.FindNode(element)
 END FindReverse;
 
 (**
@@ -223,306 +228,233 @@ BEGIN
         END;
         RETURN TRUE
     END;
-    RETURN FALSE;
+    RETURN FALSE
 END Next;
 
-PROCEDURE (VAR this: Tree) SimpleInsert(e-: Element) : Node;
-VAR
-    p, h: Node;
-    i : INTEGER;
-    direction: BOOLEAN;
+PROCEDURE (VAR this : Tree) RotateLeft(x : Node);
+VAR y : Node;
 BEGIN
-    IF this.up # NIL THEN
-        h := this.up;
-        REPEAT
-            p := h;
-            i := Compare(e, h.element);
-            IF i = 0 THEN
-                (* replace element *)
-                this.dispose(h.element);
-                this.duplicate(h.element, e);
-                RETURN NIL
-            ELSIF i > 0 THEN h := h.right; direction := TRUE
-            ELSE h := h.left;  direction := FALSE
-            END;
-        UNTIL h = NIL;
-        NEW(h);
-        h.left:= NIL; h.right:= NIL; h.up:= p;
-        this.duplicate(h.element, e);
-        h.bal:= 0;
-        IF direction THEN p.right:= h;
-        ELSE p.left:= h;
-        END;
-        INC(this.size);
-        RETURN h
-    ELSE
-        NEW(this.up);
-        this.up.right := NIL;
-        this.up.left := NIL;
-        this.up.up := NIL;
-        this.up.bal := 0;
-        this.duplicate(this.up.element, e);
-        this.size := 1;
-        RETURN this.up;
-    END;
-END SimpleInsert;
+    ASSERT(x.right # NIL);
+    y := x.right;
+	x.right := y.left;
+	IF y.left # NIL THEN
+		y.left.parent := x
+	END;
+	y.parent := x.parent;
+	IF x.parent = NIL THEN
+		this.root := y
+	ELSIF x = x.parent.left THEN
+		x.parent.left := y
+	ELSE
+		x.parent.right := y
+	END;
+	y.left := x;
+	x.parent := y
+END RotateLeft;
+
+PROCEDURE (VAR this : Tree) RotateRight(x : Node);
+VAR y : Node;
+BEGIN
+    ASSERT(x.left # NIL);
+	y := x.left;
+	x.left := y.right;
+	IF y.right # NIL THEN
+		y.right.parent := x
+	END;
+	y.parent := x.parent;
+    IF x.parent = NIL THEN
+		this.root := y
+	ELSIF x = x.parent.left THEN
+		x.parent.left := y
+	ELSE
+		x.parent.right := y
+	END;
+	y.right := x;
+	x.parent := y
+END RotateRight;
+
+PROCEDURE (VAR this : Tree) InsertFixup(z : Node);
+VAR y : Node;
+BEGIN
+	WHILE (z # this.root) & (z.parent.color = RED) DO
+		IF z.parent = z.parent.parent.left THEN
+			y := z.parent.parent.right;
+			IF (y # NIL) & (y.color = RED) THEN
+				z.parent.color := BLACK;
+				y.color := BLACK;
+				z.parent.parent.color := RED;
+				z := z.parent.parent
+			ELSE
+				IF z = z.parent.right THEN
+					z := z.parent;
+					this.RotateLeft(z)
+				END;
+				z.parent.color := BLACK;
+				z.parent.parent.color := RED;
+				this.RotateRight(z.parent.parent)
+			END;
+		ELSE
+			y := z.parent.parent.left;
+			IF (y # NIL) & (y.color = RED) THEN
+				z.parent.color := BLACK;
+				y.color := BLACK;
+				z.parent.parent.color := RED;
+				z := z.parent.parent
+			ELSE
+				IF z = z.parent.left THEN
+					z := z.parent;
+					this.RotateRight(z)
+				END;
+				z.parent.color := BLACK;
+				z.parent.parent.color := RED;
+				this.RotateLeft(z.parent.parent)
+			END
+		END;
+		this.root.color := BLACK
+	END
+END InsertFixup;
 
 (** Insert or replace element *)
-PROCEDURE (VAR this: Tree) Insert*(element-: Element);
-VAR cur, p, p2: Node;
+PROCEDURE (VAR this : Tree) Insert*(element-: Element);
+VAR
+	x, y, z : Node;
+	i : INTEGER;
 BEGIN
-    cur := this.SimpleInsert(element);
-    WHILE ( cur # NIL ) & ( cur # this.up )  DO
-        p:= cur.up;
-        IF p.left = cur THEN (* left branch grows up   *)
-            CASE p.bal OF
-                1 : p.bal:= 0;  RETURN;
-                |0 : p.bal:= -1;
-                |-1: (* balance *)
-                IF cur.bal = -1 THEN (* single LL turn *)
-                    p.left:= cur.right;
-                    IF cur.right # NIL THEN  cur.right.up:= p  END;
-                    cur.right:= p; cur.up:= p.up; p.up:= cur;
-                    p.bal:= 0;
-                    IF p = this.up THEN this.up:= cur;
-                    ELSIF cur.up.left = p THEN cur.up.left:= cur;
-                    ELSE cur.up.right:= cur;
-                    END;
-                    p:= cur;
-                ELSE (* double LR turn *)
-                    p2:= cur.right;
-                    cur.right:= p2.left;
-                    IF p2.left # NIL THEN  p2.left.up:= cur  END;
-                    p2.left:= cur; cur.up:= p2;
-                    p.left:= p2.right;
-                    IF p2.right # NIL THEN p2.right.up:= p   END;
-                    p2.right:= p; p2.up:= p.up; p.up:= p2;
-                    IF p2.bal = -1 THEN  p.bal:= 1     ELSE  p.bal:= 0    END;
-                    IF p2.bal =  1 THEN  cur.bal:= -1  ELSE  cur.bal:= 0  END;
-                    IF p = this.up THEN this.up:= p2
-                    ELSIF p2.up.left = p THEN p2.up.left:= p2;
-                    ELSE p2.up.right:= p2;
-                    END;
-                    p:= p2;
-                END;
-                p.bal:= 0;
-                RETURN;
-            END;
-        ELSE  (* right branch grows up   *)
-            CASE p.bal OF
-                -1: p.bal:= 0;  RETURN;
-                |0 : p.bal:= 1;
-                |1 : (* balance *)
-                IF cur.bal = 1 THEN  (* single RR turn *)
-                    p.right:= cur.left;
-                    IF cur.left # NIL THEN cur.left.up:= p END;
-                    cur.left:= p; cur.up:= p.up; p.up:= cur;
-                    p.bal:= 0;
-                    IF p = this.up THEN this.up:= cur
-                    ELSIF cur.up.left = p THEN cur.up.left:= cur;
-                    ELSE  cur.up.right:= cur;
-                    END;
-                    p:= cur;
-                ELSE  (* double RL turn *)
-                    p2:= cur.left;
-                    cur.left:= p2.right;
-                    IF p2.right # NIL THEN  p2.right.up:= cur END;
-                    p2.right:= cur; cur.up:= p2;
-                    p.right:= p2.left;
-                    IF p2.left # NIL THEN  p2.left.up:= p    END;
-                    p2.left:= p; p2.up:= p.up; p.up:= p2;
-                    IF p2.bal =  1 THEN  p.bal:= -1   ELSE  p.bal:= 0    END;
-                    IF p2.bal = -1 THEN  cur.bal:= 1  ELSE  cur.bal:= 0  END;
-                    IF p = this.up THEN this.up:= p2
-                    ELSIF p2.up.left = p THEN p2.up.left:= p2;
-                    ELSE p2.up.right:= p2;
-                    END;
-                    p:= p2;
-                END;
-                p.bal:= 0;
-                RETURN;
-            END;
-        END;
-        cur:= cur.up;
+	x := this.root;
+	WHILE x # NIL DO
+		y := x;
+		i := Compare(element, x.element);
+		IF i = 0 THEN
+			this.duplicate(x.element, element);
+			RETURN
+		ELSIF i < 0 THEN x := x.left
+		ELSE x := x.right END
+	END;
+	NEW(z);
+	z.parent := y; z.color := RED;
+	this.duplicate(z.element, element);
+	IF y = NIL THEN
+		z.color := BLACK;
+		this.root := z;
+		INC(this.size);
+		RETURN
     END;
+    i := Compare(z.element, y.element);
+	IF i < 0 THEN (* z.element < y.element *)
+		y.left := z
+	ELSE
+		y.right := z
+	END;
+	this.InsertFixup(z);
+	INC(this.size)
 END Insert;
 
-(* left branch grows down *)
-PROCEDURE (VAR this: Tree) BalanceL(VAR p: Node; VAR h: BOOLEAN);
-VAR p1, p2: Node;
-    b1, b2: INTEGER;
+PROCEDURE (VAR this : Tree) RemoveFixup(x, parent : Node);
+VAR w : Node;
+	PROCEDURE NodeColor(node : Node): Color;
+	BEGIN RETURN SEL(node # NIL, node.color, BLACK)
+	END NodeColor;
 BEGIN
-    CASE p.bal OF
-        -1: p.bal:= 0;
-        |0 : p.bal:= 1;  h:= FALSE;
-        |1 : (* balance *)
-            p1:= p.right; b1:= p1.bal;
-            IF b1 >= 0 THEN  (* single RR turn *)
-                p.right:= p1.left;
-                IF p1.left # NIL THEN p1.left.up:= p END;
-                p1.left:= p; p1.up:= p.up; p.up:= p1;
-                IF b1 = 0 THEN p.bal:= 1; p1.bal:= -1; h:= FALSE;
-                ELSE p.bal:= 0; p1.bal:= 0;
-                END;
-                IF p = this.up THEN this.up:= p1;
-                ELSIF p1.up.left = p THEN p1.up.left:= p1;
-                ELSE  p1.up.right:= p1;
-                END;
-                p:= p1;
-            ELSE  (* double RL turn *)
-                p2:= p1.left;  b2:= p2.bal;
-                p1.left:= p2.right;
-                IF p2.right # NIL THEN  p2.right.up:= p1 END;
-                p2.right:= p1; p1.up:= p2;
-                p.right:= p2.left;
-                IF p2.left # NIL THEN  p2.left.up:= p END;
-                p2.left:= p; p2.up:= p.up; p.up:= p2;
-                IF b2 =  1 THEN  p.bal:= -1   ELSE  p.bal:= 0    END;
-                IF b2 = -1 THEN  p1.bal:= 1   ELSE  p1.bal:= 0   END;
-                IF p = this.up THEN this.up:= p2
-                ELSIF p2.up.left = p THEN p2.up.left:= p2;
-                ELSE p2.up.right:= p2;
-                END;
-                p:= p2;
-                p2.bal:= 0;
-            END;
-    END;
-END BalanceL;
+	WHILE (x # this.root) & (NodeColor(x) = BLACK) DO
+		IF x # NIL THEN parent := x.parent END;
+		IF x = parent.left THEN
+			w := parent.right;
+			IF w.color = RED THEN
+				w.color := BLACK;
+				parent.color := RED;
+				this.RotateLeft(parent);
+				w := parent.right
+			END;
+			IF (NodeColor(w.left) = BLACK) & (NodeColor(w.right) = BLACK) THEN
+				w.color := RED;
+				x := parent
+			ELSE
+				IF NodeColor(w.right) = BLACK THEN
+					IF w.left # NIL THEN
+						w.left.color := BLACK
+					END;
+					w.color := RED;
+					this.RotateRight(w);
+					w := parent.right
+				END;
+				w.color := parent.color;
+				parent.color := BLACK;
+				IF w.right # NIL THEN
+					w.right.color := BLACK
+				END;
+				this.RotateLeft(parent);
+				x := this.root
+			END;		
+		ELSE
+			w := parent.left;
+			IF w.color = RED THEN
+				w.color := BLACK;
+				parent.color := RED;
+				this.RotateRight(parent);
+				w := parent.left;
+			END;
+			IF (NodeColor(w.left) = BLACK) & (NodeColor(w.right) = BLACK) THEN
+				w.color := RED;
+				x := parent
+			ELSE
+				IF NodeColor(w.left) = BLACK THEN
+					IF w.right # NIL THEN
+						w.right.color := BLACK
+					END;
+					w.color := RED;
+					this.RotateLeft(w);
+					w := parent.left
+				END;
+				w.color := parent.color;
+				parent.color := BLACK;
+				IF w.left # NIL THEN
+					w.left.color := BLACK
+				END;
+				this.RotateRight(parent);
+				x := this.root
+			END		
+		END;
+	END;
+	IF x # NIL THEN x.color := BLACK END
+END RemoveFixup;
 
-(* right branch grows down *)
-PROCEDURE (VAR this: Tree) BalanceR(VAR p: Node; VAR h: BOOLEAN);
-VAR p1, p2: Node;
-    b1, b2: INTEGER;
-BEGIN
-    CASE p.bal OF
-     1 : p.bal:= 0;
-    |0 : p.bal:= -1; h:= FALSE;
-    |-1: (* balance *)
-        p1:= p.left; b1:= p1.bal;
-        IF b1 <= 0 THEN (* single LL turn *)
-            p.left:= p1.right;
-            IF p1.right # NIL THEN p1.right.up:= p END;
-            p1.right:= p; p1.up:= p.up; p.up:= p1;
-            IF b1 = 0 THEN p.bal:= -1; p1.bal:= 1; h:= FALSE;
-            ELSE p.bal:= 0; p1.bal:= 0;
-            END;
-            IF p = this.up THEN this.up:= p1;
-            ELSIF p1.up.left = p THEN p1.up.left:= p1;
-            ELSE p1.up.right:= p1;
-            END;
-            p:= p1;
-        ELSE (* double LR turn *)
-            p2:= p1.right; b2:= p2.bal;
-            p1.right:= p2.left;
-            IF p2.left # NIL THEN p2.left.up:= p1 END;
-            p2.left:= p1; p1.up:= p2;
-            p.left:= p2.right;
-            IF p2.right # NIL THEN p2.right.up:= p END;
-            p2.right:= p; p2.up:= p.up; p.up:= p2;
-            IF b2 = -1 THEN  p.bal:= 1     ELSE  p.bal:= 0    END;
-            IF b2 =  1 THEN  p1.bal:= -1   ELSE  p1.bal:= 0   END;
-            IF p = this.up THEN this.up:= p2
-            ELSIF p2.up.left = p THEN p2.up.left:= p2;
-            ELSE p2.up.right:= p2;
-            END;
-            p:= p2;
-            p2.bal:= 0;
-        END;
-    END;
-END BalanceR;
-
-(* Remove element from tree if found *)
-PROCEDURE (VAR this: Tree) IRemove(element-: Element; VAR node : Node): BOOLEAN;
-    CONST root  = 0;
-          right = 1;
-          left  = 2;
-    VAR p: Node;
-        h: BOOLEAN;
-        i, direction: INTEGER;
-
-    PROCEDURE Del(r: Node; VAR h: BOOLEAN);
-    BEGIN
-        WHILE r.right # NIL DO r:= r.right END;
-        p.element := r.element;
-        IF r.up = p THEN p.left:= r.left;
-        ELSE r.up.right:= r.left;
-        END;
-        IF r.left # NIL THEN r.left.up:= r.up END;
-        h:= TRUE;
-        r:= r.up; (* balance *)
-        WHILE ( h ) & ( r # p ) DO
-            this.BalanceR( r, h );
-            r:= r.up;
-        END;
-    END Del;
-BEGIN
-    IF this.up = NIL THEN RETURN FALSE END;
-    node := this.up;
-    direction:= root;
-    LOOP
-        IF node = NIL THEN RETURN FALSE END;
-        i := Compare(element, node.element);
-        IF i = 0 THEN EXIT
-        ELSIF i > 0 THEN node := node.right; direction:= right;
-        ELSE node:= node.left; direction:= left;
-        END;
-    END;
-    p := node;
-    IF this.up.up = p THEN this.up.up:= NIL END;
-    IF p.right = NIL THEN
-        h:= TRUE;
-        IF p.left # NIL THEN p.left.up:= p.up  END;
-        CASE direction OF
-         root : this.up:= p.left;
-                RETURN TRUE;
-        |right: p.up.right:= p.left;
-                p:= p.up;
-                this.BalanceR(p, h);
-        |left : p.up.left:= p.left;
-                p:= p.up;
-                this.BalanceL(p, h);
-        END;
-    ELSIF p.left = NIL THEN
-        h:= TRUE;
-        p.right.up:= p.up;
-        CASE direction OF
-        root : this.up:= p.right;
-                RETURN TRUE;
-        |right: p.up.right:= p.right;
-                p:= p.up;
-                this.BalanceR(p, h);
-        |left : p.up.left:= p.right;
-                p:= p.up;
-                this.BalanceL(p, h);
-        END;
-    ELSE
-        Del(p.left, h);
-        IF h THEN this.BalanceL(p, h) END;
-    END;
-    (* balance *)
-    WHILE (h) & (p # this.up) DO
-        IF p.up.left = p THEN
-            p:= p.up;
-            this.BalanceL(p, h);
-        ELSE
-            p:= p.up;
-            this.BalanceR(p, h);
-        END;
-    END;
-    RETURN TRUE;
-END IRemove;
-
-(** Remove node from tree if found. Return TRUE if item present and was removed *)
+(** Remove node from tree if found. Return TRUE if item present and it was removed *)
 PROCEDURE (VAR this : Tree) Remove*(element- : Element): BOOLEAN;
-VAR node : Node;
+VAR x, y, z, xparent : Node;
 BEGIN
-    IF this.IRemove(element, node) THEN
-        this.dispose(node.element);
-        DISPOSE(node);
-        DEC(this.size);
-        RETURN TRUE
-    END;
-    RETURN FALSE
+	IF this.root = NIL THEN RETURN FALSE END;
+	z := this.FindNode(element);
+	IF z = NIL THEN RETURN FALSE END;
+	IF (z.left # NIL) & (z.right # NIL) THEN
+		y := NextNode(z)
+	ELSE
+		y := z
+	END;
+	IF y.left # NIL THEN
+		x := y.left
+	ELSE
+		x := y.right
+	END;
+	xparent := y.parent;
+	IF x # NIL THEN x.parent := xparent END;
+	IF y.parent = NIL THEN
+		this.root := x
+	ELSIF y = y.parent.left THEN
+		y.parent.left := x
+	ELSE
+		y.parent.right := x
+	END;
+	this.dispose(z.element);
+	IF y # z THEN
+		z.element := y.element
+	END;
+	IF y.color = BLACK THEN
+		this.RemoveFixup(x, xparent);
+	END;
+	IF y # z THEN DISPOSE(y)
+	ELSE DISPOSE(z) END;
+	DEC(this.size);
+	RETURN TRUE
 END Remove;
 
 END ADTTree.
