@@ -63,6 +63,46 @@ BEGIN RETURN s.ReadBytes(value, 0, SIZE(REAL)) = SIZE(REAL) END ReadReal;
 PROCEDURE (VAR s : Stream) ReadLongReal*(VAR value : LONGREAL): BOOLEAN;
 BEGIN RETURN s.ReadBytes(value, 0, SIZE(LONGREAL)) = SIZE(LONGREAL) END ReadLongReal;
 
+(** Read `UNSIGNED8` value. Return `TRUE` if success. *)
+PROCEDURE (VAR s : Stream) ReadU8*(VAR value : UNSIGNED8): BOOLEAN;
+BEGIN RETURN s.ReadBytes(value, 0, SIZE(UNSIGNED8)) = SIZE(UNSIGNED8) END ReadU8;
+
+(** Read `SIGNED8` value. Return `TRUE` if success. *)
+PROCEDURE (VAR s : Stream) ReadS8*(VAR value : SIGNED8): BOOLEAN;
+BEGIN RETURN s.ReadBytes(value, 0, SIZE(SIGNED8)) = SIZE(SIGNED8) END ReadS8;
+
+(** Read `UNSIGNED16` value. Return `TRUE` if success. *)
+PROCEDURE (VAR s : Stream) ReadU16*(VAR value : UNSIGNED16): BOOLEAN;
+BEGIN RETURN s.ReadBytes(value, 0, SIZE(UNSIGNED16)) = SIZE(UNSIGNED16) END ReadU16;
+
+(** Read `SIGNED16` value. Return `TRUE` if success. *)
+PROCEDURE (VAR s : Stream) ReadS16*(VAR value : SIGNED16): BOOLEAN;
+BEGIN RETURN s.ReadBytes(value, 0, SIZE(SIGNED16)) = SIZE(SIGNED16) END ReadS16;
+
+(** Read `UNSIGNED32` value. Return `TRUE` if success. *)
+PROCEDURE (VAR s : Stream) ReadU32*(VAR value : UNSIGNED32): BOOLEAN;
+BEGIN RETURN s.ReadBytes(value, 0, SIZE(UNSIGNED32)) = SIZE(UNSIGNED32) END ReadU32;
+
+(** Read `SIGNED32` value. Return `TRUE` if success. *)
+PROCEDURE (VAR s : Stream) ReadS32*(VAR value : SIGNED32): BOOLEAN;
+BEGIN RETURN s.ReadBytes(value, 0, SIZE(SIGNED32)) = SIZE(SIGNED32) END ReadS32;
+
+(** Read `UNSIGNED64` value. Return `TRUE` if success. *)
+PROCEDURE (VAR s : Stream) ReadU64*(VAR value : UNSIGNED64): BOOLEAN;
+BEGIN RETURN s.ReadBytes(value, 0, SIZE(UNSIGNED64)) = SIZE(UNSIGNED64) END ReadU64;
+
+(** Read `SIGNED64` value. Return `TRUE` if success. *)
+PROCEDURE (VAR s : Stream) ReadS64*(VAR value : SIGNED64): BOOLEAN;
+BEGIN RETURN s.ReadBytes(value, 0, SIZE(SIGNED64)) = SIZE(SIGNED64) END ReadS64;
+
+(** Read `REAL32` value. Return `TRUE` if success. *)
+PROCEDURE (VAR s : Stream) ReadReal32*(VAR value : REAL32): BOOLEAN;
+BEGIN RETURN s.ReadBytes(value, 0, SIZE(REAL32)) = SIZE(REAL32) END ReadReal32;
+
+(** Read `REAL64` value. Return `TRUE` if success. *)
+PROCEDURE (VAR s : Stream) ReadReal64*(VAR value : REAL64): BOOLEAN;
+BEGIN RETURN s.ReadBytes(value, 0, SIZE(REAL64)) = SIZE(REAL64) END ReadReal64;
+
 (**
 Read line to `EOL` mark or `EOF` mark.
 `STRING` possible reallocated to contain whole line if needed.
@@ -168,6 +208,86 @@ BEGIN
         s.error := Const.ErrorWriteFailed
     END
 END WriteLongReal;
+
+(** Write `UNSIGNED8` value. Sets error to `ErrorWriteFailed` on failure. *)
+PROCEDURE (VAR s : Stream) WriteU8*(value : UNSIGNED8);
+BEGIN
+    IF s.WriteBytes(value, 0, SIZE(UNSIGNED8)) # SIZE(UNSIGNED8) THEN
+        s.error := Const.ErrorWriteFailed
+    END
+END WriteU8;
+
+(** Write `SIGNED8` value. Sets error to `ErrorWriteFailed` on failure. *)
+PROCEDURE (VAR s : Stream) WriteS8*(value : SIGNED8);
+BEGIN
+    IF s.WriteBytes(value, 0, SIZE(SIGNED8)) # SIZE(SIGNED8) THEN
+        s.error := Const.ErrorWriteFailed
+    END
+END WriteS8;
+
+(** Write `UNSIGNED16` value. Sets error to `ErrorWriteFailed` on failure. *)
+PROCEDURE (VAR s : Stream) WriteU16*(value : UNSIGNED16);
+BEGIN
+    IF s.WriteBytes(value, 0, SIZE(UNSIGNED16)) # SIZE(UNSIGNED16) THEN
+        s.error := Const.ErrorWriteFailed
+    END
+END WriteU16;
+
+(** Write `SIGNED16` value. Sets error to `ErrorWriteFailed` on failure. *)
+PROCEDURE (VAR s : Stream) WriteS16*(value : SIGNED16);
+BEGIN
+    IF s.WriteBytes(value, 0, SIZE(SIGNED16)) # SIZE(SIGNED16) THEN
+        s.error := Const.ErrorWriteFailed
+    END
+END WriteS16;
+
+(** Write `UNSIGNED32` value. Sets error to `ErrorWriteFailed` on failure. *)
+PROCEDURE (VAR s : Stream) WriteU32*(value : UNSIGNED32);
+BEGIN
+    IF s.WriteBytes(value, 0, SIZE(UNSIGNED32)) # SIZE(UNSIGNED32) THEN
+        s.error := Const.ErrorWriteFailed
+    END
+END WriteU32;
+
+(** Write `SIGNED32` value. Sets error to `ErrorWriteFailed` on failure. *)
+PROCEDURE (VAR s : Stream) WriteS32*(value : SIGNED32);
+BEGIN
+    IF s.WriteBytes(value, 0, SIZE(SIGNED32)) # SIZE(SIGNED32) THEN
+        s.error := Const.ErrorWriteFailed
+    END
+END WriteS32;
+
+(** Write `UNSIGNED64` value. Sets error to `ErrorWriteFailed` on failure. *)
+PROCEDURE (VAR s : Stream) WriteU64*(value : UNSIGNED64);
+BEGIN
+    IF s.WriteBytes(value, 0, SIZE(UNSIGNED64)) # SIZE(UNSIGNED64) THEN
+        s.error := Const.ErrorWriteFailed
+    END
+END WriteU64;
+
+(** Write `SIGNED16` value. Sets error to `ErrorWriteFailed` on failure. *)
+PROCEDURE (VAR s : Stream) WriteS64*(value : SIGNED64);
+BEGIN
+    IF s.WriteBytes(value, 0, SIZE(SIGNED64)) # SIZE(SIGNED64) THEN
+        s.error := Const.ErrorWriteFailed
+    END
+END WriteS64;
+
+(** Write `REAL32` value. Sets error to `ErrorWriteFailed` on failure. *)
+PROCEDURE (VAR s : Stream) WriteReal32*(value : REAL32);
+BEGIN
+    IF s.WriteBytes(value, 0, SIZE(REAL32)) # SIZE(REAL32) THEN
+        s.error := Const.ErrorWriteFailed
+    END
+END WriteReal32;
+
+(** Write `REAL64` value. Sets error to `ErrorWriteFailed` on failure. *)
+PROCEDURE (VAR s : Stream) WriteReal64*(value : REAL64);
+BEGIN
+    IF s.WriteBytes(value, 0, SIZE(REAL64)) # SIZE(REAL64) THEN
+        s.error := Const.ErrorWriteFailed
+    END
+END WriteReal64;
 
 (**
 Write `ARRAY OF CHAR` value to NULL byte or length of array.
