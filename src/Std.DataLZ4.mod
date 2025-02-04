@@ -228,7 +228,7 @@ BEGIN
 				match := src + hentry;
 				hashTable[nextHash] := U32(sp - src);
 				nextHash := Hash(GetU32(spNext));
-				IF ((sp - match) <= 0H) OR (GetU32(sp) = GetU32(match)) THEN EXIT END;                        
+				IF ((sp - match) > 0FFFFH) OR (GetU32(sp) = GetU32(match)) THEN EXIT END;                        
           	END;
           	
 			(* Extend the match backwards. *)
@@ -294,7 +294,7 @@ BEGIN
 				newOffset := U32(sp - src);
 				hashTable[hash] := newOffset;
 				match := src + oldOffset;
-				IF ((newOffset - oldOffset) < 0) OR (GetU32(sp) # GetU32(match)) THEN
+				IF ((newOffset - oldOffset) > 0FFFFH) OR (GetU32(sp) # GetU32(match)) THEN
 					EXIT
 				END;
 				token := dp;
