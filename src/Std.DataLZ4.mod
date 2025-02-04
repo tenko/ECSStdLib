@@ -66,11 +66,11 @@ BEGIN
 			END;
 			IF literalLen > slen THEN RETURN ERROR_INVALID_DATA END;
 			IF literalLen > dlen THEN RETURN ERROR_DST_TO_SMALL END;
-			MemCopy(dst, src, literalLen);
+			MemCopy(dst, src, LENGTH(literalLen));
 			dst := dst + literalLen;
-			dlen := dlen - literalLen;
+			dlen := LENGTH(dlen - literalLen);
 			src := src + literalLen;
-			slen := slen - literalLen;
+			slen := LENGTH(slen - literalLen);
       		IF slen = 0 THEN RETURN INTEGER(dst - odst) END;
 		END;
 		IF slen < 2 THEN RETURN ERROR_INVALID_DATA END;
@@ -86,9 +86,9 @@ BEGIN
 			END;
 		END;
 		IF dlen < clen THEN RETURN ERROR_DST_TO_SMALL END;
-		dlen := dlen - clen;
+		dlen := LENGTH(dlen - clen);
 		csrc := dst - coff;
-		MemCopy(dst, csrc, clen);
+		MemCopy(dst, csrc, LENGTH(clen));
 		dst := dst + clen;
 	END;
 	RETURN INTEGER(dst - odst)
@@ -224,9 +224,9 @@ BEGIN
 					AppendLen(slen - LENGTH(literalStart - src));
 					RETURN INTEGER(dp - dst)
 				END;
-				hentry := hashTable[nextHash];
+				hentry := hashTable[LENGTH(nextHash)];
 				match := src + hentry;
-				hashTable[nextHash] := U32(sp - src);
+				hashTable[LENGTH(nextHash)] := U32(sp - src);
 				nextHash := Hash(GetU32(spNext));
 				IF ((sp - match) > 0FFFFH) OR (GetU32(sp) = GetU32(match)) THEN EXIT END;                        
           	END;
@@ -283,16 +283,16 @@ BEGIN
 					minimum match length is 4. Update the hash table for one of those
 					skipped positions.
 				*)
-				hashTable[Hash(GetU32(sp - 2))] := U32(sp - 2 - src);
+				hashTable[LENGTH(Hash(GetU32(sp - 2)))] := U32(sp - 2 - src);
 		        
 				(*
 					Check if this match can be followed immediately by another match.
 		        	If so, continue the loop. Otherwise, break.
 				*)
 				hash := Hash(GetU32(sp));
-				oldOffset := hashTable[hash];
+				oldOffset := hashTable[LENGTH(hash)];
 				newOffset := U32(sp - src);
-				hashTable[hash] := newOffset;
+				hashTable[LENGTH(hash)] := newOffset;
 				match := src + oldOffset;
 				IF ((newOffset - oldOffset) > 0FFFFH) OR (GetU32(sp) # GetU32(match)) THEN
 					EXIT

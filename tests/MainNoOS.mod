@@ -19,6 +19,7 @@ IMPORT TestADTVector;
 IMPORT TestADTTree;
 IMPORT TestADTStream;
 IMPORT TestDataConfig;
+IMPORT TestDataLZ4;
 
 IMPORT SysMem IN Std;
 (* IN Micro IMPORT Traps := ARMv7MTraps; *)
@@ -51,6 +52,7 @@ BEGIN
     TestADTTree.Run(test);
     TestADTStream.Run(test);
     TestDataConfig.Run(test);
+    TestDataLZ4.Run(test);
     Testing.Finalize(test);
 
     TRACE(SysMem.AllocSize);

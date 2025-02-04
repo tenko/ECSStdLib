@@ -19,6 +19,7 @@ IMPORT TestADTVector;
 IMPORT TestADTTree;
 IMPORT TestADTStream;
 IMPORT TestDataConfig;
+IMPORT TestDataLZ4;
 
 CONST
     M = "TestMain";
@@ -46,5 +47,6 @@ BEGIN
     TestADTTree.Run(test);
     TestADTStream.Run(test);
     TestDataConfig.Run(test);
+    TestDataLZ4.Run(test);
     Testing.Finalize(test);
 END TestMain.

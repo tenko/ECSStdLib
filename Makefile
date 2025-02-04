@@ -29,7 +29,7 @@ OBF = $(addprefix build/, $(addprefix Std., $(addsuffix .obf, $(OLS))))
 OTS  = TestArrayOfByte TestArrayOfChar TestArrayOfSet TestCardinal TestInteger TestReal
 OTS += TestString TestRegex TestDateTime TestADTBasicType TestADTList TestADTSet
 OTS += TestADTDictionary TestADTVector TestADTTree TestADTStream TestOSPath TestOS
-OTS += TestDataConfig
+OTS += TestDataConfig TestDataLZ4
 
 TMOD = $(addprefix tests/, $(addsuffix .mod, $(OTS)))
 TOBF = $(addprefix build/, $(addsuffix .obf, $(OTS)))
@@ -95,6 +95,7 @@ build/TestOSPath.obf : src/Std.OSPath.mod
 build/TestRegex.obf : src/Std.Regex.mod
 build/TestString.obf : src/Std.String.mod
 build/TestDataConfig.obf : src/Std.DataConfig.mod src/Std.ADTStream.mod src/Std.String.mod
+build/TestDataLZ4.obf : src/Std.DataLZ4.mod src/Std.ArrayOfChar$(OPT).mod
 
 build/%.obf: tests/%.mod
 	@echo compiling $<
