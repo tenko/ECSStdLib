@@ -164,7 +164,7 @@ END WriteBytes;
 (** Write `BYTE` value. Sets error to `ErrorWriteFailed` on failure. *)
 PROCEDURE (VAR s : Stream) WriteByte*(value : BYTE);
 BEGIN
-    IF s.WriteBytes(value, 0, 1) = 1 THEN
+    IF s.WriteBytes(value, 0, 1) # 1 THEN
         s.error := Const.ErrorWriteFailed
     END
 END WriteByte;
@@ -292,6 +292,7 @@ END WriteReal64;
 (**
 Write `ARRAY OF CHAR` value to NULL byte or length of array.
 Sets error to `ErrorWriteFailed` on failure.
+src argiment must be a variable.
 *)
 PROCEDURE (VAR s : Stream) WriteString*(str- : ARRAY OF CHAR);
 VAR
