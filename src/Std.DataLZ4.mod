@@ -105,7 +105,7 @@ Return encoded length if success or error code on failure.
 *)
 PROCEDURE BlockEncodeRaw*(dst : ADDRESS; dlen : LENGTH; src : ADDRESS; slen : LENGTH): INTEGER;
 VAR
-	hashTable : ARRAY 4096 OF U32;
+	hashTable : POINTER TO ARRAY OF U32;
 	sp, spNext, match, matchLimit, literalStart : ADDRESS;
 	dp, token : ADDRESS;
 	i, j, finalLiteralsLimit : LENGTH;
@@ -190,6 +190,7 @@ VAR
 	END AppendLen;
 BEGIN
 	IF dlen < MaxEncodeSize(slen) THEN RETURN ERROR_DST_TO_SMALL END;
+	NEW(hashTable, 4096);
 	dp := dst;
 	sp := src;
 	literalStart := src;
@@ -202,7 +203,7 @@ BEGIN
            Each value is an offset o, relative to src, initialized to zero.
            Each key, when set, is a hash of 4 bytes src[o .. o+4].
         *)
-		FOR i := 0 TO LEN(hashTable) - 1 DO hashTable[i] := 0 END;
+		FOR i := 0 TO LEN(hashTable^) - 1 DO hashTable[i] := 0 END;
 		LOOP
 			(*
 				Start with 1-byte steps, accelerating when not finding any matches
@@ -222,6 +223,7 @@ BEGIN
 				INC(stepCounter);
 				IF LENGTH(spNext - src) > finalLiteralsLimit THEN
 					AppendLen(slen - LENGTH(literalStart - src));
+					DISPOSE(hashTable);
 					RETURN INTEGER(dp - dst)
 				END;
 				hentry := hashTable[LENGTH(nextHash)];
@@ -275,6 +277,7 @@ BEGIN
 				literalStart := sp;
 				IF LENGTH(sp - src) >= finalLiteralsLimit THEN
 					AppendLen(slen - LENGTH(literalStart - src));
+					DISPOSE(hashTable);
 					RETURN INTEGER(dp - dst)
 				END;
 
@@ -303,6 +306,7 @@ BEGIN
       		END;
 		END;
 	END;
+	DISPOSE(hashTable);
 	RETURN ERROR_INVALID_DATA
 END BlockEncodeRaw;
 
