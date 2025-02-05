@@ -3,8 +3,8 @@
 .code vector
     .required
     .origin 0x00000000                  ; Flash start address
-
-    .qbyte 0x20004000                   ; Stack = ram top.
+    
+    .qbyte 0x20200000                   ; Stack = ram top.
     .qbyte extent (@vector) + 1         ; Initial PC. (+1 for Thumb flag)
     .qbyte @isr_nmi + 1;                ; Non maskable interrupt.
     .qbyte @isr_hardfault + 1           ; All class of fault.
