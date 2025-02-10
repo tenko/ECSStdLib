@@ -141,7 +141,7 @@ BEGIN
     LOOP
         IF (i >= j) OR ~ret THEN EXIT END;
         c := Char.Upper(str[i + start]);
-        IF Char.IsDigit(c) OR Char.IsLetter(c) THEN
+        IF Char.IsDigit(c) OR Char.IsAlpha(c) THEN
             IF Char.IsDigit(c) THEN val := ORD(c) - ORD("0");
             ELSE val := 10 + ORD(c) - ORD("A")
             END;

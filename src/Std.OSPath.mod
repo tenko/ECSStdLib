@@ -34,8 +34,8 @@ VAR cwd : String.STRING;
 BEGIN
     IF ArrayOfChar.Length(path) > 0 THEN
         IF Config.PLATFORM = Const.SysWindows THEN
-            IF (Char.IsLetter(path[0]) & (path[1] = ":") & (path[2] = SEP)) OR
-            ((path[0] = SEP) & (path[1] = SEP) & Char.IsLetter(path[2])) THEN
+            IF (Char.IsAlpha(path[0]) & (path[1] = ":") & (path[2] = SEP)) OR
+            ((path[0] = SEP) & (path[1] = SEP) & Char.IsAlpha(path[2])) THEN
                 String.Assign(dst, path);
                 RETURN
             END
@@ -130,11 +130,11 @@ VAR
         IF PeekP() = '!' THEN neg := TRUE; NextP() END;
         LOOP
             NextP();
-            IF ~Char.IsLetter(p) & ~Char.IsDigit(p) THEN EXIT END;
+            IF ~Char.IsAlpha(p) & ~Char.IsDigit(p) THEN EXIT END;
             IF PeekP() = '-' THEN
                 c := p;
                 NextP(); NextP();
-                IF ~Char.IsLetter(p) & ~Char.IsDigit(p) THEN EXIT END;
+                IF ~Char.IsAlpha(p) & ~Char.IsDigit(p) THEN EXIT END;
                 IF neg THEN match := match OR ~((s >= c) & (s <= p))
                 ELSE match := match OR ((s >= c) & (s <= p)) END;
             ELSE

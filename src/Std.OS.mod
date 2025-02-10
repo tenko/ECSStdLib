@@ -123,7 +123,7 @@ BEGIN
             Next(); Next();
             LOOP
                 IF (c = Char.NUL) OR (c = '=') THEN EXIT END;
-                IF ~Char.IsLetter(c) & ~Char.IsDigit(c) THEN EXIT END;
+                IF ~Char.IsAlpha(c) & ~Char.IsDigit(c) THEN EXIT END;
                 String.AppendChar(arg.name, c);
                 Next()
             END;
@@ -145,12 +145,12 @@ BEGIN
             RETURN TRUE
         ELSE (* Short type *)
             Next();
-            IF Char.IsLetter(c) OR Char.IsDigit(c) THEN
+            IF Char.IsAlpha(c) OR Char.IsDigit(c) THEN
                 String.AppendChar(arg.name, c);
                 Next();
                 LOOP
                     IF c = Char.NUL THEN EXIT END;
-                    IF ~Char.IsLetter(c) & ~Char.IsDigit(c) THEN EXIT END;
+                    IF ~Char.IsAlpha(c) & ~Char.IsDigit(c) THEN EXIT END;
                     String.AppendChar(arg.value, c);
                     Next()
                 END;

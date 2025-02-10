@@ -2,26 +2,54 @@
 MODULE Char IN Std;
 
 CONST
-    NUL* = CHR(00H);
-    TAB* = CHR(09H);
-    LF* = CHR(0AH);
-    CR* = CHR(0DH);
-    SPC* = CHR(020H);
+    NUL* = 00X;
+    TAB* = 09X;
+    LF* = 0AX;
+    CR* = 0DX;
+    SPC* = 20X;
+    DEL* = 7FX;
 
 (** Returns true of ch is a control character *)
 PROCEDURE IsControl* (ch: CHAR) : BOOLEAN ;
-BEGIN RETURN ch <= SPC
+BEGIN RETURN (ch <= SPC) OR (ch = DEL)
 END IsControl;
+
+(** Returns true of ch is a graphical character *)
+PROCEDURE IsGraph* (ch: CHAR) : BOOLEAN ;
+BEGIN RETURN (ch >= 21X) & (ch <= 7EX)
+END IsGraph;
+
+(** Returns true of ch is a punctuation character *)
+PROCEDURE IsPunct* (ch: CHAR) : BOOLEAN ;
+BEGIN RETURN ((ch >= 21X) & (ch <= 2FX)) OR
+             ((ch >= 3AX) & (ch <= 40X)) OR
+             ((ch >= 5BX) & (ch <= 60X)) OR
+             ((ch >= 7BX) & (ch <= 7EX))
+END IsPunct;
 
 (** Returns true of ch is a digit *)
 PROCEDURE IsDigit* (ch: CHAR) : BOOLEAN ;
 BEGIN RETURN (ch >= '0') & (ch <= '9')
 END IsDigit;
 
-(** Returns true of ch is a letter *)
-PROCEDURE IsLetter* (ch: CHAR) : BOOLEAN ;
+(** Returns true of ch is a hex digit *)
+PROCEDURE IsHexDigit* (ch: CHAR) : BOOLEAN ;
+BEGIN RETURN ((ch >= '0') & (ch <= '9')) OR
+             ((ch >= 'a') & (ch <= 'f')) OR
+             ((ch >= 'A') & (ch <= 'F'))
+END IsHexDigit;
+
+(** Returns true of ch is a alphabet letter *)
+PROCEDURE IsAlpha* (ch: CHAR) : BOOLEAN ;
 BEGIN RETURN ((ch >= 'a') & (ch <= 'z')) OR ((ch >= 'A') & (ch <= 'Z')) 
-END IsLetter;
+END IsAlpha;
+
+(** Returns true of ch is a alphabet letter or number *)
+PROCEDURE IsAlphaNum* (ch: CHAR) : BOOLEAN ;
+BEGIN RETURN ((ch >= 'a') & (ch <= 'z')) OR
+             ((ch >= 'A') & (ch <= 'Z')) OR
+             ((ch >= '0') & (ch <= '9'))
+END IsAlphaNum;
 
 (** Returns true of ch is a white space character *)
 PROCEDURE IsSpace* (ch: CHAR) : BOOLEAN ;
