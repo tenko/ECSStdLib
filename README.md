@@ -22,5 +22,4 @@ Sphinx API Documentation [Link](https://tenko.github.io/ECSStdLib/)
 
 ## TODO
 
- * Support hex float literal.
- * Replace Regex with Lua type patterns.
+ * Add better support for Linux platform.
