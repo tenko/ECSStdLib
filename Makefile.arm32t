@@ -23,7 +23,7 @@ SYS = Semihost
 RTS = armv7mrun.obf $(ECS)/armt32run.obf $(ECS)/obarmt32run.lib
 
 OLS += Const Config$(SYS) Type Char ArrayOfChar$(OPT) Integer Cardinal $(Real) ArrayOfByte$(OPT)
-OLS += ArrayOfSet DateTime String Regex ADTBasicType ADTStream ADTList ADTVector
+OLS += ArrayOfSet DateTime String StringPattern ADTBasicType ADTStream ADTList ADTVector
 OLS += ADTSet ADTDictionary ADTTree O2Testing
 OLS += OSHost$(SYS) OSStream OSFile OSDir OSPath DataConfig DataLZ4 SysMem
 
@@ -31,7 +31,7 @@ MOD = $(addprefix src/, $(addprefix Std., $(addsuffix .mod, $(OLS))))
 OBF = $(addprefix build/, $(addprefix Std., $(addsuffix .obf, $(OLS))))
 
 OTS  = TestArrayOfByte TestArrayOfChar TestArrayOfSet TestCardinal TestInteger TestReal
-OTS += TestString TestRegex TestDateTime TestADTBasicType TestADTList TestADTSet
+OTS += TestString TestStringPattern TestDateTime TestADTBasicType TestADTList TestADTSet
 OTS += TestADTDictionary TestADTVector TestADTTree TestADTStream
 OTS += TestOSPath TestOS$(SYS) TestDataConfig TestDataLZ4 MainNoOS
 
@@ -58,8 +58,8 @@ build/Std.OSDir.obf : src/Std.String.mod src/Std.OSHost$(SYS).mod
 build/Std.OSFile.obf : src/Std.DateTime.mod src/Std.OSHost$(SYS).mod
 build/Std.OSPath.obf : src/Std.ArrayOfChar$(OPT).mod src/Std.Config$(SYS).mod src/Std.Const.mod src/Std.Char.mod src/Std.OSDir.mod src/Std.String.mod
 build/Std.OSStream.obf : src/Std.Const.mod src/Std.ADTStream.mod src/Std.OSHost$(SYS).mod
-build/Std.Regex.obf : src/Std.ArrayOfChar$(OPT).mod src/Std.ArrayOfSet.mod
 build/Std.String.obf : src/Std.Char.mod src/Std.Config$(SYS).mod src/Std.Type.mod src/Std.ArrayOfChar$(OPT).mod src/Std.Integer.mod src/Std.Cardinal.mod src/Std.DateTime.mod
+build/TestStringPattern.obf : src/Std.StringPattern.mod src/Std.ArrayOfChar$(OPT).mod
 build/Std.DataConfig.obf : src/Std.Const.mod src/Std.Char.mod src/Std.ArrayOfChar$(OPT).mod src/Std.String.mod src/Std.Type.mod src/Std.ADTDictionary.mod src/Std.ADTSet.mod 
 
 build/%.obf: src/%.mod
@@ -101,8 +101,8 @@ build/TestDateTime.obf : src/Std.DateTime.mod
 build/TestInteger.obf : src/Std.Integer.mod
 build/TestOS.obf : src/Std.String.mod src/Std.OSStream.mod src/Std.OSPath.mod src/Std.OSFile.mod src/Std.OSDir.mod
 build/TestOSPath.obf : src/Std.OSPath.mod
-build/TestRegex.obf : src/Std.Regex.mod
 build/TestString.obf : src/Std.String.mod
+build/TestStringPattern.obf : src/Std.StringPattern.mod src/Std.ArrayOfChar$(OPT).mod
 build/TestDataConfig.obf : src/Std.DataConfig.mod src/Std.ADTStream.mod src/Std.String.mod
 build/TestDataLZ4.obf : src/Std.DataLZ4.mod src/Std.ArrayOfChar$(OPT).mod
 

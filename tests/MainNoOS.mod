@@ -7,7 +7,7 @@ IMPORT TestCardinal;
 IMPORT TestInteger;
 IMPORT TestReal;
 IMPORT TestString;
-IMPORT TestRegex;
+IMPORT TestStringPattern;
 IMPORT TestDateTime;
 IMPORT TestOSPath;
 IMPORT TestOS;
@@ -40,7 +40,7 @@ BEGIN
     TestInteger.Run(test);
     TestReal.Run(test);
     TestString.Run(test);
-    (* TestRegex.Run(test); *) (* Leaking memory *)
+    TestStringPattern.Run(test);
     (* TestDateTime.Run(test); *) (* Currenly fails due to error in code generator *)
     TestOSPath.Run(test);
     TestOS.Run(test);

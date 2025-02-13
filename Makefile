@@ -20,14 +20,14 @@ else
 endif
 
 OLS += Const Config$(SYS) Type Char ArrayOfChar$(OPT) OSHost$(SYS) Integer Cardinal $(Real)
-OLS += ArrayOfByte$(OPT) ArrayOfSet DateTime String Regex ADTBasicType ADTStream ADTList ADTVector
+OLS += ArrayOfByte$(OPT) ArrayOfSet DateTime String StringPattern ADTBasicType ADTStream ADTList ADTVector
 OLS += ADTSet ADTDictionary ADTTree O2Testing O2Timing$(SYS)
 OLS += OS OSStream OSFile OSDir OSPath DataConfig DataLZ4
 MOD = $(addprefix src/, $(addprefix Std., $(addsuffix .mod, $(OLS))))
 OBF = $(addprefix build/, $(addprefix Std., $(addsuffix .obf, $(OLS))))
 
 OTS  = TestArrayOfByte TestArrayOfChar TestArrayOfSet TestCardinal TestInteger TestReal
-OTS += TestString TestRegex TestDateTime TestADTBasicType TestADTList TestADTSet
+OTS += TestString TestStringPattern TestDateTime TestADTBasicType TestADTList TestADTSet
 OTS += TestADTDictionary TestADTVector TestADTTree TestADTStream TestOSPath TestOS
 OTS += TestDataConfig TestDataLZ4
 
@@ -36,7 +36,7 @@ TOBF = $(addprefix build/, $(addsuffix .obf, $(OTS)))
 
 DOC = ADTBasicType ADTDictionary ADTList ADTSet ADTStream ADTTree ADTVector ArrayOfByte
 DOC += ArrayOfChar ArrayOfSet Cardinal Char Config Const DataConfig DateTime Integer
-DOC += O2Testing O2Timing OS OSDir OSFile OSHost OSPath OSStream Real Regex String Type
+DOC += O2Testing O2Timing OS OSDir OSFile OSHost OSPath OSStream Real String StringPattern Type
 
 DRST = $(addprefix doc/src/Std., $(addsuffix .mod.rst, $(DOC)))
 
@@ -60,8 +60,8 @@ build/Std.OSDir.obf : src/Std.String.mod src/Std.OSHost$(SYS).mod
 build/Std.OSFile.obf : src/Std.DateTime.mod src/Std.OSHost$(SYS).mod
 build/Std.OSPath.obf : src/Std.ArrayOfChar$(OPT).mod src/Std.Config$(SYS).mod src/Std.Const.mod src/Std.Char.mod src/Std.OSDir.mod src/Std.String.mod
 build/Std.OSStream.obf : src/Std.Const.mod src/Std.ADTStream.mod src/Std.OSHost$(SYS).mod
-build/Std.Regex.obf : src/Std.ArrayOfChar$(OPT).mod src/Std.ArrayOfSet.mod
 build/Std.String.obf : src/Std.Char.mod src/Std.Config$(SYS).mod src/Std.Type.mod src/Std.ArrayOfChar$(OPT).mod src/Std.Integer.mod src/Std.Cardinal.mod src/Std.DateTime.mod
+build/Std.StringPattern.obf : src/Std.Char.mod src/Std.ArrayOfChar$(OPT).mod
 build/Std.Type.obf : src/Std.Const.mod src/Std.Config$(SYS).mod
 build/Std.DataConfig.obf : src/Std.Const.mod src/Std.Char.mod src/Std.ArrayOfChar$(OPT).mod src/Std.String.mod src/Std.Type.mod src/Std.ADTDictionary.mod src/Std.ADTSet.mod 
 
@@ -92,8 +92,8 @@ build/TestInteger.obf : src/Std.Integer.mod
 build/TestReal.obf : src/Std.$(Real).mod
 build/TestOS.obf : src/Std.String.mod src/Std.OSStream.mod src/Std.OSPath.mod src/Std.OSFile.mod src/Std.OSDir.mod
 build/TestOSPath.obf : src/Std.OSPath.mod
-build/TestRegex.obf : src/Std.Regex.mod
 build/TestString.obf : src/Std.String.mod
+build/TestStringPattern.obf : src/Std.StringPattern.mod src/Std.ArrayOfChar$(OPT).mod
 build/TestDataConfig.obf : src/Std.DataConfig.mod src/Std.ADTStream.mod src/Std.String.mod
 build/TestDataLZ4.obf : src/Std.DataLZ4.mod src/Std.ArrayOfChar$(OPT).mod
 
@@ -211,6 +211,10 @@ doc/src/Std.DataConfig.mod.rst : src/Std.DataConfig.mod
 	@-mkdir -p doc/src
 	@./tools/docgen.py $< -o $@
 
+doc/src/Std.DataLZ4.mod.rst : src/Std.DataLZ4.mod
+	@-mkdir -p doc/src
+	@./tools/docgen.py $< -o $@
+
 doc/src/Std.DateTime.mod.rst : src/Std.DateTime.mod
 	@-mkdir -p doc/src
 	@./tools/docgen.py $< -o $@
@@ -255,11 +259,11 @@ doc/src/Std.Real.mod.rst : src/Std.$(Real).mod
 	@-mkdir -p doc/src
 	@./tools/docgen.py $< -o $@
 
-doc/src/Std.Regex.mod.rst : src/Std.Regex.mod
+doc/src/Std.String.mod.rst : src/Std.String.mod
 	@-mkdir -p doc/src
 	@./tools/docgen.py $< -o $@
 
-doc/src/Std.String.mod.rst : src/Std.String.mod
+doc/src/Std.StringPattern.mod.rst : src/Std.StringPattern.mod
 	@-mkdir -p doc/src
 	@./tools/docgen.py $< -o $@
 

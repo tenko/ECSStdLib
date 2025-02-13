@@ -61,6 +61,7 @@ referenced as it uses many of the features of the library.
     :hidden:
 
     src/Std.DataConfig.mod
+    src/Std.DataLZ4.mod
     src/Std.O2Testing.mod
     src/Std.O2Timing.mod
     src/Std.OS.mod
@@ -69,7 +70,7 @@ referenced as it uses many of the features of the library.
     src/Std.OSHost.mod
     src/Std.OSPath.mod
     src/Std.OSStream.mod
-    src/Std.Regex.mod
+    src/Std.StringPattern.mod
 
 
 ##################
