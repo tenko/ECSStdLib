@@ -26,7 +26,6 @@ CONST
     STDIN* = -10;
     STDOUT* = -11;
     STDERR* = -12;
-    DATETIMEOFFSET* = FALSE;
     (* Windows error codes *)
     ERROR_SUCCESS = 0;
     ERROR_FILE_NOT_FOUND = 2;
@@ -165,7 +164,7 @@ BEGIN
 END FileWrite;
 
 (*
-Write from std file into buffer.
+Write from from buffer to std file handle.
 Return number of bytes actually written or -1 on failure.
 *)
 PROCEDURE FileStdWrite*(handle : HANDLE; buffer : ADDRESS; len : LENGTH): LENGTH;
@@ -247,7 +246,7 @@ BEGIN RETURN API.MoveFileA(SYSTEM.ADR(oldname), SYSTEM.ADR(newname)) # 0;
 END FileRename;
 
 (** Try to get modification time for file. Return `TRUE` on success *)
-PROCEDURE FileModificationTime*(VAR time : DateTime; filename-: ARRAY OF CHAR): BOOLEAN;
+PROCEDURE FileModificationTime*(VAR time : DateTime; VAR delta : HUGEINT; filename-: ARRAY OF CHAR): BOOLEAN;
 VAR
     fh: HANDLE;
     fdata: API.WIN32_FIND_DATAA;
@@ -271,6 +270,7 @@ BEGIN
     time.min := INTEGER(stime.wMinute);
     time.sec := INTEGER(stime.wSecond);
     time.msec := INTEGER(stime.wMilliseconds);
+    delta := -1;
     RETURN TRUE
 END FileModificationTime;
 
@@ -361,7 +361,7 @@ BEGIN
 END DirIsDir;
 
 (** Get current local time *)
-PROCEDURE GetTime*(VAR time : DateTime);
+PROCEDURE GetTime*(VAR time : DateTime; VAR delta : HUGEINT);
 VAR stime: API.SYSTEMTIME;
 BEGIN
     API.GetLocalTime(stime);
@@ -372,6 +372,7 @@ BEGIN
     time.min := INTEGER(stime.wMinute);
     time.sec := INTEGER(stime.wSecond);
     time.msec := INTEGER(stime.wMilliseconds);
+    delta := -1;
 END GetTime;
 
 (** Get local time UTC offset *)

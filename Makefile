@@ -10,11 +10,13 @@ Real = Real64
 ifdef MSYSTEM
 	PRG = .exe
 	SYS = Win
-	RTS = /c/EigenCompilerSuite/runtime/win64api.obf
+	DESTDIR = /c/EigenCompilerSuite/
+	RTS = $(DESTDIR)runtime/win64api.obf
 	CONV = unix2dos
 else
 	PRG = 
 	SYS = Lin
+	DESTDIR = ~/.local/lib/ecs/
 	RTS = 
 	CONV = dos2unix
 endif
@@ -280,8 +282,8 @@ doc: $(DRST)
 .PHONY: install
 install: std.lib
 	@echo Install
-	@cp -f std.lib /c/EigenCompilerSuite/runtime/
-	@cp -f build/std.*.sym /c/EigenCompilerSuite/libraries/oberon/
+	@cp -f std.lib $(DESTDIR)runtime/
+	@cp -f build/std.*.sym $(DESTDIR)libraries/oberon/
 
 .PHONY: clean
 clean:

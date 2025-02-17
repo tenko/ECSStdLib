@@ -254,20 +254,13 @@ END Dec;
 PROCEDURE Now* (): DATETIME;
 VAR
     dt : OSHost.DateTime;
+    delta : HUGEINT;
     ret : DATETIME;
 BEGIN
-    OSHost.GetTime(dt);
-    IF OSHost.DATETIMEOFFSET THEN
-        ret := EncodeDate(dt.year, dt.month, dt.day);
-        Inc(ret, Hour, dt.hour);
-        Inc(ret, Min, dt.min);
-        Inc(ret, Sec, dt.sec);
-        Inc(ret, MSec, dt.msec);
-    ELSE
-        ret := EncodeDateTime(
-            dt.year, dt.month, dt.day,
-            dt.hour, dt.min, dt.sec, dt.msec
-        );
+    OSHost.GetTime(dt, delta);
+    ret := EncodeDateTime(dt.year, dt.month, dt.day, dt.hour, dt.min, dt.sec, dt.msec);
+    IF (ret # ERROR) & (delta # -1) THEN
+        Inc(ret, Sec, delta);
     END;
     RETURN ret
 END Now;

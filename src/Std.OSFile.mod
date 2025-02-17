@@ -20,12 +20,18 @@ END Rename;
 
 (** Try to get file access time. Return `TRUE` on success *)
 PROCEDURE ModifyTime*(VAR time : DateTime.DATETIME; filename-: ARRAY OF CHAR): BOOLEAN;
-VAR dt : OSHost.DateTime;
+VAR
+    dt : OSHost.DateTime;
+    delta : HUGEINT;
 BEGIN
-    IF ~OSHost.FileModificationTime(dt, filename) THEN RETURN FALSE END;
-    RETURN DateTime.TryEncodeDateTime(time,
-    dt.year, dt.month, dt.day, dt.hour, dt.min, dt.sec, dt.msec
-    );
+    IF ~OSHost.FileModificationTime(dt, delta, filename) THEN RETURN FALSE END;
+    IF ~DateTime.TryEncodeDateTime(time, dt.year, dt.month, dt.day, dt.hour, dt.min, dt.sec, dt.msec) THEN
+        RETURN FALSE
+    END;
+    IF delta # -1 THEN
+        DateTime.Inc(time, DateTime.Sec, delta)
+    END;
+    RETURN TRUE
 END ModifyTime;
 
 END OSFile.

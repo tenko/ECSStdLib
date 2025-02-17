@@ -174,10 +174,16 @@ END FromString;
 
 (* Initialize randomSeed with time *)
 PROCEDURE Init;
-VAR dt : OSHost.DateTime;
+VAR
+    dt : OSHost.DateTime;
+    delta : HUGEINT;
 BEGIN
-    OSHost.GetTime(dt);
-    randomSeed := dt.msec + dt.sec * 1000 + dt.min * 60 * 1000 + dt.hour * 60 * 60 * 1000;
+    OSHost.GetTime(dt, delta);
+    IF delta # -1 THEN
+        randomSeed := delta
+    ELSE
+        randomSeed := dt.msec + dt.sec * 1000 + dt.min * 60 * 1000 + dt.hour * 60 * 60 * 1000;
+    END;
 END Init;
 
 BEGIN
