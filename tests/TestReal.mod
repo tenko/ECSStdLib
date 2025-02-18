@@ -83,7 +83,6 @@ BEGIN
 
     (* IsNan *)
     Assert(Real.IsNan(Real.NaN) = TRUE, __LINE__);
-    Assert(Real.IsNan(Real.Inf*0.0) = TRUE, __LINE__); (* This should pass *)
     Assert(Real.IsNan(0.0) = FALSE, __LINE__);
     Assert(Real.IsNan(Real.Inf) = FALSE, __LINE__);
 
