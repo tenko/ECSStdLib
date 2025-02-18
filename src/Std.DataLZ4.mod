@@ -1,8 +1,10 @@
 (**
 Module implementing the LZ4 block compression format.
-Ref : https://github.com/lz4/lz4/blob/dev/doc/lz4_Block_format.md
 
-This code is from the simplified implementation : https://github.com/nigeltao/sflz4/
+Ref : `Link <https://github.com/lz4/lz4/blob/dev/doc/lz4_Block_format.md>`_
+
+This code is from the simplified implementation : `Link <https://github.com/nigeltao/sflz4/>`_
+
 License is Apache License 2.0, Copyright 2022 Nigel Tao.
 *)
 MODULE DataLZ4 IN Std;

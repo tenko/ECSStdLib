@@ -37,7 +37,7 @@ TMOD = $(addprefix tests/, $(addsuffix .mod, $(OTS)))
 TOBF = $(addprefix build/, $(addsuffix .obf, $(OTS)))
 
 DOC = ADTBasicType ADTDictionary ADTList ADTSet ADTStream ADTTree ADTVector ArrayOfByte
-DOC += ArrayOfChar ArrayOfSet Cardinal Char Config Const DataConfig DateTime Integer
+DOC += ArrayOfChar ArrayOfSet Cardinal Char Config Const DataConfig DataLZ4 DateTime Integer
 DOC += O2Testing O2Timing OS OSDir OSFile OSHost OSPath OSStream Real String StringPattern Type
 
 DRST = $(addprefix doc/src/Std., $(addsuffix .mod.rst, $(DOC)))

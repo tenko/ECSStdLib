@@ -2,7 +2,7 @@
 Date and Time module.
 
 Adapted from the implementation of `Julia` language standard library.
-License is MIT: https://julialang.org/license
+License is MIT: `Link <https://julialang.org/license>`_
 
 A Date value is encoded as an `HUGEINT`, counting milliseconds
 from an epoch. The epoch is 0000-12-31T00:00:00.

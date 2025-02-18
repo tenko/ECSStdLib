@@ -6,9 +6,9 @@ This library is developed for the *ECS Oberon-2 Compiler*.
 
 The intended use case is small personal utilities and
 applications on the Windows and Linux platform.
-For now only the Windows platform is tested, but there
-should be no big obstacles to get Linux up and running.
-In addition baremetal platforms arm32t are supported.
+For now only the Windows and Linux platforms are tested.
+In addition baremetal platforms arm32t are supported with
+a seperate makefile.
 
 The API is a not intended to be compatibe with legacy Oberon-2
 code and rather use comparable Python standard library API or POSIX
