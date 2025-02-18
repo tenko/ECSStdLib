@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Char &mdash; ECSStdLib 0.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
 
   
@@ -65,6 +65,16 @@
 <li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-readlongint">Stream.ReadLongInt</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-readreal">Stream.ReadReal</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-readlongreal">Stream.ReadLongReal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-readu8">Stream.ReadU8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-reads8">Stream.ReadS8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-readu16">Stream.ReadU16</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-reads16">Stream.ReadS16</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-readu32">Stream.ReadU32</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-reads32">Stream.ReadS32</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-readu64">Stream.ReadU64</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-reads64">Stream.ReadS64</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-readreal32">Stream.ReadReal32</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-readreal64">Stream.ReadReal64</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-readline">Stream.ReadLine</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-writebytes">Stream.WriteBytes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-writebyte">Stream.WriteByte</a></li>
@@ -73,6 +83,16 @@
 <li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-writelongint">Stream.WriteLongInt</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-writereal">Stream.WriteReal</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-writelongreal">Stream.WriteLongReal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-writeu8">Stream.WriteU8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-writes8">Stream.WriteS8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-writeu16">Stream.WriteU16</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-writes16">Stream.WriteS16</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-writeu32">Stream.WriteU32</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-writes32">Stream.WriteS32</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-writeu64">Stream.WriteU64</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-writes64">Stream.WriteS64</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-writereal32">Stream.WriteReal32</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-writereal64">Stream.WriteReal64</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-writestring">Stream.WriteString</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-writenl">Stream.WriteNL</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-writestream">Stream.WriteStream</a></li>
@@ -182,8 +202,12 @@
 <li class="toctree-l2"><a class="reference internal" href="#const">Const</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#procedures">Procedures</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#iscontrol">IsControl</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#isgraph">IsGraph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ispunct">IsPunct</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#isdigit">IsDigit</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#isletter">IsLetter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ishexdigit">IsHexDigit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#isalpha">IsAlpha</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#isalphanum">IsAlphaNum</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#isspace">IsSpace</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#islower">IsLower</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#isupper">IsUpper</a></li>
@@ -397,8 +421,8 @@
 <li class="toctree-l1"><a class="reference internal" href="Std.ADTTree.mod.html">ADTTree</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="Std.ADTTree.mod.html#procedures">Procedures</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTTree.mod.html#tree-init">Tree.Init</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Std.ADTTree.mod.html#tree-dispose">Tree.Dispose</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTTree.mod.html#tree-size">Tree.Size</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTTree.mod.html#tree-dispose">Tree.Dispose</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTTree.mod.html#tree-findnode">Tree.FindNode</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTTree.mod.html#tree-haselement">Tree.HasElement</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTTree.mod.html#tree-first">Tree.First</a></li>
@@ -606,19 +630,13 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="Std.Regex.mod.html">Regex</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="Std.Regex.mod.html#types">Types</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Std.Regex.mod.html#procedures">Procedures</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="Std.Regex.mod.html#dispose">Dispose</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Std.Regex.mod.html#compile">Compile</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Std.Regex.mod.html#pattern-match">Pattern.Match</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Std.Regex.mod.html#pattern-fullmatch">Pattern.FullMatch</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Std.Regex.mod.html#pattern-matchlength">Pattern.MatchLength</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Std.Regex.mod.html#pattern-matchpos">Pattern.MatchPos</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="Std.Regex.mod.html#example">Example</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="Std.Regex.mod.html#regex-example">Regex Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Std.StringPattern.mod.html">StringPattern</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Std.StringPattern.mod.html#const">Const</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Std.StringPattern.mod.html#types">Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Std.StringPattern.mod.html#procedures">Procedures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Std.StringPattern.mod.html#pattern-match">Pattern.Match</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.StringPattern.mod.html#pattern-find">Pattern.Find</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.StringPattern.mod.html#pattern-capture">Pattern.Capture</a></li>
 </ul>
 </li>
 </ul>
@@ -656,19 +674,22 @@
 </div></blockquote>
 <section id="const">
 <h2>Const<a class="headerlink" href="#const" title="Link to this heading"></a></h2>
-<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="n">NUL</span><span class="o">*</span> <span class="o">=</span> <span class="nb">CHR</span><span class="p">(</span><span class="mh">00H</span><span class="p">);</span>
+<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="n">NUL</span><span class="o">*</span> <span class="o">=</span> <span class="mi">00</span><span class="n">X</span><span class="p">;</span>
 </pre></div>
 </div>
-<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="n">TAB</span><span class="o">*</span> <span class="o">=</span> <span class="nb">CHR</span><span class="p">(</span><span class="mh">09H</span><span class="p">);</span>
+<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="n">TAB</span><span class="o">*</span> <span class="o">=</span> <span class="mi">09</span><span class="n">X</span><span class="p">;</span>
 </pre></div>
 </div>
-<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="n">LF</span><span class="o">*</span> <span class="o">=</span> <span class="nb">CHR</span><span class="p">(</span><span class="mh">0AH</span><span class="p">);</span>
+<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="n">LF</span><span class="o">*</span> <span class="o">=</span> <span class="mi">0</span><span class="n">AX</span><span class="p">;</span>
 </pre></div>
 </div>
-<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="n">CR</span><span class="o">*</span> <span class="o">=</span> <span class="nb">CHR</span><span class="p">(</span><span class="mh">0DH</span><span class="p">);</span>
+<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="n">CR</span><span class="o">*</span> <span class="o">=</span> <span class="mi">0</span><span class="n">DX</span><span class="p">;</span>
 </pre></div>
 </div>
-<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="n">SPC</span><span class="o">*</span> <span class="o">=</span> <span class="nb">CHR</span><span class="p">(</span><span class="mh">020H</span><span class="p">);</span>
+<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="n">SPC</span><span class="o">*</span> <span class="o">=</span> <span class="mi">20</span><span class="n">X</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="n">DEL</span><span class="o">*</span> <span class="o">=</span> <span class="mi">7</span><span class="n">FX</span><span class="p">;</span>
 </pre></div>
 </div>
 </section>
@@ -677,6 +698,24 @@
 <section id="iscontrol">
 <span id="char-iscontrol"></span><h3>IsControl<a class="headerlink" href="#iscontrol" title="Link to this heading"></a></h3>
 <div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="n">IsControl</span><span class="o">*</span> <span class="p">(</span><span class="n">ch</span><span class="p">:</span> <span class="nb">CHAR</span><span class="p">)</span> <span class="p">:</span> <span class="nb">BOOLEAN</span> <span class="p">;</span>
+</pre></div>
+</div>
+</section>
+<section id="isgraph">
+<span id="char-isgraph"></span><h3>IsGraph<a class="headerlink" href="#isgraph" title="Link to this heading"></a></h3>
+<blockquote>
+<div><p>Returns true of ch is a graphical character</p>
+</div></blockquote>
+<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="n">IsGraph</span><span class="o">*</span> <span class="p">(</span><span class="n">ch</span><span class="p">:</span> <span class="nb">CHAR</span><span class="p">)</span> <span class="p">:</span> <span class="nb">BOOLEAN</span> <span class="p">;</span>
+</pre></div>
+</div>
+</section>
+<section id="ispunct">
+<span id="char-ispunct"></span><h3>IsPunct<a class="headerlink" href="#ispunct" title="Link to this heading"></a></h3>
+<blockquote>
+<div><p>Returns true of ch is a punctuation character</p>
+</div></blockquote>
+<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="n">IsPunct</span><span class="o">*</span> <span class="p">(</span><span class="n">ch</span><span class="p">:</span> <span class="nb">CHAR</span><span class="p">)</span> <span class="p">:</span> <span class="nb">BOOLEAN</span> <span class="p">;</span>
 </pre></div>
 </div>
 </section>
@@ -689,12 +728,30 @@
 </pre></div>
 </div>
 </section>
-<section id="isletter">
-<span id="char-isletter"></span><h3>IsLetter<a class="headerlink" href="#isletter" title="Link to this heading"></a></h3>
+<section id="ishexdigit">
+<span id="char-ishexdigit"></span><h3>IsHexDigit<a class="headerlink" href="#ishexdigit" title="Link to this heading"></a></h3>
 <blockquote>
-<div><p>Returns true of ch is a letter</p>
+<div><p>Returns true of ch is a hex digit</p>
 </div></blockquote>
-<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="n">IsLetter</span><span class="o">*</span> <span class="p">(</span><span class="n">ch</span><span class="p">:</span> <span class="nb">CHAR</span><span class="p">)</span> <span class="p">:</span> <span class="nb">BOOLEAN</span> <span class="p">;</span>
+<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="n">IsHexDigit</span><span class="o">*</span> <span class="p">(</span><span class="n">ch</span><span class="p">:</span> <span class="nb">CHAR</span><span class="p">)</span> <span class="p">:</span> <span class="nb">BOOLEAN</span> <span class="p">;</span>
+</pre></div>
+</div>
+</section>
+<section id="isalpha">
+<span id="char-isalpha"></span><h3>IsAlpha<a class="headerlink" href="#isalpha" title="Link to this heading"></a></h3>
+<blockquote>
+<div><p>Returns true of ch is a alphabet letter</p>
+</div></blockquote>
+<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="n">IsAlpha</span><span class="o">*</span> <span class="p">(</span><span class="n">ch</span><span class="p">:</span> <span class="nb">CHAR</span><span class="p">)</span> <span class="p">:</span> <span class="nb">BOOLEAN</span> <span class="p">;</span>
+</pre></div>
+</div>
+</section>
+<section id="isalphanum">
+<span id="char-isalphanum"></span><h3>IsAlphaNum<a class="headerlink" href="#isalphanum" title="Link to this heading"></a></h3>
+<blockquote>
+<div><p>Returns true of ch is a alphabet letter or number</p>
+</div></blockquote>
+<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="n">IsAlphaNum</span><span class="o">*</span> <span class="p">(</span><span class="n">ch</span><span class="p">:</span> <span class="nb">CHAR</span><span class="p">)</span> <span class="p">:</span> <span class="nb">BOOLEAN</span> <span class="p">;</span>
 </pre></div>
 </div>
 </section>

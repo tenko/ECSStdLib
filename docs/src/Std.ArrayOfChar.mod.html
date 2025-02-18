@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ArrayOfChar &mdash; ECSStdLib 0.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
 
   
@@ -65,6 +65,16 @@
 <li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-readlongint">Stream.ReadLongInt</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-readreal">Stream.ReadReal</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-readlongreal">Stream.ReadLongReal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-readu8">Stream.ReadU8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-reads8">Stream.ReadS8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-readu16">Stream.ReadU16</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-reads16">Stream.ReadS16</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-readu32">Stream.ReadU32</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-reads32">Stream.ReadS32</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-readu64">Stream.ReadU64</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-reads64">Stream.ReadS64</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-readreal32">Stream.ReadReal32</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-readreal64">Stream.ReadReal64</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-readline">Stream.ReadLine</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-writebytes">Stream.WriteBytes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-writebyte">Stream.WriteByte</a></li>
@@ -73,6 +83,16 @@
 <li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-writelongint">Stream.WriteLongInt</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-writereal">Stream.WriteReal</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-writelongreal">Stream.WriteLongReal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-writeu8">Stream.WriteU8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-writes8">Stream.WriteS8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-writeu16">Stream.WriteU16</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-writes16">Stream.WriteS16</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-writeu32">Stream.WriteU32</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-writes32">Stream.WriteS32</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-writeu64">Stream.WriteU64</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-writes64">Stream.WriteS64</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-writereal32">Stream.WriteReal32</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-writereal64">Stream.WriteReal64</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-writestring">Stream.WriteString</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-writenl">Stream.WriteNL</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.Type.mod.html#stream-writestream">Stream.WriteStream</a></li>
@@ -182,8 +202,12 @@
 <li class="toctree-l2"><a class="reference internal" href="Std.Char.mod.html#const">Const</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Std.Char.mod.html#procedures">Procedures</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Std.Char.mod.html#iscontrol">IsControl</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Char.mod.html#isgraph">IsGraph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Char.mod.html#ispunct">IsPunct</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.Char.mod.html#isdigit">IsDigit</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Std.Char.mod.html#isletter">IsLetter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Char.mod.html#ishexdigit">IsHexDigit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Char.mod.html#isalpha">IsAlpha</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.Char.mod.html#isalphanum">IsAlphaNum</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.Char.mod.html#isspace">IsSpace</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.Char.mod.html#islower">IsLower</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.Char.mod.html#isupper">IsUpper</a></li>
@@ -397,8 +421,8 @@
 <li class="toctree-l1"><a class="reference internal" href="Std.ADTTree.mod.html">ADTTree</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="Std.ADTTree.mod.html#procedures">Procedures</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTTree.mod.html#tree-init">Tree.Init</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Std.ADTTree.mod.html#tree-dispose">Tree.Dispose</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTTree.mod.html#tree-size">Tree.Size</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTTree.mod.html#tree-dispose">Tree.Dispose</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTTree.mod.html#tree-findnode">Tree.FindNode</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTTree.mod.html#tree-haselement">Tree.HasElement</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTTree.mod.html#tree-first">Tree.First</a></li>
@@ -606,19 +630,13 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="Std.Regex.mod.html">Regex</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="Std.Regex.mod.html#types">Types</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Std.Regex.mod.html#procedures">Procedures</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="Std.Regex.mod.html#dispose">Dispose</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Std.Regex.mod.html#compile">Compile</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Std.Regex.mod.html#pattern-match">Pattern.Match</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Std.Regex.mod.html#pattern-fullmatch">Pattern.FullMatch</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Std.Regex.mod.html#pattern-matchlength">Pattern.MatchLength</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Std.Regex.mod.html#pattern-matchpos">Pattern.MatchPos</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="Std.Regex.mod.html#example">Example</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="Std.Regex.mod.html#regex-example">Regex Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Std.StringPattern.mod.html">StringPattern</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Std.StringPattern.mod.html#const">Const</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Std.StringPattern.mod.html#types">Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Std.StringPattern.mod.html#procedures">Procedures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Std.StringPattern.mod.html#pattern-match">Pattern.Match</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.StringPattern.mod.html#pattern-find">Pattern.Find</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.StringPattern.mod.html#pattern-capture">Pattern.Capture</a></li>
 </ul>
 </li>
 </ul>
