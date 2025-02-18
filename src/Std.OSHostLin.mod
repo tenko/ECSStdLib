@@ -9,7 +9,9 @@ CONST
     STDIN* = 0;
     STDOUT* = 1;
     STDERR* = 2;
-    DT_DIR = 4;
+    OFSRECLEN = 16;
+    OFSTYPE = 18;
+    OFSSTR = 19;
 
 TYPE
     HANDLE* = INTEGER;
@@ -317,7 +319,7 @@ BEGIN
             END;
             dir.idx := 0;
         ELSE
-            SYSTEM.GET(dir.adr + dir.idx + 16, reclen);
+            SYSTEM.GET(dir.adr + dir.idx + OFSRECLEN, reclen);
             INC(dir.idx, reclen);
             IF dir.idx >= dir.size THEN
                 dir.size := API.GetDents(dir.handle, dir.adr, 4096);
@@ -341,7 +343,7 @@ VAR
 BEGIN
     IF (dir.handle # INVALID_HANDLE) & (dir.size # -1) THEN
         i := 0;
-        idx := dir.idx + 18;
+        idx := dir.idx + OFSSTR;
         WHILE idx + i < dir.size DO
             SYSTEM.GET(dir.adr + idx + i, c);
             IF c = 00X THEN RETURN i END;
@@ -351,6 +353,7 @@ BEGIN
     RETURN 0
 END DirNameLength;
 
+(** Return current directory listing name *)
 PROCEDURE DirName*(dir-: DirEntry; VAR name: ARRAY OF CHAR);
 VAR
     c : CHAR;
@@ -358,7 +361,7 @@ VAR
 BEGIN
     i := 0;
     IF (dir.handle # INVALID_HANDLE) & (dir.size # -1) THEN
-        idx := dir.idx + 18;
+        idx := dir.idx + OFSSTR;
         LOOP
             IF (idx + i > dir.size) OR (i >= LEN(name) - 1) THEN EXIT END;
             SYSTEM.GET(dir.adr + idx + i, c);
@@ -372,14 +375,13 @@ END DirName;
 
 (** Return TRUE if current entry is a directory *)
 PROCEDURE DirIsDir*(dir-: DirEntry): BOOLEAN;
-VAR
-    reclen : UNSIGNED16;
-    d_type : UNSIGNED8;
+VAR stat : Stat;
 BEGIN
     IF (dir.handle # INVALID_HANDLE) & (dir.size # -1) THEN
-        SYSTEM.GET(dir.adr + dir.idx + 16, reclen);
-        SYSTEM.GET(dir.adr + reclen - 1, d_type);
-        RETURN d_type = DT_DIR
+        IF API.Stat(dir.adr + dir.idx + OFSSTR, SYSTEM.ADR(stat)) # 0 THEN
+            RETURN FALSE
+        END;
+        RETURN stat.st_mode = 2;
     END;
     RETURN FALSE;
 END DirIsDir;
