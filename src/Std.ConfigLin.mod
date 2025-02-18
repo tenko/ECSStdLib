@@ -11,7 +11,7 @@ VAR
     NL- : ARRAY 3 OF CHAR;
 
 BEGIN
-    NL[0] := 0DX;
-    NL[1] := 0AX;
+    NL[0] := 0AX;
+    NL[1] := 00X;
     NL[2] := 00X;
 END Config.
