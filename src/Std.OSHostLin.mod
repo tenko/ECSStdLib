@@ -411,10 +411,10 @@ VAR
     arr : POINTER TO ARRAY OF CHAR;
     len : LENGTH;
 BEGIN
-    IF API.GetCWD(SYSTEM.ADR(str[0]), 64) = 0 THEN
+    IF API.GetCWD(SYSTEM.ADR(str[0]), 64) = -1 THEN
         NEW(arr, 4096);
-        IF arr = NIL THEN RETURN -1 END;
-        IF API.GetCWD(SYSTEM.ADR(arr^[0]), 4096) = 0 THEN
+        IF arr = NIL THEN RETURN 0 END;
+        IF API.GetCWD(SYSTEM.ADR(arr^[0]), 4096) = -1 THEN
             RETURN 0
         END;
         len := ArrayOfChar.Length(arr^);
