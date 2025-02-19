@@ -677,15 +677,13 @@
              
   <section id="intro">
 <h1>Intro<a class="headerlink" href="#intro" title="Link to this heading"></a></h1>
-<p>This library is developed for the <em>ECS Oberon-2 Compiler</em>.</p>
-<p>The intended use case is small personal utilities and
-applications on the Windows and Linux platform.
-For now only the Windows and Linux platforms are tested.
-In addition baremetal platforms arm32t are supported with
-a seperate makefile.</p>
-<p>The API is a not intended to be compatibe with legacy Oberon-2
-code and rather use comparable Python standard library API or POSIX
-where it fits.</p>
+<p>This library is developed for the <em>ECS Oberon-2 Compiler</em> to
+support application development.</p>
+<p>Currently the <em>Windows</em>, <em>Linux</em> &amp; embedded <em>ARMv7M</em> targets are supported.</p>
+<p>The <a class="reference internal" href="src/Std.Const.mod.html#const"><span class="std std-ref">Const</span></a> module defines constants reused throughout the library.</p>
+<p>The stream concept is used troughout the modules to support formatting,
+reading and writing of data. The <a class="reference internal" href="src/Std.Type.mod.html#type"><span class="std std-ref">Type</span></a> module defines the basic stream
+type interface.</p>
 <p>The unit tests can be inspected for basic usage.
 For more complete usage the <a class="reference internal" href="src/Std.DataConfig.mod.html#dataconfig"><span class="std std-ref">DataConfig</span></a> module is
 referenced as it uses many of the features of the library.</p>
