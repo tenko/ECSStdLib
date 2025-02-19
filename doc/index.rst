@@ -2,17 +2,16 @@
 Intro
 #####
 
-This library is developed for the *ECS Oberon-2 Compiler*.
+This library is developed for the *ECS Oberon-2 Compiler* to
+support application development.
 
-The intended use case is small personal utilities and
-applications on the Windows and Linux platform.
-For now only the Windows and Linux platforms are tested.
-In addition baremetal platforms arm32t are supported with
-a seperate makefile.
+Currently the *Windows*, *Linux* & embedded *ARMv7M* targets are supported.
 
-The API is a not intended to be compatibe with legacy Oberon-2
-code and rather use comparable Python standard library API or POSIX
-where it fits.
+The :ref:`Const` module defines constants reused throughout the library.
+
+The stream concept is used troughout the modules to support formatting,
+reading and writing of data. The :ref:`Type` module defines the basic stream
+type interface.
 
 The unit tests can be inspected for basic usage.
 For more complete usage the :ref:`DataConfig` module is

@@ -132,7 +132,10 @@ def parse(st):
     try:
         current = next(iter)
         while True:
+            lastComment = comment
             current, comment = skip(current)
+            if comment is None: comment = lastComment
+
             if current.type == Type.KEYWORD:
                 if module is None:
                     if current.value == 'MODULE':
@@ -159,7 +162,6 @@ def parse(st):
                             current = next(iter)
                             if current.type == Type.COM:
                                 current = next(iter)
-                        comment = None
 
                     elif current.value == 'CONST':
                         current = next(iter)
@@ -188,7 +190,6 @@ def parse(st):
                                 module.entries.append(Entry(EntryType.CONST, name, Span(start, current.span.end), None, None))
                             current = next(iter)
 
-                        comment = None
                         continue
                     
                     elif current.value == 'TYPE':
@@ -224,7 +225,7 @@ def parse(st):
                             if export:
                                 module.entries.append(Entry(EntryType.TYPE, name, Span(start, current.span.end), None, None))
                             current = next(iter)
-                        comment = None
+                        
                         continue
 
                     elif current.value == 'VAR':
@@ -262,8 +263,7 @@ def parse(st):
                                 for name in names:
                                     module.entries.append(Entry(EntryType.VAR, name, Span(start, current.span.end), None, None))
                             current = next(iter)
-                            
-                        comment = None
+                        
                         continue
 
                     elif current.value == 'PROCEDURE':
