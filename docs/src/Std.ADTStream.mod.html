@@ -478,6 +478,15 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="Std.DataLZ4.mod.html">DataLZ4</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Std.DataLZ4.mod.html#procedures">Procedures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Std.DataLZ4.mod.html#blockdecoderaw">BlockDecodeRaw</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.DataLZ4.mod.html#maxencodesize">MaxEncodeSize</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.DataLZ4.mod.html#blockencoderaw">BlockEncodeRaw</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="Std.O2Testing.mod.html">O2Testing</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="Std.O2Testing.mod.html#types">Types</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Std.O2Testing.mod.html#procedures">Procedures</a><ul>
@@ -716,6 +725,14 @@ to avoid circular import in <cite>Type</cite>.</p>
 <h2>Procedures<a class="headerlink" href="#procedures" title="Link to this heading"></a></h2>
 <section id="adtstream-formatstring">
 <span id="adtstream-adtstream-formatstring"></span><h3>ADTStream.FormatString<a class="headerlink" href="#adtstream-formatstring" title="Link to this heading"></a></h3>
+<p>Format <cite>ARRAY OF CHAR</cite>.</p>
+<ul class="simple">
+<li><p><cite>width</cite> : Total field with. Can overflow if string is bigger.</p></li>
+<li><p><cite>prec</cite> : The number of characters in string to add (if prec &gt; 0)</p></li>
+</ul>
+<p>The alignment formatting flags are <cite>Left</cite>, <cite>Right</cite> &amp; <cite>Center</cite> .
+The <cite>Upper</cite> flag will make the whole string upper case.
+The <cite>Alt</cite> flag will capitalize the string.</p>
 <div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="p">(</span><span class="kr">VAR</span> <span class="n">s</span> <span class="p">:</span> <span class="n">ADTStream</span><span class="p">)</span> <span class="n">FormatString</span><span class="o">*</span><span class="p">(</span><span class="n">str</span><span class="o">-</span> <span class="p">:</span> <span class="kr">ARRAY</span> <span class="kr">OF</span> <span class="nb">CHAR</span><span class="p">;</span> <span class="n">width</span><span class="p">,</span> <span class="n">prec</span><span class="p">:</span> <span class="nb">INTEGER</span><span class="p">;</span> <span class="n">flags</span><span class="p">:</span> <span class="kr">SET</span><span class="p">);</span>
 </pre></div>
 </div>

@@ -686,6 +686,10 @@
 <h2>Procedures<a class="headerlink" href="#procedures" title="Link to this heading"></a></h2>
 <section id="blockdecoderaw">
 <span id="datalz4-blockdecoderaw"></span><h3>BlockDecodeRaw<a class="headerlink" href="#blockdecoderaw" title="Link to this heading"></a></h3>
+<p>Decode LZ4 block format data from src to dst.
+Operates directly on raw memory data.
+Source size is limited to 16777215 bytes in order to simplify the code.
+Return decoded length if success or error code on failure.</p>
 <div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="n">BlockDecodeRaw</span><span class="o">*</span><span class="p">(</span><span class="n">dst</span> <span class="p">:</span> <span class="bp">ADDRESS</span><span class="p">;</span> <span class="n">dlen</span> <span class="p">:</span> <span class="nb">LENGTH</span><span class="p">;</span> <span class="n">src</span> <span class="p">:</span> <span class="bp">ADDRESS</span><span class="p">;</span> <span class="n">slen</span> <span class="p">:</span> <span class="nb">LENGTH</span><span class="p">):</span> <span class="nb">INTEGER</span><span class="p">;</span>
 </pre></div>
 </div>
