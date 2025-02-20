@@ -124,7 +124,7 @@ If `length` is < 0 then the whole string is expected to be converted.
 If an overflow is detected then `FALSE` is returned.
 Return `TRUE` if success.
 *)
-PROCEDURE FromSubString* (VAR result : HUGECARD; str- : ARRAY OF CHAR; base : INTEGER; start : LENGTH ; length : LENGTH): BOOLEAN;
+PROCEDURE FromSubString* (VAR result : HUGECARD; str- : ARRAY OF CHAR; base : INTEGER; start, length : LENGTH): BOOLEAN;
 VAR
     i, j: LENGTH;
     val, bas: HUGECARD;

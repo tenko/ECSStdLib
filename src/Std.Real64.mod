@@ -484,11 +484,11 @@ Convert string `str` to `REAL` and `start` and `length` into `str`.
 
 Return `TRUE` if success.
 *)
-PROCEDURE FromString*(VAR result: REAL; str-: ARRAY OF CHAR; start, length: INTEGER): BOOLEAN;
+PROCEDURE FromSubString*(VAR result: REAL; str-: ARRAY OF CHAR; start, length: LENGTH): BOOLEAN;
 VAR
     y : REAL;
-    e, i : INTEGER;
-    j : LENGTH;
+    e : INTEGER;
+    i, j : LENGTH;
     ch : CHAR;
     neg, negE : BOOLEAN;
     PROCEDURE Next;
@@ -568,6 +568,20 @@ BEGIN
     IF neg THEN y := -y  END;
     result := y;
     RETURN i = start + j
+END FromSubString;
+
+(**
+Convert string `str` to `REAL`.
+
+Return `TRUE` if success.
+*)
+PROCEDURE FromString* (VAR result : REAL; str- : ARRAY OF CHAR): BOOLEAN;
+VAR
+    i: LENGTH;
+BEGIN
+    i := 0;
+    WHILE (i < LEN(str)) & (str[i] # 00X) DO INC(i) END;
+    RETURN FromSubString(result, str, 0, i);
 END FromString;
 
 BEGIN

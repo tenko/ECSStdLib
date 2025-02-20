@@ -192,38 +192,38 @@ BEGIN
     AssertReal(Real.Round(-2.3), -2.0, tol, __LINE__);
     AssertReal(Real.Round(-2.5), -3.0, tol, __LINE__);
 
-    (* FromString *)
-    Assert(~Real.FromString(value, "", 0, 0), __LINE__);
-    Assert(~Real.FromString(value, "x", 0, 0), __LINE__);
-    Assert(~Real.FromString(value, "1..1", 0, 0), __LINE__);
-    Assert(~Real.FromString(value, "..", 0, 0), __LINE__);
-    ret := Real.FromString(value, "0", 0, 0);
+    (* FromSubString *)
+    Assert(~Real.FromSubString(value, "", 0, 0), __LINE__);
+    Assert(~Real.FromSubString(value, "x", 0, 0), __LINE__);
+    Assert(~Real.FromSubString(value, "1..1", 0, 0), __LINE__);
+    Assert(~Real.FromSubString(value, "..", 0, 0), __LINE__);
+    ret := Real.FromSubString(value, "0", 0, 0);
     Assert(ret & (value = 0.), __LINE__);
-    ret := Real.FromString(value, "-0", 0, 0);
+    ret := Real.FromSubString(value, "-0", 0, 0);
     Assert(ret & (value = -0.), __LINE__);
-    ret := Real.FromString(value, "0.", 0, 0);
+    ret := Real.FromSubString(value, "0.", 0, 0);
     Assert(ret & (value = 0.), __LINE__);
-    ret := Real.FromString(value, "123456789", 0, 0);
+    ret := Real.FromSubString(value, "123456789", 0, 0);
     AssertReal(value, 123456789., tol, __LINE__);
-    ret := Real.FromString(value, "1e0", 0, 0);
+    ret := Real.FromSubString(value, "1e0", 0, 0);
     Assert(ret & (value = 1.), __LINE__);
-    ret := Real.FromString(value, "1E0", 0, 0);
+    ret := Real.FromSubString(value, "1E0", 0, 0);
     Assert(ret & (value = 1.), __LINE__);
     IF REALSIZE = 8 THEN
-        ret := Real.FromString(value, "1.7976931348623157e308", 0, 0);
+        ret := Real.FromSubString(value, "1.7976931348623157e308", 0, 0);
         Assert(ret & (value = 1.7976931348623157E308), __LINE__);
-        ret := Real.FromString(value, "5E-324", 0, 0);
+        ret := Real.FromSubString(value, "5E-324", 0, 0);
         Assert(ret, __LINE__);
-        ret := Real.FromString(value, "2.4e-324", 0, 0); (* Underflow *)
+        ret := Real.FromSubString(value, "2.4e-324", 0, 0); (* Underflow *)
         Assert(ret & (value = 0.0), __LINE__);
-        ret := Real.FromString(value, "2e308", 0, 0); (* Overflow *)
+        ret := Real.FromSubString(value, "2e308", 0, 0); (* Overflow *)
         Assert(ret & (value = Real.Inf), __LINE__);
     ELSE
-        ret := Real.FromString(value, "3.40282E+38", 0, 0);
+        ret := Real.FromSubString(value, "3.40282E+38", 0, 0);
         Assert(ret, __LINE__);
         AssertReal(value, 3.40282E+38, tol, __LINE__); (* Strange error *)
     END;
-    ret := Real.FromString(value, " 1234", 1, 4); (* start & length *)
+    ret := Real.FromSubString(value, " 1234", 1, 4); (* start & length *)
     Assert(ret & (value = 1234.), __LINE__);
 
     Testing.End(test);
