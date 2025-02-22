@@ -191,7 +191,7 @@ BEGIN RETURN FALSE
 END DirIsDir;
 
 (** Get current local time *)
-PROCEDURE GetTime*(VAR time : DateTime);
+PROCEDURE GetTime*(VAR time : DateTime; VAR delta : HUGEINT);
 VAR offset : UNSIGNED32;
 BEGIN
     time.year := 1970;
@@ -199,6 +199,7 @@ BEGIN
     time.day := 1;
     time.hour := 0;
     time.msec := 0;
+    delta := 0;
 END GetTime;
 
 (** Get local time UTC offset *)
