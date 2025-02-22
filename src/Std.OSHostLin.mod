@@ -43,9 +43,19 @@ TYPE
     	pad : ARRAY 64 OF SYSTEM.BYTE;
     END;
 
+VAR
+    errno : INTEGER;
+
 VAR ^ argc ["_argc"]: INTEGER;
 VAR ^ argv ["_argv"]: POINTER TO - ARRAY MAX(LENGTH) OF ArgStr;
 PROCEDURE ^ GetEnv ["getenv"] (addr: SYSTEM.ADDRESS): SYSTEM.ADDRESS;
+
+PROCEDURE CheckForError(error : INTEGER);
+BEGIN
+    IF (error < 0) & (errno # 0) THEN
+        errno := ABS(error)
+    END;
+END CheckForError;
 
 (**
 Get length of program name string
@@ -144,6 +154,7 @@ BEGIN
     END;
     handle := API.Open(SYSTEM.ADR(filename[0]), flags, mode_t);
     IF handle < 0 THEN
+        CheckForError(handle);
         handle := INVALID_HANDLE;
         RETURN FALSE
     END;
@@ -152,7 +163,14 @@ END FileOpen;
 
 (* Close file. Return TRUE if success *)
 PROCEDURE FileClose*(handle : HANDLE): BOOLEAN;
-BEGIN RETURN API.Close(handle) = 0
+VAR ret : INTEGER;
+BEGIN
+    ret := API.Close(handle);
+    IF ret < 0 THEN
+        CheckForError(ret);
+        ret := -1
+    END;
+    RETURN ret >= 0
 END FileClose;
 
 (*
@@ -160,7 +178,14 @@ Read from file into buffer.
 Return number of bytes actually read or -1 on failure.
 *)
 PROCEDURE FileRead*(handle : HANDLE; buffer : ADDRESS; len : LENGTH): LENGTH;
-BEGIN RETURN LENGTH(API.Read(handle, buffer, len))
+VAR ret : LENGTH;
+BEGIN
+    ret := API.Read(handle, buffer, len);
+    IF ret < 0 THEN
+        CheckForError(INTEGER(ret));
+        ret := -1
+    END;
+    RETURN ret
 END FileRead;
 
 (*
@@ -168,7 +193,14 @@ Write from file into buffer.
 Return number of bytes actually written or -1 on failure.
 *)
 PROCEDURE FileWrite*(handle : HANDLE; buffer : ADDRESS; len : LENGTH): LENGTH;
-BEGIN RETURN LENGTH(API.Write(handle, buffer, len))
+VAR ret : LENGTH;
+BEGIN
+    ret := API.Write(handle, buffer, len);
+    IF ret < 0 THEN
+        CheckForError(INTEGER(ret));
+        ret := -1
+    END;
+    RETURN ret
 END FileWrite;
 
 (*
@@ -176,7 +208,14 @@ Write from from buffer to std file handle.
 Return number of bytes actually written or -1 on failure.
 *)
 PROCEDURE FileStdWrite*(handle : HANDLE; buffer : ADDRESS; len : LENGTH): LENGTH;
-BEGIN RETURN LENGTH(API.Write(handle, buffer, len))
+VAR ret : LENGTH;
+BEGIN
+    ret := API.Write(handle, buffer, len);
+    IF ret < 0 THEN
+        CheckForError(INTEGER(ret));
+        ret := -1
+    END;
+    RETURN ret
 END FileStdWrite;
 
 (**
@@ -195,7 +234,10 @@ BEGIN
         RETURN -1
     END;
     ret := API.LSeek(handle, offset, mod);
-    IF ret < 0 THEN RETURN -1 END;
+    IF ret < 0 THEN
+        CheckForError(INTEGER(ret));
+        RETURN -1
+    END;
     RETURN ret
 END FileSeek;
 
@@ -204,7 +246,10 @@ PROCEDURE FileTell*(handle : HANDLE): LENGTH;
 VAR ret : LENGTH;
 BEGIN
     ret := API.LSeek(handle, 0, API.SEEK_CUR);
-    IF ret < 0 THEN RETURN -1 END;
+    IF ret < 0 THEN
+        CheckForError(INTEGER(ret));
+        RETURN -1
+    END;
     RETURN ret
 END FileTell;
 
@@ -213,15 +258,24 @@ PROCEDURE FileSetSize*(handle : HANDLE): BOOLEAN;
 VAR size : LENGTH;
 BEGIN
     size := FileTell(handle);
-    IF size = -1 THEN RETURN FALSE END;
+    IF size < 0 THEN
+        CheckForError(INTEGER(size));
+        RETURN FALSE
+    END;
     IF API.FTruncate(handle, size) # 0 THEN RETURN FALSE END;
     RETURN TRUE
 END FileSetSize;
 
 (* Truncate file to given size *)
 PROCEDURE FileTruncate*(handle : HANDLE; size : LENGTH): LENGTH;
+VAR ret : INTEGER;
 BEGIN
-    IF API.FTruncate(handle, size) # 0 THEN RETURN -1 END;
+    ret := API.FTruncate(handle, size);
+    IF ret < 0 THEN
+        CheckForError(ret);
+        RETURN -1
+    END;
+    IF ret # 0 THEN RETURN -1 END;
     RETURN size
 END FileTruncate;
 
@@ -235,31 +289,42 @@ END FileFlush;
 
 (** Check if file exists *)
 PROCEDURE FileExists*(filename- : ARRAY OF CHAR): BOOLEAN;
-VAR stat : Stat;
+VAR
+    stat : Stat;
+    ret : INTEGER;
 BEGIN
-    IF API.Stat(SYSTEM.ADR(filename[0]), SYSTEM.ADR(stat)) # 0 THEN
-        RETURN FALSE
-    END;
-    RETURN TRUE
+    ret := API.Stat(SYSTEM.ADR(filename[0]), SYSTEM.ADR(stat));
+    CheckForError(ret);
+    RETURN ret = 0
 END FileExists;
 
 (** Try to remove file. Return `TRUE` on success *)
 PROCEDURE FileRemove*(filename- : ARRAY OF CHAR): BOOLEAN;
-BEGIN RETURN API.Unlink(SYSTEM.ADR(filename[0])) = 0
+VAR ret : INTEGER;
+BEGIN
+    ret := API.Unlink(SYSTEM.ADR(filename[0]));
+    CheckForError(ret);
+    RETURN ret = 0
 END FileRemove;
 
 (** Try to rename file. Return `TRUE` on success *)
 PROCEDURE FileRename*(oldname-, newname-: ARRAY OF CHAR): BOOLEAN;
-BEGIN RETURN API.Rename(SYSTEM.ADR(oldname[0]), SYSTEM.ADR(newname[0])) = 0
+VAR ret : INTEGER;
+BEGIN
+    ret := API.Rename(SYSTEM.ADR(oldname[0]), SYSTEM.ADR(newname[0]));
+    CheckForError(ret);
+    RETURN ret = 0
 END FileRename;
 
 (** Try to get modification time for file. Return `TRUE` on success *)
 PROCEDURE FileModificationTime*(VAR time : DateTime; VAR delta : HUGEINT; filename-: ARRAY OF CHAR): BOOLEAN;
-VAR stat : Stat;
+VAR
+    stat : Stat;
+    ret : INTEGER;
 BEGIN
-    IF API.Stat(SYSTEM.ADR(filename[0]), SYSTEM.ADR(stat)) # 0 THEN
-        RETURN FALSE
-    END;
+    ret := API.Stat(SYSTEM.ADR(filename[0]), SYSTEM.ADR(stat));
+    CheckForError(ret);
+    IF ret # 0 THEN RETURN FALSE END;
     time.year := 1970;
     time.month := 1;
     time.day := 1;
@@ -282,6 +347,7 @@ BEGIN
         dir.handle := API.Open(SYSTEM.ADR(name[0]), API.O_RDONLY + API.O_DIRECTORY, 0);
     END;
     IF dir.handle < 0 THEN
+        CheckForError(dir.handle);
         dir.handle := INVALID_HANDLE;
         RETURN
     END;
@@ -292,9 +358,11 @@ END DirOpen;
 
 (** Close directory listing *)
 PROCEDURE DirClose*(VAR dir: DirEntry);
+VAR ret : INTEGER;
 BEGIN
     IF dir.handle # INVALID_HANDLE THEN
-        IGNORE(API.Close(dir.handle));
+        ret := API.Close(dir.handle);
+        CheckForError(ret);
         dir.handle := INVALID_HANDLE
     END;
     IF dir.data # NIL THEN
@@ -375,10 +443,14 @@ END DirName;
 
 (** Return TRUE if current entry is a directory *)
 PROCEDURE DirIsDir*(dir-: DirEntry): BOOLEAN;
-VAR stat : Stat;
+VAR
+    stat : Stat;
+    ret : INTEGER;
 BEGIN
     IF (dir.handle # INVALID_HANDLE) & (dir.size # -1) THEN
-        IF API.Stat(dir.adr + dir.idx + OFSSTR, SYSTEM.ADR(stat)) # 0 THEN
+        ret := API.Stat(dir.adr + dir.idx + OFSSTR, SYSTEM.ADR(stat));
+        CheckForError(ret);
+        IF ret # 0 THEN
             RETURN FALSE
         END;
         RETURN stat.st_mode = 2;
@@ -397,6 +469,10 @@ BEGIN
     time.sec := 0;
     time.msec := 0;
     delta := API.Time(0);
+    IF delta < 0 THEN
+        CheckForError(INTEGER(delta));
+        delta := -1;
+    END;
 END GetTime;
 
 (** Get local time UTC offset *)
@@ -410,11 +486,19 @@ VAR
     str : ARRAY 64 OF CHAR;
     arr : POINTER TO ARRAY OF CHAR;
     len : LENGTH;
+    ret : ADDRESS;
 BEGIN
-    IF API.GetCWD(SYSTEM.ADR(str[0]), 64) = -1 THEN
+    ret := API.GetCWD(SYSTEM.ADR(str[0]), 64);
+    IF ret < 0 THEN
+        CheckForError(INTEGER(ret));
+        RETURN 0
+    END;
+    IF ret = 0 THEN
         NEW(arr, 4096);
-        IF arr = NIL THEN RETURN 0 END;
-        IF API.GetCWD(SYSTEM.ADR(arr^[0]), 4096) = -1 THEN
+        IF arr = NIL THEN RETURN -1 END;
+        ret := API.GetCWD(SYSTEM.ADR(arr^[0]), 4096);
+        IF ret <= 0 THEN
+            CheckForError(INTEGER(ret));
             RETURN 0
         END;
         len := ArrayOfChar.Length(arr^);
@@ -426,22 +510,37 @@ END CDNameLength;
 
 (** Get the current directory *)
 PROCEDURE CDName*(VAR name: ARRAY OF CHAR; length: LENGTH);
-BEGIN IGNORE(API.GetCWD(SYSTEM.ADR(name[0]), length))
+VAR ret : ADDRESS;
+BEGIN
+    ret := API.GetCWD(SYSTEM.ADR(name[0]), length);
+    IF ret < 0 THEN CheckForError(INTEGER(ret)) END;
 END CDName;
 
 (** Get the current directory *)
 PROCEDURE SetCD*(name-: ARRAY OF CHAR): BOOLEAN;
-BEGIN RETURN API.ChDir(SYSTEM.ADR(name[0])) = 0
+VAR ret : INTEGER;
+BEGIN
+    ret := API.ChDir(SYSTEM.ADR(name[0]));
+    IF ret < 0 THEN CheckForError(ret) END;
+    RETURN ret = 0
 END SetCD;
 
 (** Try to create directory. Return `TRUE` on success *)
 PROCEDURE CreateDirectory*(name-: ARRAY OF CHAR): BOOLEAN;
-BEGIN RETURN API.MkDir(SYSTEM.ADR(name[0]), 755O) = 0
+VAR ret : INTEGER;
+BEGIN
+    ret := API.MkDir(SYSTEM.ADR(name[0]), 755O);
+    IF ret < 0 THEN CheckForError(ret) END;
+    RETURN ret = 0
 END CreateDirectory;
 
 (** Try to delete directory. Return `TRUE` on success *)
 PROCEDURE RemoveDirectory*(name-: ARRAY OF CHAR): BOOLEAN;
-BEGIN RETURN API.RmDir(SYSTEM.ADR(name[0])) = 0
+VAR ret : INTEGER;
+BEGIN
+    ret := API.RmDir(SYSTEM.ADR(name[0]));
+    IF ret < 0 THEN CheckForError(ret) END;
+    RETURN ret = 0
 END RemoveDirectory;
 
 (** Get string length of the environment variable *)
@@ -452,7 +551,8 @@ VAR
     i : LENGTH;
 BEGIN
     adr := GetEnv(SYSTEM.ADR(name[0]));
-    IF adr = 0 THEN RETURN 0 END;
+    IF adr < 0 THEN CheckForError(INTEGER(adr)) END;
+    IF adr <= 0 THEN RETURN 0 END;
     i := 0;
     LOOP
         SYSTEM.GET(adr + i, c);
@@ -470,6 +570,7 @@ VAR
     i : LENGTH;
 BEGIN
     adr := GetEnv(SYSTEM.ADR(name[0]));
+    IF adr < 0 THEN CheckForError(INTEGER(adr)) END;
     IF adr = 0 THEN
         value[0] := 00X;
         RETURN
@@ -491,9 +592,29 @@ END Exit;
 
 (* Get last error code or OK on no error. *)
 PROCEDURE GetLastError*(VAR error: INTEGER);
-BEGIN error := Const.OK;
+CONST
+    EPERM       = 1;
+    ENOENT      = 2;
+    EACCES      = 13;
+    EEXIST      = 17;
+    ENOTDIR     = 20;
+    EINVAL      = 22;
+    ENOTEMPTY   = 39;
+BEGIN
+    CASE errno OF
+          0 : error := Const.OK
+        | ENOENT, EINVAL : error := Const.ErrorFileNotFound
+        | ENOTDIR : error := Const.ErrorPathNotFound
+        | EACCES : error := Const.ErrorNoAccess
+        | EPERM : error := Const.ErrorLocked
+        | ENOTEMPTY : error := Const.ErrorDirNotEmpty
+        | EEXIST : error := Const.ErrorAlreadyExists
+    ELSE
+        error := Const.ErrorUnknown
+    END;
 END GetLastError;
 
 BEGIN
     argc := -1;
+    errno := 0;
 END OSHost.
