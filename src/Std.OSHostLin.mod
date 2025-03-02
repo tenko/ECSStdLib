@@ -470,7 +470,7 @@ BEGIN
         IF ret # 0 THEN
             RETURN FALSE
         END;
-        RETURN stat.st_mode # 2;
+        RETURN stat.st_mode = 1;
     END;
     RETURN FALSE;
 END DirIsFile;
