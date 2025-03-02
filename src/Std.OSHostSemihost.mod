@@ -460,6 +460,11 @@ PROCEDURE DirIsDir*(dir-: DirEntry): BOOLEAN;
 BEGIN RETURN FALSE
 END DirIsDir;
 
+(** Return TRUE if current entry is a file *)
+PROCEDURE DirIsFile*(dir-: DirEntry): BOOLEAN;
+BEGIN RETURN FALSE;
+END DirIsFile;
+
 (** Get current local time *)
 PROCEDURE GetTime*(VAR time : DateTime; VAR delta : HUGEINT);
 VAR offset : UNSIGNED32;

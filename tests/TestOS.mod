@@ -12,8 +12,10 @@ CONST
 PROCEDURE Run* (VAR test: TEST);
 VAR
     fh : OSStream.File;
+    dir : OSDir.Dir;
     str : Str.STRING;
-
+    found : BOOLEAN;
+    
     PROCEDURE Assert(b: BOOLEAN; id: LONGINT) ;
     BEGIN
         Testing.Assert(test, b, M, id);
@@ -40,6 +42,17 @@ BEGIN
         Assert(fh.ReadLine(str) = FALSE, __LINE__);
         fh.Close;
     END;
+    
+    dir.Open("");
+    WHILE dir.Next() DO
+        IF dir.IsFile() THEN
+            dir.Name(str);
+            Assert(str^ = "test.txt", __LINE__);
+            found := TRUE;
+        END;
+    END;
+    dir.Close();
+    Assert(found, __LINE__);
 
     Assert(OSFile.Delete("test.txt") = TRUE, __LINE__);
     Assert(OSDir.SetCurrent('..') = TRUE, __LINE__);

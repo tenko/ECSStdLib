@@ -458,6 +458,23 @@ BEGIN
     RETURN FALSE;
 END DirIsDir;
 
+(** Return TRUE if current entry is a file *)
+PROCEDURE DirIsFile*(dir-: DirEntry): BOOLEAN;
+VAR
+    stat : Stat;
+    ret : INTEGER;
+BEGIN
+    IF (dir.handle # INVALID_HANDLE) & (dir.size # -1) THEN
+        ret := API.Stat(dir.adr + dir.idx + OFSSTR, SYSTEM.ADR(stat));
+        CheckForError(ret);
+        IF ret # 0 THEN
+            RETURN FALSE
+        END;
+        RETURN stat.st_mode # 2;
+    END;
+    RETURN FALSE;
+END DirIsFile;
+
 (** Get current local time *)
 PROCEDURE GetTime*(VAR time : DateTime; VAR delta : HUGEINT);
 BEGIN

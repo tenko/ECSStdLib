@@ -6,12 +6,12 @@ IN Std IMPORT String, OSHost;
 TYPE
     Dir* = RECORD (OSHost.DirEntry) END;
 
-(** Open directory listing *)
+(** Open file/directory listing *)
 PROCEDURE (VAR d : Dir) Open*(name- : ARRAY OF CHAR);
 BEGIN OSHost.DirOpen(d, name)
 END Open;
 
-(** Close directory listing *)
+(** Close file/directory listing *)
 PROCEDURE (VAR d : Dir) Close*();
 BEGIN OSHost.DirClose(d)
 END Close;
@@ -21,7 +21,7 @@ PROCEDURE (VAR d : Dir) Next*(): BOOLEAN;
 BEGIN RETURN OSHost.DirNext(d);
 END Next;
 
-(** Get current name *)
+(** Get current entry path name *)
 PROCEDURE (VAR d : Dir) Name*(VAR name : String.STRING);
 BEGIN
     IF OSHost.DirNameLength(d) > 0 THEN
@@ -32,10 +32,15 @@ BEGIN
     END;
 END Name;
 
-(** Get current name *)
+(** Return TRUE if current entry is a directory *)
 PROCEDURE (VAR d : Dir) IsDir*(): BOOLEAN;
 BEGIN RETURN OSHost.DirIsDir(d)
 END IsDir;
+
+(** Return TRUE if current entry is a file *)
+PROCEDURE (VAR d : Dir) IsFile*(): BOOLEAN;
+BEGIN RETURN OSHost.DirIsFile(d)
+END IsFile;
 
 (** Get current directory name *)
 PROCEDURE Current*(VAR name : String.STRING);

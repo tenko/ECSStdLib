@@ -360,6 +360,15 @@ BEGIN
     RETURN FALSE;
 END DirIsDir;
 
+(** Return TRUE if current entry is a file *)
+PROCEDURE DirIsFile*(dir-: DirEntry): BOOLEAN;
+BEGIN
+    IF dir.handle # INVALID_HANDLE THEN
+        RETURN WSET(dir.data.dwFileAttributes) * WSET(API.FILE_ATTRIBUTE_DIRECTORY) = {}
+    END;
+    RETURN FALSE;
+END DirIsFile;
+
 (** Get current local time *)
 PROCEDURE GetTime*(VAR time : DateTime; VAR delta : HUGEINT);
 VAR stime: API.SYSTEMTIME;
