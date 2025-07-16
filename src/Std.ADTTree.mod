@@ -37,7 +37,7 @@ TYPE
     END;
     Iterator* = RECORD
         current : Node;
-        duplicate : DuplicateElementProc;
+        duplicate* : DuplicateElementProc;
         reverse : BOOLEAN;
     END;
 

@@ -27,7 +27,7 @@ TYPE
     Iterator* = RECORD
         reverse : BOOLEAN;
         current : POINTER TO Node;
-        duplicate : DuplicateElementProc;
+        duplicate* : DuplicateElementProc;
     END;
 
 PROCEDURE DefaultDuplicateElement (VAR dst: Element; src-: Element);

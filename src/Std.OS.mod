@@ -3,7 +3,6 @@ Module for basic OS functionality
 *)
 MODULE OS IN Std;
 
-IMPORT SYSTEM;
 IN Std IMPORT String, Char, Str := ArrayOfChar, OSHost;
 
 CONST

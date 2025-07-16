@@ -2,7 +2,7 @@
 MODULE OSHost IN Std;
 
 IMPORT API := Linux IN API, SYSTEM;
-IN Std IMPORT Const, Char, ArrayOfChar;
+IN Std IMPORT Const, ArrayOfChar;
 
 CONST
     INVALID_HANDLE* = -1;
@@ -374,8 +374,6 @@ END DirClose;
 (** Return FALSE when end of file/directory listing is reached *)
 PROCEDURE DirNext*(VAR dir: DirEntry): BOOLEAN;
 VAR
-    ret : BOOLEAN;
-    handle : HANDLE;
     reclen : UNSIGNED16;
 BEGIN
     IF dir.handle # INVALID_HANDLE THEN

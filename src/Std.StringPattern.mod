@@ -21,7 +21,7 @@ literal percent character.
 Ranges and sets
  * `[aBc]` - represent letters `a`, `B` & `c`.
  * `[%a_]` - represent all letters and the underscore character.
- * `[0-0]` - represent all digits.
+ * `[0-9]` - represent all digits.
 
 A range or set with `^` as the first character is the inverse version.
 

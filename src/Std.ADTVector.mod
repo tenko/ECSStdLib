@@ -18,7 +18,7 @@ TYPE
     DisposeElementProc = PROCEDURE(VAR dst: Element);
     VectorStorage = POINTER TO ARRAY OF Element;
     Vector* = RECORD-
-        storage : VectorStorage;
+        storage* : VectorStorage;
         duplicate* : DuplicateElementProc;
         dispose* : DisposeElementProc;
         last : LENGTH;

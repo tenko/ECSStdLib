@@ -13,7 +13,7 @@ to avoid circular import in `Type`.
 MODULE ADTStream IN Std;
 
 IMPORT SYSTEM;
-IN Std IMPORT Config, Type, Const, Integer, Cardinal, Real;
+IN Std IMPORT Type, Const, Integer, Cardinal, Real;
 IN Std IMPORT ArrayOfByte, ArrayOfChar, String, DateTime;
 
 CONST
@@ -192,7 +192,6 @@ Copy Stream content to string.
 The string is possible resized and is NUL terminated.
 *)
 PROCEDURE (VAR s : MemoryStream) ToString*(VAR str : Type.STRING);
-VAR i : LENGTH;
 BEGIN
     String.Reserve(str, s.last + 1, FALSE);
     ArrayOfByte.Copy(str^, s.storage^, s.last);

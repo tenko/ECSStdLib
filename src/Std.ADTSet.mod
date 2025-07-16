@@ -31,7 +31,7 @@ TYPE
     END;
     Iterator* = RECORD-
         storage : Storage;
-        duplicate : DuplicateElementProc;
+        duplicate* : DuplicateElementProc;
         index : LENGTH;
     END;
 

@@ -26,7 +26,7 @@ BEGIN
     IF dst = NIL THEN
         NEW(dst, capacity + 1);
         dst^[0] := Char.NUL;
-    ELSIF LEN(dst^) < capacity THEN
+    ELSIF LEN(dst^) < capacity + 1 THEN
         NEW(tmp, capacity + 1);
         IF Copy THEN ArrayOfChar.Assign(tmp^, dst^)
         ELSE tmp^[capacity] := Char.NUL END;
@@ -41,7 +41,8 @@ VAR len : LENGTH;
 BEGIN
     len := ArrayOfChar.Length(src);
     Reserve(dst, len, FALSE);
-    ArrayOfChar.Assign(dst^, src)
+    ArrayOfChar.Assign(dst^, src);
+    dst^[len] := Char.NUL;
 END Assign;
 
 (** Append `ch` to `dst`. *)
@@ -51,7 +52,7 @@ BEGIN
     IF dst = NIL THEN n := 0
     ELSE n := ArrayOfChar.Length(dst^)
     END;
-    Reserve(dst, n + 2, TRUE);
+    Reserve(dst, n + 1, TRUE);
     dst^[n + 0] := ch;
     dst^[n + 1] := Char.NUL;
 END AppendChar ;
@@ -73,7 +74,7 @@ BEGIN
     ELSE n := ArrayOfChar.Length(dst^)
     END;
     m := ArrayOfChar.Length(src);
-    Reserve(dst, n + m + 1, TRUE);
+    Reserve(dst, n + m, TRUE);
     FOR i := 0 TO m - 1 DO
         dst^[n + i] := src[i];
     END;

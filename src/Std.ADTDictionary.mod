@@ -39,8 +39,8 @@ TYPE
     END;
     Iterator* = RECORD-
         storage : Storage;
-        duplicateKey : DuplicateKeyProc;
-        duplicateValue : DuplicateValueProc;
+        duplicateKey* : DuplicateKeyProc;
+        duplicateValue* : DuplicateValueProc;
         index : LENGTH;
     END;
 
