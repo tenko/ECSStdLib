@@ -15,11 +15,12 @@ IMPORT ADTValueVector := ADTVector(Value) IN Std;
 
 TYPE
     WSET = SYSTEM.SET;
+    
     DuplicateKeyProc = PROCEDURE(VAR dst: Key; src-: Key);
     DisposeKeyProc = PROCEDURE(VAR dst: Key);
     DuplicateValueProc = PROCEDURE(VAR dst: Value; src-: Value);
     DisposeValueProc = PROCEDURE(VAR dst: Value);
-
+    
     ValueVector* = ADTValueVector.Vector;
     KeyVector* = ADTKeyVector.Vector;
     Entry = POINTER TO EntryDesc;
@@ -44,18 +45,18 @@ TYPE
         index : LENGTH;
     END;
 
-PROCEDURE DefaultDuplicateKey (VAR dst: Key; src-: Key);
+PROCEDURE DefaultDuplicateKey* (VAR dst: Key; src-: Key);
 BEGIN dst := src
 END DefaultDuplicateKey;
 
-PROCEDURE DefaultDisposeKey (VAR dst: Key);
+PROCEDURE DefaultDisposeKey* (VAR dst: Key);
 BEGIN END DefaultDisposeKey;
 
-PROCEDURE DefaultDuplicateValue (VAR dst: Value; src-: Value);
+PROCEDURE DefaultDuplicateValue* (VAR dst: Value; src-: Value);
 BEGIN dst := src
 END DefaultDuplicateValue;
 
-PROCEDURE DefaultDisposeValue (VAR dst: Value);
+PROCEDURE DefaultDisposeValue* (VAR dst: Value);
 BEGIN END DefaultDisposeValue;
 
 PROCEDURE NewStorage(VAR storage: Storage; VAR capacity : LENGTH);

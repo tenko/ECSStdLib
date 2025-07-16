@@ -41,11 +41,11 @@ TYPE
         reverse : BOOLEAN;
     END;
 
-PROCEDURE DefaultDuplicateElement (VAR dst: Element; src-: Element);
+PROCEDURE DefaultDuplicateElement* (VAR dst: Element; src-: Element);
 BEGIN dst := src
 END DefaultDuplicateElement;
 
-PROCEDURE DefaultDisposeElement (VAR dst: Element);
+PROCEDURE DefaultDisposeElement* (VAR dst: Element);
 BEGIN END DefaultDisposeElement;
 
 (** Initialize  *)

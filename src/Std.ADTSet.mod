@@ -35,11 +35,11 @@ TYPE
         index : LENGTH;
     END;
 
-PROCEDURE DefaultDuplicateElement (VAR dst: Element; src-: Element);
+PROCEDURE DefaultDuplicateElement* (VAR dst: Element; src-: Element);
 BEGIN dst := src
 END DefaultDuplicateElement;
 
-PROCEDURE DefaultDisposeElement (VAR dst: Element);
+PROCEDURE DefaultDisposeElement* (VAR dst: Element);
 BEGIN END DefaultDisposeElement;
 
 PROCEDURE NewStorage(VAR storage: Storage; VAR capacity : LENGTH);
@@ -309,6 +309,28 @@ BEGIN
     END;
     RETURN ret
 END Elements;
+
+(**
+Return Vector of reference to elements.
+*)
+PROCEDURE (VAR this- : Set) ElementsRef*(): ElementVector;
+VAR 
+    i : LENGTH;
+    entry : Entry;
+    element : Element;
+    ret : ElementVector;
+BEGIN
+    ret.Init(this.size);
+    ret.dispose := DefaultDisposeElement;
+    ret.duplicate := DefaultDuplicateElement;
+    FOR i := 0 TO this.capacity - 1 DO
+        entry := this.storage[i];
+        IF (entry # NIL) & ~entry.deleted THEN
+            ret.Append(entry.element)
+        END
+    END;
+    RETURN ret
+END ElementsRef;
 
 (** Returns an iterator for the set. *)
 PROCEDURE (VAR this- : Set) First* (VAR iterator: Iterator);

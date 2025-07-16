@@ -193,7 +193,7 @@ The string is possible resized and is NUL terminated.
 *)
 PROCEDURE (VAR s : MemoryStream) ToString*(VAR str : Type.STRING);
 BEGIN
-    String.Reserve(str, s.last + 1, FALSE);
+    String.Reserve(str, s.last, FALSE);
     ArrayOfByte.Copy(str^, s.storage^, s.last);
     str[s.last] := 00X;
 END ToString;

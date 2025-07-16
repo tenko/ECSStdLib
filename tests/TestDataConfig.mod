@@ -77,6 +77,30 @@ BEGIN
     res := parser.Get(value, "Section", "key");
     Assert(res & (value^ = "value"), __LINE__);
 
+    IGNORE(fh.Truncate(0));
+    fh.WriteString("# This is a valid comments"); fh.WriteNL;
+    fh.WriteString("[Section]"); fh.WriteNL;
+    fh.WriteString("key=value"); fh.WriteNL;
+    fh.WriteString("Long Key=Long Value"); fh.WriteNL;
+    fh.WriteString("emptyvalue="); fh.WriteNL;
+
+    IGNORE(fh.Seek(ADTStream.SeekSet, 0));
+    parser.Clear();
+    Assert(parser.Read(fh) = 0, __LINE__);
+
+    IGNORE(fh.Truncate(0));
+    Assert(parser.Write(fh) = TRUE, __LINE__);
+    IGNORE(fh.Seek(ADTStream.SeekSet,0));
+    Assert(fh.ReadLine(value) = TRUE, __LINE__);
+    Assert(value^ = "[section]", __LINE__);
+    Assert(fh.ReadLine(value) = TRUE, __LINE__);
+    Assert(value^ = "emptyvalue = ", __LINE__);
+    Assert(fh.ReadLine(value) = TRUE, __LINE__);
+    Assert(value^ = "key = value", __LINE__);
+    Assert(fh.ReadLine(value) = TRUE, __LINE__);
+    Assert(value^ = "long key = Long Value", __LINE__);
+    Assert(fh.ReadLine(value) = FALSE, __LINE__);
+    
     parser.Dispose;
     String.Dispose(value);
     fh.Close;

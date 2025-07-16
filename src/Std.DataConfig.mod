@@ -149,7 +149,7 @@ PROCEDURE (VAR this- : Parser) Sections*(): VectorOfSections;
 BEGIN RETURN this.sections.Elements()
 END Sections;
 
-(** Write data to Stream *)
+(** Write config data to Stream. Return TRUE on success. *)
 PROCEDURE (VAR this- : Parser) Write*(VAR fh : Type.Stream): BOOLEAN;
 VAR
     key, value, section : String.STRING;
@@ -158,13 +158,15 @@ VAR
     i : LENGTH;
     first : BOOLEAN;
 BEGIN
-    (* IF fh.Closed() OR ~fh.Writeable() THEN RETURN FALSE END; *)
-    sections := this.Sections();
+    IF fh.Closed() OR ~fh.Writeable() THEN RETURN FALSE END;
+    sections := this.sections.ElementsRef(); (* avoid allocations *)
     sections.Sort(String.Compare);
     FOR i := 0 TO sections.Size() - 1 DO
-        section := sections.At(i);
+        section := sections.storage[i];
         first := FALSE;
         this.entries.First(it);
+        it.duplicateKey := DictStrStr.DefaultDuplicateKey; (* avoid allocations *)
+        it.duplicateValue := DictStrStr.DefaultDuplicateValue; (* avoid allocations *)
         WHILE it.NextItem(key, value) DO
             IF Str.StartsWith(key^, section^) &
                (Str.IndexChar("=", key^, 0) = Str.Length(section^)) THEN
@@ -177,9 +179,7 @@ BEGIN
                 fh.WriteString(value^); fh.WriteNL;
             END;
         END;
-        String.Dispose(section);
     END;
-    String.Dispose(key); String.Dispose(value);
     sections.Dispose;
     RETURN TRUE
 END Write;
