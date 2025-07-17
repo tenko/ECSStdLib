@@ -64,7 +64,8 @@ BEGIN
 
     dict.Clear();
     Assert(~dict.PopItem(s, value), __LINE__);
-
+    String.Dispose(s);
+    
     dict.Set(String.S(key, "test"), 1);
     dict.Set(String.S(key, "a"), 4);
     dict.Set(String.S(key, "c"), -1);
@@ -85,7 +86,6 @@ BEGIN
     dict.First(it);
     WHILE it.NextItem(s, value) DO
         Assert((value = 1) OR (value = 4) OR (value = -1), __LINE__);
-        String.Dispose(s);
     END;
 
     (* Dispose strings *)

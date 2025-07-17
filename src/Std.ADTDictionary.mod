@@ -40,8 +40,6 @@ TYPE
     END;
     Iterator* = RECORD-
         storage : Storage;
-        duplicateKey* : DuplicateKeyProc;
-        duplicateValue* : DuplicateValueProc;
         index : LENGTH;
     END;
 
@@ -235,8 +233,7 @@ END Set;
 
 (**
 Get value and return TRUE if dictionary has item with given key.
-Note this may be duplicate the value and the caller would be
-responsible for the lifetime of the value.
+Note: this potentially return a reference to the value. 
 *)
 PROCEDURE (VAR this- : Dictionary) Get*(key- : Key; VAR value : Value): BOOLEAN;
 VAR
@@ -250,7 +247,7 @@ BEGIN
         IF current = NIL THEN EXIT
         ELSIF ~current.deleted THEN
             IF Equal(current.key, key) THEN
-                this.duplicateValue(value, current.value);
+                value := current.value;
                 RETURN TRUE
             END;
         END;
@@ -320,8 +317,7 @@ END Clear;
 (**
 Remove arbitary item from dictionary and set key.
 Return FALSE if dictionary is empty.
-Note this may be duplicate the key and the caller would be
-responsible for the lifetime of the key.
+Note: this potentially transfere key ownership to caller.
 *)
 PROCEDURE (VAR this : Dictionary) Pop*(VAR key : Key): BOOLEAN;
 VAR 
@@ -331,10 +327,12 @@ BEGIN
     FOR i := 0 TO this.capacity - 1 DO
         entry := this.storage[i];
         IF (entry # NIL) & ~entry.deleted THEN
-            this.duplicateKey(key, entry.key);
+            key := entry.key;
             DEC(this.size);
             IF this.size < 0 THEN this.size := 0 END;
-            entry.deleted := TRUE;
+            this.disposeValue(entry.value);
+            DISPOSE(entry);
+            this.storage[i] := NIL;
             RETURN TRUE;
         END
     END;
@@ -342,10 +340,9 @@ BEGIN
 END Pop;
 
 (**
-Remove arbitary item from dictionary and set key and value.
+Remove arbitary item from dictionary and set key and value to item.
 Return FALSE if dictionary is empty.
-Note this may be duplicate the key and/or value and the caller would be
-responsible for the lifetime.
+Note: this potentially transfere key and value ownership to caller.
 *)
 PROCEDURE (VAR this : Dictionary) PopItem*(VAR key : Key; VAR value : Value): BOOLEAN;
 VAR 
@@ -355,11 +352,12 @@ BEGIN
     FOR i := 0 TO this.capacity - 1 DO
         entry := this.storage[i];
         IF (entry # NIL) & ~entry.deleted THEN
-            this.duplicateKey(key, entry.key);
-            this.duplicateValue(value, entry.value);
+            key := entry.key;
+            value := entry.value;
             DEC(this.size);
             IF this.size < 0 THEN this.size := 0 END;
-            entry.deleted := TRUE;
+            DISPOSE(entry);
+            this.storage[i] := NIL;
             RETURN TRUE;
         END
     END;
@@ -368,24 +366,19 @@ END PopItem;
 
 (**
 Return Vector of keys.
-Note this may be duplicate the keys and the caller would be
-responsible for the lifetime of the keys.
+Note: this potentially return a vector of reference to keys. 
 *)
 PROCEDURE (VAR this- : Dictionary) Keys*(): KeyVector;
 VAR 
     i : LENGTH;
     entry : Entry;
-    key : Key;
     ret : KeyVector;
 BEGIN
     ret.Init(this.size);
-    ret.dispose := this.disposeKey;
-    ret.duplicate := this.duplicateKey;
     FOR i := 0 TO this.capacity - 1 DO
         entry := this.storage[i];
         IF (entry # NIL) & ~entry.deleted THEN
-            this.duplicateKey(key, entry.key);
-            ret.Append(key)
+            ret.Append(entry.key)
         END
     END;
     RETURN ret
@@ -393,24 +386,19 @@ END Keys;
 
 (**
 Return Vector of values.
-Note this may be duplicate the values and the caller would be
-responsible for the lifetime of the values.
+Note: this potentially return a vector of reference to the values.
 *)
 PROCEDURE (VAR this- : Dictionary) Values*(): ValueVector;
 VAR 
     i : LENGTH;
     entry : Entry;
-    value : Value;
     ret : ValueVector;
 BEGIN
     ret.Init(this.size);
-    ret.dispose := this.disposeValue;
-    ret.duplicate := this.duplicateValue;
     FOR i := 0 TO this.capacity - 1 DO
         entry := this.storage[i];
         IF (entry # NIL) & ~entry.deleted THEN
-            this.duplicateValue(value, entry.value);
-            ret.Append(value)
+            ret.Append(entry.value)
         END
     END;
     RETURN ret
@@ -420,15 +408,12 @@ END Values;
 PROCEDURE (VAR this- : Dictionary) First* (VAR iterator: Iterator);
 BEGIN
     iterator.storage := this.storage;
-    iterator.duplicateKey := this.duplicateKey;
-    iterator.duplicateValue := this.duplicateValue;
     iterator.index := 0;
 END First;
 
 (**
 Advance iterator and set key. Return `FALSE` if end is reached.
-Note this may be duplicate the key and the caller would be
-responsible for the lifetime of the key.
+Note: this potentially set the key to a reference.
 *)
 PROCEDURE (VAR this : Iterator) Next*(VAR key : Key) : BOOLEAN;
 VAR entry : Entry;
@@ -438,7 +423,7 @@ BEGIN
         INC(this.index);
         IF entry # NIL THEN
             IF ~entry.deleted THEN
-                this.duplicateKey(key, entry.key);
+                key := entry.key;
                 RETURN TRUE
             END
         END
@@ -448,8 +433,7 @@ END Next;
 
 (**
 Advance iterator and set key and value. Return `FALSE` if end is reached.
-Note this may be duplicate the key and/or value and the caller would be
-responsible for the lifetimes.
+Note: this potentially set the key and value to a reference.
 *)
 PROCEDURE (VAR this : Iterator) NextItem*(VAR key : Key; VAR value : Value) : BOOLEAN;
 VAR entry : Entry;
@@ -459,8 +443,8 @@ BEGIN
         INC(this.index);
         IF entry # NIL THEN
             IF ~entry.deleted THEN
-                this.duplicateKey(key, entry.key);
-                this.duplicateValue(value, entry.value);
+                key := entry.key;
+                value := entry.value;
                 RETURN TRUE
             END
         END

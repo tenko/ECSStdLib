@@ -27,7 +27,6 @@ TYPE
     Iterator* = RECORD
         reverse : BOOLEAN;
         current : POINTER TO Node;
-        duplicate* : DuplicateElementProc;
     END;
 
 PROCEDURE DefaultDuplicateElement* (VAR dst: Element; src-: Element);
@@ -36,7 +35,6 @@ END DefaultDuplicateElement;
 
 PROCEDURE DefaultDisposeElement* (VAR dst: Element);
 BEGIN END DefaultDisposeElement;
-
 
 (** Initialize  *)
 PROCEDURE (VAR this : List) Init*;
@@ -128,15 +126,14 @@ END AppendHead;
 (**
 Remove and return element at tail of list-
 Return FALSE if list is empty.
-Note this may be duplicate the element and the caller would be
-responsible for the lifetime of the element.
+Note: this potentially transfere element ownership to caller.
 *)
 PROCEDURE (VAR this: List) Pop* (VAR element: Element): BOOLEAN;
 VAR node: POINTER TO Node;
 BEGIN
     IF this.last = NIL THEN RETURN FALSE END;
     node := this.last;
-    this.duplicate(element, node.element);
+    element := node.element;
     IF this.size = 1 THEN
         this.first := NIL;
         this.last := NIL;
@@ -144,7 +141,6 @@ BEGIN
         this.last := this.last.prev;
         this.last.next := NIL;
     END;
-    this.dispose(node.element);
     DISPOSE(node);
     DEC(this.size);
     RETURN TRUE
@@ -153,22 +149,20 @@ END Pop;
 (**
 Remove and return element at head of list
 Return FALSE if list is empty.
-Note this may be duplicate the element and the caller would be
-responsible for the lifetime of the element.
+Note: this potentially transfere element ownership to caller.
 *)
 PROCEDURE (VAR this: List) PopHead* (VAR element: Element): BOOLEAN;
 VAR node: POINTER TO Node;
 BEGIN
     IF this.first = NIL THEN RETURN FALSE END;
     node := this.first;
-    this.duplicate(element, node.element);
+    element := node.element;
     IF this.size = 1 THEN
         this.first := NIL;
         this.last := NIL;
     ELSE;
         this.first := node.next;
     END;
-    this.dispose(node.element);
     DISPOSE(node);
     DEC(this.size);
     RETURN TRUE; 
@@ -179,7 +173,6 @@ PROCEDURE (VAR this-: List) First* (VAR iterator: Iterator);
 BEGIN
     iterator.reverse := FALSE;
     iterator.current := this.first;
-    iterator.duplicate := this.duplicate;
 END First;
 
 (** Returns an reverse iterator for the list. *)
@@ -187,18 +180,16 @@ PROCEDURE (VAR this-: List) Last* (VAR iterator: Iterator);
 BEGIN
     iterator.reverse := TRUE;
     iterator.current := this.last;
-    iterator.duplicate := this.duplicate;
 END Last;
 
 (**
 Advance iterator. Return `FALSE` if end is reached.
-Note this may be duplicate the element and the caller would be
-responsible for the lifetime of the element.
+Note: this potentially set the element to a reference.
 *)
 PROCEDURE (VAR this: Iterator) Next* (VAR element: Element): BOOLEAN;
 BEGIN
     IF this.current # NIL THEN
-        this.duplicate(element, this.current.element);
+        element := this.current.element;
         IF this.reverse THEN this.current := this.current.prev
         ELSE this.current := this.current.next END;
         RETURN TRUE

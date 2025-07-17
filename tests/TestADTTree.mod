@@ -11,7 +11,7 @@ CONST
 
 PROCEDURE Run* (VAR test: TEST);
 VAR
-    e : String.STRING;
+    e, r : String.STRING;
     tree : ADTTree.Tree;
     it : ADTTree.Iterator;
     ret : BOOLEAN;
@@ -38,22 +38,22 @@ BEGIN
     Assert(~tree.HasElement(String.S(e, "cd")), __LINE__);
     tree.Insert(String.S(e, "cd"));
     tree.First(it);
-    ret := it.Next(e);
-    Assert(ret & (S.Compare(e^, "12") = 0), __LINE__);
-    ret := it.Next(e);
-    Assert(ret & (S.Compare(e^, "ab") = 0), __LINE__);
-    ret := it.Next(e);
-    Assert(ret & (S.Compare(e^, "cd") = 0), __LINE__);
-    ret := it.Next(e);
+    ret := it.Next(r);
+    Assert(ret & (S.Compare(r^, "12") = 0), __LINE__);
+    ret := it.Next(r);
+    Assert(ret & (S.Compare(r^, "ab") = 0), __LINE__);
+    ret := it.Next(r);
+    Assert(ret & (S.Compare(r^, "cd") = 0), __LINE__);
+    ret := it.Next(r);
     Assert(~ret, __LINE__);
     tree.Last(it);
-    ret := it.Next(e);
-    Assert(ret & (S.Compare(e^, "cd") = 0), __LINE__);
-    ret := it.Next(e);
-    Assert(ret & (S.Compare(e^, "ab") = 0), __LINE__);
-    ret := it.Next(e);
-    Assert(ret & (S.Compare(e^, "12") = 0), __LINE__);
-    ret := it.Next(e);
+    ret := it.Next(r);
+    Assert(ret & (S.Compare(r^, "cd") = 0), __LINE__);
+    ret := it.Next(r);
+    Assert(ret & (S.Compare(r^, "ab") = 0), __LINE__);
+    ret := it.Next(r);
+    Assert(ret & (S.Compare(r^, "12") = 0), __LINE__);
+    ret := it.Next(r);
     Assert(~ret, __LINE__);
     String.Dispose(e);
     tree.Dispose();

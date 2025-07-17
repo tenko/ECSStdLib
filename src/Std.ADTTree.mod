@@ -37,7 +37,6 @@ TYPE
     END;
     Iterator* = RECORD
         current : Node;
-        duplicate* : DuplicateElementProc;
         reverse : BOOLEAN;
     END;
 
@@ -156,7 +155,7 @@ BEGIN
 END Dispose;
 
 (** Find node equal to element argument. Return NIL if no node is found. *)
-PROCEDURE (VAR this-: Tree) FindNode*(element-: Element) : Node;
+PROCEDURE (VAR this-: Tree) FindNode(element-: Element) : Node;
 VAR
 	x : Node;
 	i : INTEGER;
@@ -183,7 +182,6 @@ BEGIN
     iterator.reverse := FALSE;
     node := MinNode(this.root);
     iterator.current := node;
-    iterator.duplicate := this.duplicate
 END First;
 
 (** Reverse iterator for the tree. *)
@@ -191,7 +189,6 @@ PROCEDURE (VAR this-: Tree) Last* (VAR iterator: Iterator);
 VAR node: Node;
 BEGIN
     iterator.reverse := TRUE;
-    iterator.duplicate := this.duplicate;
     node := MaxNode(this.root);
     iterator.current := node
 END Last;
@@ -200,7 +197,6 @@ END Last;
 PROCEDURE (VAR this-: Tree) FindForward* (VAR iterator: Iterator; element- : Element);
 BEGIN
     iterator.reverse := FALSE;
-    iterator.duplicate := this.duplicate;
     iterator.current := this.FindNode(element)
 END FindForward;
 
@@ -208,19 +204,17 @@ END FindForward;
 PROCEDURE (VAR this-: Tree) FindReverse* (VAR iterator: Iterator; element- : Element);
 BEGIN
     iterator.reverse := TRUE;
-    iterator.duplicate := this.duplicate;
     iterator.current := this.FindNode(element)
 END FindReverse;
 
 (**
 Advance iterator. Return `FALSE` if end is reached.
-Note this may be duplicate the element and the caller would be
-responsible for the lifetime of the element.
+Note: this potentially set the element to a reference.
 *)
 PROCEDURE (VAR this: Iterator) Next* (VAR element: Element): BOOLEAN;
 BEGIN
     IF this.current # NIL THEN
-        this.duplicate(element, this.current.element);
+        element := this.current.element;
         IF this.reverse THEN
             this.current := PrevNode(this.current)
         ELSE

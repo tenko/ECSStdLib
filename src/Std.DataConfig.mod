@@ -71,14 +71,15 @@ Return `TRUE` if success.
 *)
 PROCEDURE (VAR this- : Parser) Get*(VAR value : String.STRING; section-, key- : ARRAY OF CHAR) : BOOLEAN;
 VAR
-    ikey : String.STRING;
+    ikey, val : String.STRING;
     ret : BOOLEAN;
 BEGIN
     IF ~TryMakeKey(ikey, section, key) THEN
         String.Dispose(ikey);
         RETURN FALSE
     END;
-    ret := this.entries.Get(ikey, value);
+    ret := this.entries.Get(ikey, val);
+    String.Duplicate(value, val);
     String.Dispose(ikey);
     RETURN ret
 END Get;
@@ -159,14 +160,12 @@ VAR
     first : BOOLEAN;
 BEGIN
     IF fh.Closed() OR ~fh.Writeable() THEN RETURN FALSE END;
-    sections := this.sections.ElementsRef(); (* avoid allocations *)
+    sections := this.sections.Elements();
     sections.Sort(String.Compare);
     FOR i := 0 TO sections.Size() - 1 DO
-        section := sections.storage[i];
+        section := sections.At(i);
         first := FALSE;
         this.entries.First(it);
-        it.duplicateKey := DictStrStr.DefaultDuplicateKey; (* avoid allocations *)
-        it.duplicateValue := DictStrStr.DefaultDuplicateValue; (* avoid allocations *)
         WHILE it.NextItem(key, value) DO
             IF Str.StartsWith(key^, section^) &
                (Str.IndexChar("=", key^, 0) = Str.Length(section^)) THEN

@@ -132,14 +132,10 @@ END Append;
 
 (**
 Return value at idx.
-Note this may be duplicate the element and the caller would be
-responsible for the lifetime of the element.
+Note this may return a reference to a element.
 *)
 PROCEDURE (VAR this- : Vector) At*(idx : LENGTH): Element;
-VAR ret : Element;
-BEGIN
-    this.duplicate(ret, this.storage[idx]);
-    RETURN ret
+BEGIN RETURN this.storage[idx]
 END At;
 
 (** Set value at idx *)
@@ -148,23 +144,23 @@ BEGIN
     this.duplicate(this.storage[idx], value)
 END Set;
 
-(** Get value at idx *)
+(** Get value at idx.
+Note: this potentially set the value to a reference.
+*)
 PROCEDURE (VAR this : Vector) Get*(idx : LENGTH; VAR value : Element);
 BEGIN
-    this.duplicate(value, this.storage[idx])
+    value := this.storage[idx];
 END Get;
 
 (**
 Remove and return last element of vector.
 Return FALSE if vector is empty.
-Note this may be duplicate the element and the caller would be
-responsible for the lifetime of the element.
+Note: this potentially transfere key ownership to caller.
 *)
 PROCEDURE (VAR this : Vector) Pop*(VAR element : Element) : BOOLEAN;
 BEGIN
     IF this.Size() = 0 THEN RETURN FALSE END;
-    this.duplicate(element, this.storage[this.last - 1]);
-    this.dispose(this.storage[this.last - 1]);
+    element := this.storage[this.last - 1];
     DEC(this.last);
     RETURN TRUE;
 END Pop;

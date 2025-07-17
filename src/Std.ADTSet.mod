@@ -31,7 +31,6 @@ TYPE
     END;
     Iterator* = RECORD-
         storage : Storage;
-        duplicate* : DuplicateElementProc;
         index : LENGTH;
     END;
 
@@ -264,8 +263,7 @@ END Clear;
 
 (**
 Remove arbitary element from set. Return FALSE if set is empty.
-Note this may be duplicate the element and the caller would be
-responsible for the lifetime of the element.
+Note: this potentially transfere key ownership to caller.
 *)
 PROCEDURE (VAR this : Set) Pop*(VAR element : Element): BOOLEAN;
 VAR 
@@ -275,10 +273,11 @@ BEGIN
     FOR i := 0 TO this.capacity - 1 DO
         entry := this.storage[i];
         IF (entry # NIL) & ~entry.deleted THEN
-            this.duplicate(element, entry.element);
+            element := entry.element;
             DEC(this.size);
             IF this.size < 0 THEN this.size := 0 END;
-            entry.deleted := TRUE;
+            DISPOSE(entry);
+            this.storage[i] := NIL;
             RETURN TRUE;
         END
     END;
@@ -287,42 +286,15 @@ END Pop;
 
 (**
 Return Vector of elements.
-Note this may be duplicate the elements and the caller would be
-responsible for the lifetime of the elements.
+Note: this potentially return a vector of reference to elements. 
 *)
 PROCEDURE (VAR this- : Set) Elements*(): ElementVector;
 VAR 
     i : LENGTH;
     entry : Entry;
-    element : Element;
     ret : ElementVector;
 BEGIN
     ret.Init(this.size);
-    ret.dispose := this.dispose;
-    ret.duplicate := this.duplicate;
-    FOR i := 0 TO this.capacity - 1 DO
-        entry := this.storage[i];
-        IF (entry # NIL) & ~entry.deleted THEN
-            this.duplicate(element, entry.element);
-            ret.Append(element)
-        END
-    END;
-    RETURN ret
-END Elements;
-
-(**
-Return Vector of reference to elements.
-*)
-PROCEDURE (VAR this- : Set) ElementsRef*(): ElementVector;
-VAR 
-    i : LENGTH;
-    entry : Entry;
-    element : Element;
-    ret : ElementVector;
-BEGIN
-    ret.Init(this.size);
-    ret.dispose := DefaultDisposeElement;
-    ret.duplicate := DefaultDuplicateElement;
     FOR i := 0 TO this.capacity - 1 DO
         entry := this.storage[i];
         IF (entry # NIL) & ~entry.deleted THEN
@@ -330,20 +302,18 @@ BEGIN
         END
     END;
     RETURN ret
-END ElementsRef;
+END Elements;
 
 (** Returns an iterator for the set. *)
 PROCEDURE (VAR this- : Set) First* (VAR iterator: Iterator);
 BEGIN
     iterator.storage := this.storage;
-    iterator.duplicate := this.duplicate;
     iterator.index := 0;
 END First;
 
 (**
 Advance iterator. Return `FALSE` if end is reached.
-Note this may be duplicate the element and the caller would be
-responsible for the lifetime of the element.
+Note: this potentially set the key a reference.
 *)
 PROCEDURE (VAR this : Iterator) Next*(VAR element : Element) : BOOLEAN;
 VAR entry : Entry;
@@ -353,7 +323,7 @@ BEGIN
         INC(this.index);
         IF entry # NIL THEN
             IF ~entry.deleted THEN
-                this.duplicate(element, entry.element);
+                element := entry.element;
                 RETURN TRUE
             END
         END
