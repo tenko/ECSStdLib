@@ -23,7 +23,7 @@ endif
 
 OLS += Const Config$(SYS) Type Char ArrayOfChar$(OPT) OSHost$(SYS) Integer Cardinal $(Real)
 OLS += ArrayOfByte$(OPT) ArrayOfSet DateTime String StringPattern ADTBasicType ADTStream ADTList ADTVector
-OLS += ADTSet ADTDictionary ADTTree O2Testing O2Timing$(SYS)
+OLS += ADTPair ADTSet ADTDictionary ADTTree O2Testing O2Timing$(SYS)
 OLS += OS OSStream OSFile OSDir OSPath DataConfig DataLZ4
 MOD = $(addprefix src/, $(addprefix Std., $(addsuffix .mod, $(OLS))))
 OBF = $(addprefix build/, $(addprefix Std., $(addsuffix .obf, $(OLS))))
@@ -36,7 +36,7 @@ OTS += TestDataConfig TestDataLZ4
 TMOD = $(addprefix tests/, $(addsuffix .mod, $(OTS)))
 TOBF = $(addprefix build/, $(addsuffix .obf, $(OTS)))
 
-DOC = ADTBasicType ADTDictionary ADTList ADTSet ADTStream ADTTree ADTVector ArrayOfByte
+DOC = ADTBasicType ADTDictionary ADTList ADTPair ADTSet ADTStream ADTTree ADTVector ArrayOfByte
 DOC += ArrayOfChar ArrayOfSet Cardinal Char Config Const DataConfig DataLZ4 DateTime Integer
 DOC += O2Testing O2Timing OS OSDir OSFile OSHost OSPath OSStream Real String StringPattern Type
 
@@ -119,7 +119,6 @@ Test$(PRG) : misc/Test.mod std.lib
 	@cd build && cp -f $(addprefix ../, $<) .
 	@cd build && ecsd $(notdir $<) ../std.lib $(RTS)
 	@cp build/$@ .
-	@./$@
 
 perfLength$(PRG) : misc/perfLength.mod std.lib
 	@echo compiling $<
@@ -165,6 +164,10 @@ doc/src/Std.ADTList.mod.rst : src/Std.ADTList.mod
 	@-mkdir -p doc/src
 	@./tools/docgen.py $< -o $@
 
+doc/src/Std.ADTPair.mod.rst : src/Std.ADTPair.mod
+	@-mkdir -p doc/src
+	@./tools/docgen.py $< -o $@
+	
 doc/src/Std.ADTSet.mod.rst : src/Std.ADTSet.mod
 	@-mkdir -p doc/src
 	@./tools/docgen.py $< -o $@

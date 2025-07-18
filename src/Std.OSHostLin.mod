@@ -45,7 +45,7 @@ TYPE
 
 VAR
     errno : INTEGER;
-
+  
 VAR ^ argc ["_argc"]: INTEGER;
 VAR ^ argv ["_argv"]: POINTER TO - ARRAY MAX(LENGTH) OF ArgStr;
 PROCEDURE ^ GetEnv ["getenv"] (addr: SYSTEM.ADDRESS): SYSTEM.ADDRESS;
@@ -84,7 +84,14 @@ END ProgramName;
 Get number of program arguments
 *)
 PROCEDURE Args*(): LENGTH;
-BEGIN RETURN LENGTH(argc)
+VAR i : LENGTH;
+BEGIN
+     i := 0;
+     LOOP
+        IF argv[i] = NIL THEN EXIT END;
+        INC(i);
+     END;
+     RETURN i
 END Args;
 
 (**
@@ -92,7 +99,7 @@ Get length of argument string
 *)
 PROCEDURE ArgLength*(n : LENGTH): LENGTH;
 BEGIN
-    IF (argv # NIL) & (n < argc) & (argv[n] # NIL) THEN
+    IF (argv # NIL) & (n < Args()) & (argv[n] # NIL) THEN
         RETURN ArrayOfChar.Length(argv[n]^)
     END;
     RETURN 0
@@ -103,7 +110,7 @@ Get n-th argument
 *)
 PROCEDURE Arg*(VAR str : ARRAY OF CHAR; n : LENGTH);
 BEGIN
-    IF (argv # NIL) & (n < argc) & (argv[n] # NIL) THEN
+    IF (argv # NIL) & (n < Args()) & (argv[n] # NIL) THEN
         ArrayOfChar.Assign(str, argv[n]^)
     ELSE
         ArrayOfChar.Clear(str)
