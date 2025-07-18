@@ -566,7 +566,8 @@ BEGIN
 	this.maxcaptures := MAXCAPTURES;
 	this.send := ArrayOfChar.Length(str) - 1; 
 	this.pend := ArrayOfChar.Length(pat) - 1;
-    IF (this.pend = - 1) OR (this.send = -1) THEN RETURN 0 END;
+	IF this.send = - 1 THEN RETURN -1 END;
+    IF this.pend = - 1 THEN RETURN 0 END;
 	this.error := 0;
 	this.level := 0;
 	IF (start < 0) OR (start > this.send) THEN RETURN -1 END;
