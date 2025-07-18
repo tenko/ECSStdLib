@@ -30,12 +30,11 @@ BEGIN
     WHILE fh.ReadLine(line) DO
         idx := 0;
         WHILE pat.Find("%w+", line^, idx) # -1 DO
-            IF pat.Capture(0, pos, len) THEN
-                String.Extract(word, line^, pos, len);
-                ArrayOfChar.LowerCase(word^);
-                IF ~dict.Get(word, cnt) THEN cnt := 0 END;
-                dict.Set(word, cnt + 1);
-            END;
+            IGNORE(pat.Capture(0, pos, len));
+            String.Extract(word, line^, pos, len);
+            ArrayOfChar.LowerCase(word^);
+            IF ~dict.Get(word, cnt) THEN cnt := 0 END;
+            dict.Set(word, cnt + 1);
             idx := pos + len + 1;
         END;
     END;
