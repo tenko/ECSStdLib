@@ -14,8 +14,7 @@ reading and writing of data. The :ref:`Type` module defines the basic stream
 type interface.
 
 The unit tests can be inspected for basic usage.
-For more complete usage the :ref:`DataConfig` module is
-referenced as it uses many of the features of the library.
+For more complete usage the example in `misc/Test.mod` can be inspected.
 
 .. toctree::
     :maxdepth: 1
@@ -49,6 +48,7 @@ referenced as it uses many of the features of the library.
     src/Std.ADTBasicType.mod
     src/Std.ADTDictionary.mod
     src/Std.ADTList.mod
+    src/Std.ADTPair.mod
     src/Std.ADTSet.mod
     src/Std.ADTStream.mod
     src/Std.ADTTree.mod
