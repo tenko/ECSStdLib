@@ -547,7 +547,9 @@ BEGIN
 	this.pend := ArrayOfChar.Length(pat) - 1;
 	this.error := 0;
 	this.level := 0;
-    IF (this.pend = - 1) OR (this.send = -1) THEN RETURN TRUE END;
+
+	IF this.pend = - 1 THEN RETURN TRUE END;
+	IF this.send = - 1 THEN RETURN FALSE END;
     sidx := 0;
 	ret := this.FindAux(pat, str, sidx);
 	RETURN ret >= 0;
@@ -566,7 +568,8 @@ BEGIN
 	this.maxcaptures := MAXCAPTURES;
 	this.send := ArrayOfChar.Length(str) - 1; 
 	this.pend := ArrayOfChar.Length(pat) - 1;
-    IF (this.pend = - 1) OR (this.send = -1) THEN RETURN 0 END;
+	IF this.pend = - 1 THEN RETURN 0 END;
+	IF this.send = - 1 THEN RETURN -1 END;
 	this.error := 0;
 	this.level := 0;
 	IF (start < 0) OR (start > this.send) THEN RETURN -1 END;
