@@ -71,7 +71,13 @@ For more complete usage the example in `misc/Test.mod` can be inspected.
     src/Std.OSStream.mod
     src/Std.StringPattern.mod
 
+#######
+Example
+#######
 
+.. literalinclude:: ../misc/Test.mod
+	:language: modula2
+	
 ##################
 Indices and tables
 ##################

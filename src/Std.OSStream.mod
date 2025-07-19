@@ -24,12 +24,12 @@ CONST
 
 TYPE
     BYTE = SYSTEM.BYTE;
-    File* = RECORD(ADTStream.ADTStream)
+    File* = RECORD(ADTStream.Stream)
         fh : OSHost.HANDLE;
         mode : SET;
         opened : BOOLEAN;
     END;
-    Std* = RECORD(ADTStream.ADTStream)
+    Std* = RECORD(ADTStream.Stream)
         fh : OSHost.HANDLE;
         type : INTEGER;
     END;

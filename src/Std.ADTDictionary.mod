@@ -16,10 +16,10 @@ IMPORT ADTValueVector := ADTVector(Value) IN Std;
 TYPE
     WSET = SYSTEM.SET;
     
-    DuplicateKeyProc = PROCEDURE(VAR dst: Key; src-: Key);
-    DisposeKeyProc = PROCEDURE(VAR dst: Key);
-    DuplicateValueProc = PROCEDURE(VAR dst: Value; src-: Value);
-    DisposeValueProc = PROCEDURE(VAR dst: Value);
+    DuplicateKeyProc* = PROCEDURE(VAR dst: Key; src-: Key);
+    DisposeKeyProc* = PROCEDURE(VAR dst: Key);
+    DuplicateValueProc* = PROCEDURE(VAR dst: Value; src-: Value);
+    DisposeValueProc* = PROCEDURE(VAR dst: Value);
     
     ValueVector* = ADTValueVector.Vector;
     KeyVector* = ADTKeyVector.Vector;
@@ -43,17 +43,21 @@ TYPE
         index : LENGTH;
     END;
 
+(** defaults to assignment *)
 PROCEDURE DefaultDuplicateKey* (VAR dst: Key; src-: Key);
 BEGIN dst := src
 END DefaultDuplicateKey;
 
+(** defaults to no operation *)
 PROCEDURE DefaultDisposeKey* (VAR dst: Key);
 BEGIN END DefaultDisposeKey;
 
+(** defaults to assignment *)
 PROCEDURE DefaultDuplicateValue* (VAR dst: Value; src-: Value);
 BEGIN dst := src
 END DefaultDuplicateValue;
 
+(** defaults to no operation *)
 PROCEDURE DefaultDisposeValue* (VAR dst: Value);
 BEGIN END DefaultDisposeValue;
 
@@ -93,7 +97,7 @@ BEGIN
     this.size := 0;
 END Init;
 
-(** Free set storage *)
+(** Free dictionary storage *)
 PROCEDURE (VAR this : Dictionary) Dispose*();
 VAR
     current : Entry;

@@ -154,7 +154,7 @@ perfCompare$(PRG) : misc/perfCompare.mod std.lib
 
 doc/src/Std.ADTBasicType.mod.rst : src/Std.ADTBasicType.mod
 	@-mkdir -p doc/src
-	@./tools/docgen.py $< -o $@
+	./tools/docgen.py $< -o $@
 
 doc/src/Std.ADTDictionary.mod.rst : src/Std.ADTDictionary.mod
 	@-mkdir -p doc/src
