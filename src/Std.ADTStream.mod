@@ -27,12 +27,12 @@ CONST
 TYPE
     BYTE = SYSTEM.BYTE;
     (* Abstract Stream Class *)
-    ADTStream* = RECORD (Type.Stream) END;
+    Stream* = RECORD (Type.Stream) END;
     (* NullStrean *)
-    NullStream* = RECORD (ADTStream) END;
+    NullStream* = RECORD (Stream) END;
     (* MemoryStream *)
     MemoryStorage = POINTER TO ARRAY OF BYTE;
-    MemoryStream* = RECORD (ADTStream)
+    MemoryStream* = RECORD (Stream)
         storage : MemoryStorage;
         pos : LENGTH;
         last : LENGTH;
@@ -52,7 +52,7 @@ The alignment formatting flags are `Left`, `Right` & `Center` .
 The `Upper` flag will make the whole string upper case.
 The `Alt` flag will capitalize the string.
 *)
-PROCEDURE (VAR s : ADTStream) FormatString*(str- : ARRAY OF CHAR; width, prec: INTEGER; flags: SET);
+PROCEDURE (VAR s : Stream) FormatString*(str- : ARRAY OF CHAR; width, prec: INTEGER; flags: SET);
 BEGIN ArrayOfChar.Format(s, str, width, prec, flags);
 END FormatString;
 
@@ -67,7 +67,7 @@ The `Spc` flag fills in a blank character for `+` if the number is positive.
 The `Sign` flag fills in a `+` character if the number is positive.
 If both `Spc` and `Sign` are given then `Sign` precedes.
 *)
-PROCEDURE (VAR s : ADTStream) FormatInteger*(value : HUGEINT; width: LENGTH; flags: SET);
+PROCEDURE (VAR s : Stream) FormatInteger*(value : HUGEINT; width: LENGTH; flags: SET);
 BEGIN Integer.Format(s, value, width, flags);
 END FormatInteger;
 
@@ -83,7 +83,7 @@ The `Spc` flag fills in a blank character for `+` if the number is positive.
 The `Sign` flag fills in a `+` character if the number is positive.
 If both `Spc` and `Sign` are given then `Sign` precedes.
 *)
-PROCEDURE (VAR s : ADTStream) FormatReal*(value : REAL; prec : INTEGER; width: LENGTH; flags: SET);
+PROCEDURE (VAR s : Stream) FormatReal*(value : REAL; prec : INTEGER; width: LENGTH; flags: SET);
 BEGIN Real.Format(s, value, prec, width, flags);
 END FormatReal;
 
@@ -101,7 +101,7 @@ The `Alt` flags prefix binary (base 2) numbers with `0b`,
 octal numbers (base 8) with `0o` and hex decimal numbers
 with either `0x` or `0X` depending on the `Upper` flag.
 *)
-PROCEDURE (VAR s : ADTStream) FormatCardinal*(value : HUGECARD; base, width: INTEGER; flags: SET);
+PROCEDURE (VAR s : Stream) FormatCardinal*(value : HUGECARD; base, width: INTEGER; flags: SET);
 BEGIN Cardinal.Format(s, value, base, width, flags);
 END FormatCardinal;
 
@@ -129,7 +129,7 @@ Format `DATETIME` according to format string arguments:
 
 Other characters are copied to output.
 *)
-PROCEDURE (VAR s : ADTStream) FormatDateTime*(value : DateTime.DATETIME; fmt- : ARRAY OF CHAR);
+PROCEDURE (VAR s : Stream) FormatDateTime*(value : DateTime.DATETIME; fmt- : ARRAY OF CHAR);
 BEGIN DateTime.Format(s, value, fmt);
 END FormatDateTime;
 

@@ -4,9 +4,9 @@ A Pair is a templated type which allows to store two types as a single unit.
 MODULE ADTPair (First*, Second*) IN Std;
 
 TYPE
-    HashProc = PROCEDURE(first- : First; second- : Second): LENGTH;
-    EqualProc = PROCEDURE(fl-, fr- : First; sl-, sr- : Second): BOOLEAN;
-    CompareProc = PROCEDURE(fl-, fr- : First; sl-, sr- : Second): INTEGER;
+    HashProc* = PROCEDURE(first- : First; second- : Second): LENGTH;
+    EqualProc* = PROCEDURE(fl-, fr- : First; sl-, sr- : Second): BOOLEAN;
+    CompareProc* = PROCEDURE(fl-, fr- : First; sl-, sr- : Second): INTEGER;
     
     Pair* = RECORD-
         first* : First;

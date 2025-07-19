@@ -71,7 +71,13 @@ referenced as it uses many of the features of the library.
     src/Std.OSStream.mod
     src/Std.StringPattern.mod
 
+#######
+Example
+#######
 
+.. literalinclude:: ../misc/Test.mod
+	:language: modula2
+	
 ##################
 Indices and tables
 ##################

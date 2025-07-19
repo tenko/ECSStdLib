@@ -14,8 +14,8 @@ MODULE ADTVector (Element*) IN Std;
 IN Std IMPORT ArrayOfByte, Cardinal;
 
 TYPE
-    DuplicateElementProc = PROCEDURE(VAR dst: Element; src-: Element);
-    DisposeElementProc = PROCEDURE(VAR dst: Element);
+    DuplicateElementProc* = PROCEDURE(VAR dst: Element; src-: Element);
+    DisposeElementProc* = PROCEDURE(VAR dst: Element);
     VectorStorage = POINTER TO ARRAY OF Element;
     Vector* = RECORD-
         storage* : VectorStorage;
@@ -27,10 +27,12 @@ TYPE
 
 CONST INIT_SIZE = 4;
 
+(** defaults to assignment *)
 PROCEDURE DefaultDuplicateElement* (VAR dst: Element; src-: Element);
 BEGIN dst := src
 END DefaultDuplicateElement;
 
+(** defaults to no operation *)
 PROCEDURE DefaultDisposeElement* (VAR dst: Element);
 BEGIN END DefaultDisposeElement;
 
@@ -255,7 +257,6 @@ BEGIN
     j := 0;
     WHILE j < N DO
         i := (j + N) DIV 2;
-
         CASE Cmp(this.storage[i], value) OF
             | -1 : j := i + 1;
             |  0 : RETURN i;

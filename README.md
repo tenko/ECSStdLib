@@ -6,7 +6,7 @@ with the **[ECS Oberon](https://ecs.openbrace.org/manual/manualch7.html)** compi
  * Modules for basic types : [Char](https://tenko.github.io/ECSStdLib/src/Std.Char.mod.html), [Integer](https://tenko.github.io/ECSStdLib/src/Std.Integer.mod.html), [Cardinal](https://tenko.github.io/ECSStdLib/src/Std.Cardinal.mod.html), [Real](https://tenko.github.io/ECSStdLib/src/Std.Real.mod.html), [ArrayOfChar](https://tenko.github.io/ECSStdLib/src/Std.ArrayOfChar.mod.html), [ArrayOfByte](https://tenko.github.io/ECSStdLib/src/Std.ArrayOfByte.mod.html) & [ArrayOfSet](https://tenko.github.io/ECSStdLib/src/Std.ArrayOfSet.mod.html) .
  * Modules for string handling : [String](https://tenko.github.io/ECSStdLib/src/Std.String.mod.html) & [StringPattern](https://tenko.github.io/ECSStdLib/src/Std.StringPattern.mod.html).
  * Module for date and time support : [DateTime](https://tenko.github.io/ECSStdLib/src/Std.DateTime.mod.html).
- * Module for container and alogrithms : [ADTStream](https://tenko.github.io/ECSStdLib/src/Std.ADTStream.mod.html), [ADTDictionary](https://tenko.github.io/ECSStdLib/src/Std.ADTDictionary.mod.html), [ADTList](https://tenko.github.io/ECSStdLib/src/Std.ADTList.mod.html), [ADTSet](https://tenko.github.io/ECSStdLib/src/Std.ADTSet.mod.html), [ADTTree](https://tenko.github.io/ECSStdLib/src/Std.ADTTree.mod.html) & [ADTVector](https://tenko.github.io/ECSStdLib/src/Std.ADTVector.mod.html).
+ * Module for container and alogrithms : [ADTStream](https://tenko.github.io/ECSStdLib/src/Std.ADTStream.mod.html), [ADTDictionary](https://tenko.github.io/ECSStdLib/src/Std.ADTDictionary.mod.html), [ADTList](https://tenko.github.io/ECSStdLib/src/Std.ADTList.mod.html), [ADTSet](https://tenko.github.io/ECSStdLib/src/Std.ADTSet.mod.html), [ADTPair](https://tenko.github.io/ECSStdLib/src/Std.ADTPair.mod.html), [ADTTree](https://tenko.github.io/ECSStdLib/src/Std.ADTTree.mod.html) & [ADTVector](https://tenko.github.io/ECSStdLib/src/Std.ADTVector.mod.html).
  * Module for cross platform basic OS support : [OS](https://tenko.github.io/ECSStdLib/src/Std.OS.mod.html), [OSDir](https://tenko.github.io/ECSStdLib/src/Std.OSDir.mod.html), [OSFile](https://tenko.github.io/ECSStdLib/src/Std.OSFile.mod.html), [OSPath](https://tenko.github.io/ECSStdLib/src/Std.OSPath.mod.html) & [OSStream](https://tenko.github.io/ECSStdLib/src/Std.OSStream.mod.html).
  * Module for testing & benchmark : [O2Testing](https://tenko.github.io/ECSStdLib/src/Std.O2Testing.mod.html) & [O2Timing](https://tenko.github.io/ECSStdLib/src/Std.O2Timing.mod.html).
  * Modules for data handling: [DataLZ4](https://tenko.github.io/ECSStdLib/src/Std.DataLZ4.mod.html) & [DataConfig](https://tenko.github.io/ECSStdLib/src/Std.DataConfig.mod.html) .
@@ -62,7 +62,7 @@ BEGIN
     RETURN 1;
 END PairCompare;
 
-PROCEDURE ProcessFile(VAR fh : ADTStream.ADTStream);
+PROCEDURE ProcessFile(VAR fh : ADTStream.Stream);
 VAR
     dict : DictStrInt.Dictionary;
     dit : DictStrInt.Iterator;
@@ -101,7 +101,7 @@ BEGIN
         OSStream.StdOut.FormatInteger(pair.second, 3, {});
         OSStream.StdOut.WriteString(" : ");
         OSStream.StdOut.WriteString(pair.first^);
-        OSStream.StdErr.WriteNL;
+        OSStream.StdOut.WriteNL;
         INC(cnt);
     END;
     String.Dispose(line);

@@ -1,6 +1,6 @@
 (**
 `INI` file format config parser with similar functions to Python
-version except for multiline values.
+version except for missing support for multiline values.
 *)
 MODULE DataConfig IN Std;
 

@@ -27,7 +27,7 @@ CONST
 Decode LZ4 block format data from src to dst.
 Operates directly on raw memory data.
 Source size is limited to 16777215 bytes in order to simplify the code.
-Return decoded length if success or error code on failure.
+Return decoded length if success or error code on failure (negative value).
 *)
 PROCEDURE BlockDecodeRaw*(dst : ADDRESS; dlen : LENGTH; src : ADDRESS; slen : LENGTH): INTEGER;
 VAR
@@ -103,7 +103,7 @@ END MaxEncodeSize;
 
 (**
 Encode raw memory data in src to LZ4 block format data in dst.
-Return encoded length if success or error code on failure.
+Return encoded length if success or error code on failure (negative value).
 *)
 PROCEDURE BlockEncodeRaw*(dst : ADDRESS; dlen : LENGTH; src : ADDRESS; slen : LENGTH): INTEGER;
 VAR

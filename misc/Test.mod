@@ -12,7 +12,7 @@ BEGIN
     RETURN 1;
 END PairCompare;
 
-PROCEDURE ProcessFile(VAR fh : ADTStream.ADTStream);
+PROCEDURE ProcessFile(VAR fh : ADTStream.Stream);
 VAR
     dict : DictStrInt.Dictionary;
     dit : DictStrInt.Iterator;
@@ -51,7 +51,7 @@ BEGIN
         OSStream.StdOut.FormatInteger(pair.second, 3, {});
         OSStream.StdOut.WriteString(" : ");
         OSStream.StdOut.WriteString(pair.first^);
-        OSStream.StdErr.WriteNL;
+        OSStream.StdOut.WriteNL;
         INC(cnt);
     END;
     String.Dispose(line);
