@@ -8,7 +8,12 @@ LK := linkmem
 QEMU := qemu-system-arm
 DEVICE := mps2-an386 # cortex-m4
 ADR := 0x00000000
-ECS := /c/EigenCompilerSuite/runtime
+
+ifdef MSYSTEM
+	ECS := /c/EigenCompilerSuite/
+else
+	ECS := ~/.local/lib/ecs/
+endif
 
 # OptSpeed or OptSize
 OPT = OptSize
@@ -20,7 +25,7 @@ CPU = armt32
 # Semihost or Baremetal
 SYS = Semihost
 
-RTS = armv7mrun.obf $(ECS)/armt32run.obf $(ECS)/obarmt32run.lib
+RTS = armv7mrun.obf $(ECS)/runtime/armt32run.obf $(ECS)/runtime/obarmt32run.lib
 
 OLS += Const Config$(SYS) Type Char ArrayOfChar$(OPT) Integer Cardinal $(Real) ArrayOfByte$(OPT)
 OLS += ArrayOfSet DateTime String StringPattern ADTBasicType ADTStream ADTList ADTVector
@@ -131,8 +136,8 @@ Test : misc/Test.mod std$(CPU).lib build/armv7mrun.obf
 .PHONY: install
 install: std$(CPU).lib
 	@echo Install
-	@cp -f std$(CPU).lib /c/EigenCompilerSuite/runtime/
-	@cp -f build/std.*.sym /c/EigenCompilerSuite/libraries/oberon/
+	@cp -f std$(CPU).lib $(ECS)/runtime/
+	@cp -f build/std.*.sym $(ECS)/libraries/oberon/
 
 .PHONY: clean
 clean:
