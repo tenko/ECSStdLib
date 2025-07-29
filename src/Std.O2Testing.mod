@@ -19,7 +19,7 @@ TYPE
     END;
 
 (* Initialize global testing Record and output host, target and title *)
-PROCEDURE Initialize* (VAR test: TEST; title: ARRAY OF CHAR);
+PROCEDURE Initialize* (VAR test: TEST; title-: ARRAY OF CHAR);
 BEGIN
     ArrayOfChar.Assign(test.title, title);
     test.tests := 0;
@@ -28,7 +28,7 @@ BEGIN
 END Initialize;
 
 (** Begin local module tests *)
-PROCEDURE Begin* (VAR test: TEST; name: ARRAY OF CHAR);
+PROCEDURE Begin* (VAR test: TEST; name-: ARRAY OF CHAR);
 BEGIN
     ArrayOfChar.Assign(test.current, name);
     test.local := 0;
@@ -57,7 +57,7 @@ END Finalize;
 (**
 Assert procedure.
 *)
-PROCEDURE Assert* (VAR test: TEST; b: BOOLEAN; file : ARRAY OF CHAR; id: INTEGER) ;
+PROCEDURE Assert* (VAR test: TEST; b: BOOLEAN; file- : ARRAY OF CHAR; id: INTEGER) ;
 BEGIN
     INC(test.local);
     IF ~b THEN

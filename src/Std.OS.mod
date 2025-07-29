@@ -174,12 +174,12 @@ BEGIN
 END NextArgument;
 
 (** Check if environment variable exists *)
-PROCEDURE HasEnv*(name : ARRAY OF CHAR): BOOLEAN;
+PROCEDURE HasEnv*(name- : ARRAY OF CHAR): BOOLEAN;
 BEGIN RETURN OSHost.EnvVarLength(name) > 0
 END HasEnv;
 
 (** Get environment variable *)
-PROCEDURE Env*(VAR value : String.STRING; name : ARRAY OF CHAR);
+PROCEDURE Env*(VAR value : String.STRING; name- : ARRAY OF CHAR);
 BEGIN
     IF OSHost.EnvVarLength(name) = 0 THEN RETURN END;
     String.Reserve(value, OSHost.EnvVarLength(name) + 1, FALSE);

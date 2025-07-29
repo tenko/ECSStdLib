@@ -105,7 +105,7 @@ BEGIN RETURN ArrayOfChar.Compare(left^, right^) = 0
 END Equal;
 
 (** Insert `src` into `dst` at `start` *)
-PROCEDURE Insert* (VAR dst : STRING; src : ARRAY OF CHAR; start: LENGTH);
+PROCEDURE Insert* (VAR dst : STRING; src- : ARRAY OF CHAR; start: LENGTH);
 VAR i, n, m: LENGTH ;
 BEGIN
     IF dst = NIL THEN n := 0
