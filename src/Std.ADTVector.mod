@@ -161,7 +161,7 @@ Note: this potentially transfere key ownership to caller.
 *)
 PROCEDURE (VAR this : Vector) Pop*(VAR element : Element) : BOOLEAN;
 BEGIN
-    IF this.Size() = 0 THEN RETURN FALSE END;
+    IF this.last = 0 THEN RETURN FALSE END;
     element := this.storage[this.last - 1];
     DEC(this.last);
     RETURN TRUE;
@@ -181,7 +181,7 @@ PROCEDURE (VAR this : Vector) Reverse*();
 VAR start, end: LENGTH;
 BEGIN
     start := 0;
-    end := this.Size() - 1;
+    end := this.last - 1;
     WHILE start < end DO
        this.Swap(start, end);
        INC(start); DEC(end)
@@ -192,9 +192,9 @@ END Reverse;
 PROCEDURE (VAR this : Vector) Shuffle*();
 VAR i, j: LENGTH;
 BEGIN
-    i := this.Size() - 1;
+    i := this.last - 1;
     WHILE i >= 1 DO
-        j := LENGTH(Cardinal.RandomRange(this.Size() - 1));
+        j := LENGTH(Cardinal.RandomRange(this.last - 1));
         this.Swap(i, j);
         DEC(i)
     END;
@@ -240,7 +240,7 @@ VAR N: LENGTH;
         END;
     END ISort;
 BEGIN
-    N := this.Size();
+    N := this.last;
     IF N > 0 THEN
         ISort(0, N-1);
     END
@@ -254,7 +254,7 @@ PROCEDURE (VAR this- : Vector) Find* (Cmp : Compare; value- : Element): LENGTH;
 VAR i, left, right: LENGTH;
 BEGIN
     left := 0;
-    right := this.Size() - 1;
+    right := this.last - 1;
     WHILE left <= right DO
         i := left + (right - left) DIV 2;
         CASE Cmp(this.storage[i], value) OF
@@ -274,7 +274,7 @@ PROCEDURE (VAR this- : Vector) BisectLeft* (Cmp : Compare; value- : Element): LE
 VAR i, left, right: LENGTH;
 BEGIN
     left := 0;
-    right := this.Size();
+    right := this.last;
     WHILE left < right DO
         i := left + (right - left) DIV 2;
         IF Cmp(this.storage[i], value) = -1 THEN
@@ -294,7 +294,7 @@ PROCEDURE (VAR this- : Vector) BisectRight* (Cmp : Compare; value- : Element): L
 VAR i, left, right: LENGTH;
 BEGIN
     left := 0;
-    right := this.Size();
+    right := this.last;
     WHILE left < right DO
         i := left + (right - left) DIV 2;
         IF Cmp(value, this.storage[i]) = -1 THEN
@@ -310,7 +310,7 @@ END BisectRight;
 PROCEDURE (VAR this : Vector) HeapSiftDown*(Cmp : Compare; i : LENGTH);
 VAR size, largest, left, right : LENGTH;
 BEGIN
-    size := this.Size();
+    size := this.last;
     largest := i;
     left := 2*i + 1;
     right := 2*i + 2;
@@ -332,7 +332,7 @@ END HeapSiftDown;
 PROCEDURE (VAR this : Vector) Heapify*(Cmp : Compare);
 VAR i, size : LENGTH;
 BEGIN
-    size := this.Size();
+    size := this.last;
     IF size <= 1 THEN RETURN END;
     FOR i := (size - 1) DIV 2 TO 0 BY -1 DO
         this.HeapSiftDown(Cmp, i);
@@ -344,12 +344,14 @@ Remove first element of heap. Return FALSE if heap is empty.
 Note: this potentially transfere key ownership to caller.
 *)
 PROCEDURE (VAR this : Vector) HeapPop*(Cmp : Compare; VAR element : Element) : BOOLEAN;
+VAR size : LENGTH;
 BEGIN
-    IF this.Size() = 0 THEN RETURN FALSE END;
-    IF this.Size() = 1 THEN RETURN this.Pop(element) END;
+    size := this.last;
+    IF size = 0 THEN RETURN FALSE END;
+    IF size = 1 THEN RETURN this.Pop(element) END;
 
     element := this.storage[0];
-    this.storage[0] := this.storage[this.last - 1];
+    this.storage[0] := this.storage[size - 1];
     DEC(this.last);
     this.HeapSiftDown(Cmp, 0);
     RETURN TRUE;
@@ -361,7 +363,7 @@ VAR i : LENGTH;
 BEGIN
     this.Append(value);
     (* move node up in the tree to restore heap condition *)
-    i := this.Size() - 1;
+    i := this.last - 1;
     WHILE (i > 0) & (Cmp(this.storage[(i - 1) DIV 2], this.storage[i]) = -1) DO
         this.Swap(i, (i - 1) DIV 2);
         i := (i - 1) DIV 2;
