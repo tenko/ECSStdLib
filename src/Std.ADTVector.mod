@@ -121,7 +121,7 @@ BEGIN
 END Shrink;
 
 (** Append Element to end of Vector *)
-PROCEDURE (VAR this : Vector) Append*(value : Element);
+PROCEDURE (VAR this : Vector) Append*(value- : Element);
 VAR capacity : LENGTH;
 BEGIN
     capacity := this.Capacity();
@@ -248,24 +248,124 @@ END Sort;
 
 (**
 Find position in array. Expect array to be sorted in ascending order.
-Return -1 if not found. Must be called from concrete Vector.
+Return -1 if not found.
 *)
 PROCEDURE (VAR this- : Vector) Find* (Cmp : Compare; value- : Element): LENGTH;
-VAR N, i, j: LENGTH;
+VAR i, left, right: LENGTH;
 BEGIN
-    N := this.Size();
-    j := 0;
-    WHILE j < N DO
-        i := (j + N) DIV 2;
+    left := 0;
+    right := this.Size() - 1;
+    WHILE left <= right DO
+        i := left + (right - left) DIV 2;
         CASE Cmp(this.storage[i], value) OF
-            | -1 : j := i + 1;
+            | -1 : left := i + 1;
             |  0 : RETURN i;
-            | +1 : N := i;
-        ELSE
-            HALT(0);
-        END;
+            | +1 : right := i - 1;
+        ELSE RETURN -1 END
     END;
     RETURN -1
 END Find;
+
+(**
+Find leftmost insertion position in array for value.
+Expect array to be sorted in ascending order.
+*)
+PROCEDURE (VAR this- : Vector) BisectLeft* (Cmp : Compare; value- : Element): LENGTH;
+VAR i, left, right: LENGTH;
+BEGIN
+    left := 0;
+    right := this.Size();
+    WHILE left < right DO
+        i := left + (right - left) DIV 2;
+        IF Cmp(this.storage[i], value) = -1 THEN
+            left := i + 1;
+        ELSE
+            right := i;
+        END;
+    END;
+    RETURN left
+END BisectLeft;
+
+(**
+Find rightmost insertion position in array for value.
+Expect array to be sorted in ascending order.
+*)
+PROCEDURE (VAR this- : Vector) BisectRight* (Cmp : Compare; value- : Element): LENGTH;
+VAR i, left, right: LENGTH;
+BEGIN
+    left := 0;
+    right := this.Size();
+    WHILE left < right DO
+        i := left + (right - left) DIV 2;
+        IF Cmp(value, this.storage[i]) = -1 THEN
+            right := i;
+        ELSE
+            left := i + 1;
+        END;
+    END;
+    RETURN left
+END BisectRight;
+
+(* move a node down in the tree to restore heap relationship *)
+PROCEDURE (VAR this : Vector) HeapSiftDown*(Cmp : Compare; i : LENGTH);
+VAR size, largest, left, right : LENGTH;
+BEGIN
+    size := this.Size();
+    largest := i;
+    left := 2*i + 1;
+    right := 2*i + 2;
+    
+    IF (left < size) & (Cmp(this.storage[left], this.storage[largest]) = 1) THEN
+        largest := left;
+    END;
+    IF (right < size) & (Cmp(this.storage[right], this.storage[largest]) = 1) THEN
+        largest := right;
+    END;
+
+    IF largest # i THEN
+        this.Swap(i, largest);
+        this.HeapSiftDown(Cmp, largest);
+    END;
+END HeapSiftDown;
+
+(** Heapify array in-place *)
+PROCEDURE (VAR this : Vector) Heapify*(Cmp : Compare);
+VAR i, size : LENGTH;
+BEGIN
+    size := this.Size();
+    IF size <= 1 THEN RETURN END;
+    FOR i := (size - 1) DIV 2 TO 0 BY -1 DO
+        this.HeapSiftDown(Cmp, i);
+    END;
+END Heapify;
+
+(**
+Remove first element of heap. Return FALSE if heap is empty.
+Note: this potentially transfere key ownership to caller.
+*)
+PROCEDURE (VAR this : Vector) HeapPop*(Cmp : Compare; VAR element : Element) : BOOLEAN;
+BEGIN
+    IF this.Size() = 0 THEN RETURN FALSE END;
+    IF this.Size() = 1 THEN RETURN this.Pop(element) END;
+
+    element := this.storage[0];
+    this.storage[0] := this.storage[this.last - 1];
+    DEC(this.last);
+    this.HeapSiftDown(Cmp, 0);
+    RETURN TRUE;
+END HeapPop;
+
+(** Insert Element into Vector and update heap relationship *)
+PROCEDURE (VAR this : Vector) HeapInsert*(Cmp : Compare; value : Element);
+VAR i : LENGTH;
+BEGIN
+    this.Append(value);
+    (* move node up in the tree to restore heap condition *)
+    i := this.Size() - 1;
+    WHILE (i > 0) & (Cmp(this.storage[(i - 1) DIV 2], this.storage[i]) = -1) DO
+        this.Swap(i, (i - 1) DIV 2);
+        i := (i - 1) DIV 2;
+    END;
+END HeapInsert;
 
 END ADTVector.
