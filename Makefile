@@ -22,8 +22,8 @@ else
 endif
 
 OLS += Const Config$(SYS) Type Char ArrayOfChar$(OPT) OSHost$(SYS) Integer Cardinal $(Real)
-OLS += ArrayOfByte$(OPT) ArrayOfSet DateTime String StringPattern ADTBasicType ADTStream ADTList ADTVector
-OLS += ADTPair ADTSet ADTDictionary ADTTree O2Testing O2Timing$(SYS)
+OLS += ArrayOfByte$(OPT) ArrayOfSet DateTime String StringPattern ADTBasicType ADTRingBuffer
+OLS += ADTStream ADTList ADTVector ADTPair ADTSet ADTDictionary ADTTree O2Testing O2Timing$(SYS)
 OLS += OS OSStream OSFile OSDir OSPath DataConfig DataLZ4
 MOD = $(addprefix src/, $(addprefix Std., $(addsuffix .mod, $(OLS))))
 OBF = $(addprefix build/, $(addprefix Std., $(addsuffix .obf, $(OLS))))
@@ -36,7 +36,7 @@ OTS += TestDataConfig TestDataLZ4
 TMOD = $(addprefix tests/, $(addsuffix .mod, $(OTS)))
 TOBF = $(addprefix build/, $(addsuffix .obf, $(OTS)))
 
-DOC = ADTBasicType ADTDictionary ADTList ADTPair ADTSet ADTStream ADTTree ADTVector ArrayOfByte
+DOC = ADTBasicType ADTRingBuffer ADTDictionary ADTList ADTPair ADTSet ADTStream ADTTree ADTVector ArrayOfByte
 DOC += ArrayOfChar ArrayOfSet Cardinal Char Config Const DataConfig DataLZ4 DateTime Integer
 DOC += O2Testing O2Timing OS OSDir OSFile OSHost OSPath OSStream Real String StringPattern Type
 
@@ -156,6 +156,10 @@ doc/src/Std.ADTBasicType.mod.rst : src/Std.ADTBasicType.mod
 	@-mkdir -p doc/src
 	./tools/docgen.py $< -o $@
 
+doc/src/Std.ADTRingBuffer.mod.rst : src/Std.ADTRingBuffer.mod
+	@-mkdir -p doc/src
+	./tools/docgen.py $< -o $@
+	
 doc/src/Std.ADTDictionary.mod.rst : src/Std.ADTDictionary.mod
 	@-mkdir -p doc/src
 	@./tools/docgen.py $< -o $@
