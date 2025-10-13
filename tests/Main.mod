@@ -13,6 +13,7 @@ IMPORT TestOSPath;
 IMPORT TestOS;
 IMPORT TestADTBasicType;
 IMPORT TestADTList;
+IMPORT TestADTRingBuffer;
 IMPORT TestADTSet;
 IMPORT TestADTDictionary;
 IMPORT TestADTVector;
@@ -41,6 +42,7 @@ BEGIN
     TestOS.Run(test);
     TestADTBasicType.Run(test);
     TestADTList.Run(test);
+    TestADTRingBuffer.Run(test);
     TestADTSet.Run(test);
     TestADTDictionary.Run(test);
     TestADTVector.Run(test);

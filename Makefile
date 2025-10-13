@@ -30,8 +30,8 @@ OBF = $(addprefix build/, $(addprefix Std., $(addsuffix .obf, $(OLS))))
 
 OTS  = TestArrayOfByte TestArrayOfChar TestArrayOfSet TestCardinal TestInteger TestReal
 OTS += TestString TestStringPattern TestDateTime TestADTBasicType TestADTList TestADTSet
-OTS += TestADTDictionary TestADTVector TestADTTree TestADTStream TestOSPath TestOS
-OTS += TestDataConfig TestDataLZ4
+OTS += TestADTDictionary TestADTVector TestADTTree TestADTRingBuffer TestADTStream TestOSPath
+OTS += TestOS TestDataConfig TestDataLZ4
 
 TMOD = $(addprefix tests/, $(addsuffix .mod, $(OTS)))
 TOBF = $(addprefix build/, $(addsuffix .obf, $(OTS)))
@@ -81,6 +81,7 @@ std.lib : $(OBF)
 build/TestADTBasicType.obf : src/Std.ADTBasicType.mod
 build/TestADTDictionary.obf : src/Std.ADTDictionary.mod
 build/TestADTList.obf : src/Std.ADTList.mod
+build/TestADTRingBuffer.obf : src/Std.ADTRingBuffer.mod
 build/TestADTSet.obf : src/Std.ADTSet.mod
 build/TestADTTree.obf : src/Std.ADTTree.mod
 build/TestADTVector.obf : src/Std.ADTVector.mod
