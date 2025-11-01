@@ -356,6 +356,23 @@ BEGIN
     IF start < LEN(dst) THEN dst[start] := 00X END
 END Delete;
 
+(** Insert character `ch` into `dst` at `pos`. *)
+PROCEDURE InsertChar* (VAR dst : ARRAY OF CHAR; ch : CHAR; pos: LENGTH);
+VAR
+    i, n: LENGTH;
+BEGIN
+    n := Length(dst);
+    IF pos < 0 THEN pos := 0 END;
+    IF (pos > n) OR (n + 1 > LEN(dst)) THEN RETURN END;
+    i := n;
+    WHILE i > pos DO
+        dst[i] := dst[i - 1];
+        DEC(i);
+    END;
+    dst[pos] := ch;
+    IF n + 1 < LEN(dst) THEN dst[n + 1] := 00X END;
+END InsertChar;
+
 (** Insert `src` into `dst` at `start`. *)
 PROCEDURE Insert* (VAR dst : ARRAY OF CHAR; src- : ARRAY OF CHAR; start: LENGTH);
 VAR
