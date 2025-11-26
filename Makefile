@@ -24,7 +24,7 @@ endif
 OLS += Const Config$(SYS) Type Char ArrayOfChar$(OPT) OSHost$(SYS) Integer Cardinal $(Real)
 OLS += ArrayOfByte$(OPT) ArrayOfSet DateTime String StringPattern ADTBasicType ADTRingBuffer
 OLS += ADTStream ADTList ADTVector ADTPair ADTSet ADTDictionary ADTTree O2Testing O2Timing$(SYS)
-OLS += OS OSStream OSFile OSDir OSPath DataConfig DataLZ4
+OLS += Coroutine OS OSStream OSFile OSDir OSPath DataConfig DataLZ4
 MOD = $(addprefix src/, $(addprefix Std., $(addsuffix .mod, $(OLS))))
 OBF = $(addprefix build/, $(addprefix Std., $(addsuffix .obf, $(OLS))))
 
