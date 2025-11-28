@@ -43,11 +43,11 @@ BEGIN
 	SYSTEM.CODE ("mov ptr [$fp + pointer], ptr $fp");
 	coroutine.frame := pointer;
 	IF target.frame = NIL THEN
-	    target.stack := SYSTEM.VAL(SYSTEM.PTR, SYSTEM.ADR(target.data));
+	    target.stack := PTR(target.data);
     	pointer := target.stack;
     	SYSTEM.CODE ("add ptr $sp, ptr [$fp + pointer], ptr StkSize - stackdisp");
     	target.Call;
-    	SYSTEM.CODE ("mov ptr $sp, ptr $fp - stackdisp");
+    	SYSTEM.CODE ("mov ptr $sp, ptr $fp + pointer - stackdisp");
     	target.frame := NIL;
 	ELSE
 		pointer := target.frame;
