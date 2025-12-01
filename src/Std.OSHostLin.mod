@@ -128,6 +128,42 @@ BEGIN
     RETURN TRUE
 END StdHandle;
 
+(* Read single key from console without echo. *)
+PROCEDURE ConsoleReadKey*(): CHAR;
+CONST
+    TCGETS = 00005401H;
+    TCSETSW = 00005403H;
+    STDIN_FILENO = 0;
+    ICANON = 1;
+    ECHO = 3;
+TYPE
+    Termios = RECORD-
+        c_iflag: INTEGER;
+        c_oflag: INTEGER;
+        c_cflag: INTEGER;
+        c_lflag: INTEGER;
+        c_cc: ARRAY 64 OF SYSTEM.BYTE;
+    END;
+VAR
+    termios : Termios;
+    saved : INTEGER;
+    s : SET;
+    ret : CHAR;
+BEGIN
+    IGNORE(API.IOCtl(STDIN_FILENO, TCGETS, SYSTEM.ADR(termios)));
+    saved := termios.c_lflag;
+    s := SET(termios.c_lflag);
+    s := s - {ICANON} - {ECHO};
+    termios.c_lflag := SYSTEM.VAL(INTEGER, s);
+    IGNORE(API.IOCtl(STDIN_FILENO, TCSETSW, SYSTEM.ADR(termios)));
+    IF API.Read(STDIN_FILENO, SYSTEM.ADR(ret), 1) # 1 THEN
+        ret := 00X;
+    END;
+    termios.c_lflag := saved;
+    IGNORE(API.IOCtl(STDIN_FILENO, TCSETSW, SYSTEM.ADR(termios)));
+    RETURN ret;
+END ConsoleReadKey;
+
 (* Open new or existing file with mode flags. Return TRUE on success.*)
 PROCEDURE FileOpen*(VAR handle : HANDLE; filename- : ARRAY OF CHAR; mode : SET): BOOLEAN;
 VAR

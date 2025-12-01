@@ -253,6 +253,11 @@ BEGIN
     RETURN handle # INVALID_HANDLE
 END StdHandle;
 
+(* Read single key from console without echo. *)
+PROCEDURE ConsoleReadKey*(): CHAR;
+BEGIN RETURN SYSTEM.VAL(CHAR, Getchar())
+END ConsoleReadKey;
+
 (* Open new or existing file with mode flags. Return TRUE on success.*)
 PROCEDURE FileOpen*(VAR handle : HANDLE; filename- : ARRAY OF CHAR; mode : SET): BOOLEAN;
 VAR

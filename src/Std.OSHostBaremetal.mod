@@ -69,6 +69,12 @@ PROCEDURE ^ HostStdHandle ["HostStdHandle"](VAR handle : HANDLE; type : INTEGER)
 PROCEDURE StdHandle*(VAR handle : HANDLE; type : INTEGER): BOOLEAN;
 BEGIN RETURN HostStdHandle(handle, type) END StdHandle;
 
+(* Read single key from console without echo. *)
+PROCEDURE ^ HostConsoleReadKey ["HostConsoleReadKey"](): CHAR;
+PROCEDURE ConsoleReadKey*(): CHAR;
+BEGIN RETURN HostConsoleReadKey()
+END ConsoleReadKey;
+
 (* Open new or existing file with mode flags. Return TRUE on success.*)
 PROCEDURE ^ HostFileOpen ["HostFileOpen"](VAR handle : HANDLE; filename- : ARRAY OF CHAR; mode : SET): BOOLEAN;
 PROCEDURE FileOpen*(VAR handle : HANDLE; filename- : ARRAY OF CHAR; mode : SET): BOOLEAN;

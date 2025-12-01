@@ -99,6 +99,24 @@ BEGIN
     RETURN handle # INVALID_HANDLE
 END StdHandle;
 
+(* Read single key from console without echo. *)
+PROCEDURE ConsoleReadKey*(): CHAR;
+VAR
+    handle : HANDLE;
+    mode : DWORD;
+    ch : CHAR;
+BEGIN
+    ch := 00X;
+    handle := API.GetStdHandle(API.STD_INPUT_HANDLE);
+    IF handle = API.INVALID_HANDLE_VALUE THEN RETURN 00X END;
+    IGNORE(API.GetConsoleMode(handle, SYSTEM.ADR(mode)));
+    IGNORE(API.SetConsoleMode(handle, 0));
+    IGNORE(API.WaitForSingleObject(handle, API.INFINITE));
+    IGNORE(API.ReadFile(handle, SYSTEM.ADR(ch), 1, 0, NIL));
+    IGNORE(API.SetConsoleMode(handle, mode));
+    RETURN ch
+END ConsoleReadKey;
+
 (* Open new or existing file with mode flags. Return TRUE on success.*)
 PROCEDURE FileOpen*(VAR handle : HANDLE; filename- : ARRAY OF CHAR; mode : SET): BOOLEAN;
 VAR

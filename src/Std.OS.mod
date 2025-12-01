@@ -187,6 +187,11 @@ BEGIN
     OSHost.EnvVar(value^, name)
 END Env;
 
+(** Read single key from console without echo. *)
+PROCEDURE ConsoleReadKey*(): CHAR;
+BEGIN RETURN OSHost.ConsoleReadKey()
+END ConsoleReadKey;
+
 (** Get last error code or OK on no error. *)
 PROCEDURE GetLastError*(VAR error: INTEGER);
 BEGIN OSHost.GetLastError(error)
