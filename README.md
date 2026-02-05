@@ -10,11 +10,12 @@ with the **[ECS Oberon](https://ecs.openbrace.org/manual/manualch7.html)** compi
  * Module for cross platform basic OS support : [OS](https://tenko.github.io/ECSStdLib/src/Std.OS.mod.html), [OSDir](https://tenko.github.io/ECSStdLib/src/Std.OSDir.mod.html), [OSFile](https://tenko.github.io/ECSStdLib/src/Std.OSFile.mod.html), [OSPath](https://tenko.github.io/ECSStdLib/src/Std.OSPath.mod.html) & [OSStream](https://tenko.github.io/ECSStdLib/src/Std.OSStream.mod.html).
  * Module for testing & benchmark : [O2Testing](https://tenko.github.io/ECSStdLib/src/Std.O2Testing.mod.html) & [O2Timing](https://tenko.github.io/ECSStdLib/src/Std.O2Timing.mod.html).
  * Modules for data handling: [DataLZ4](https://tenko.github.io/ECSStdLib/src/Std.DataLZ4.mod.html) & [DataConfig](https://tenko.github.io/ECSStdLib/src/Std.DataConfig.mod.html) .
+ * Module for coroutines : [Coroutine](https://github.com/tenko/ECSStdLib/blob/main/src/Std.Coroutine.mod).
  * Module for memory allocation on embedded platforms : [SysMem](https://github.com/tenko/ECSStdLib/blob/main/src/Std.SysMem.mod).
 
 The [Const](https://tenko.github.io/ECSStdLib/src/Std.Const.mod.html) module defines constants reused throughout the library.
 
-The stream concept is used troughout the modules to support formatting, reading and writing of data.  
+The stream concept is used throughout the modules to support formatting, reading and writing of data.  
 The module [Type](https://tenko.github.io/ECSStdLib/src/Std.Type.mod.html) defines the basic stream type interface. 
 
 OS support is covered for the **Windows** and **Linux** platforms.  
@@ -154,6 +155,10 @@ ecsd Test.mod std.lib /c/EigenCompilerSuite/runtime/win64api.obf
  29 : io
  24 : string
 ```
+
+## TODO
+
+* Add support for embedded filesystems. First candidate is Squashfs and later FAT16.
 
 ## Note
 
