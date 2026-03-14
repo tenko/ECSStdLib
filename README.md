@@ -30,17 +30,34 @@ Oberon-2 [report](https://www.ssw.uni-linz.ac.at/Research/Papers/Oberon2.pdf) wi
 
 ## Building & Running tests
 
-Building
+Build instructions here are for a current **ArchLinux** version, but should
+be possible to adapt to other **Linux** distributions.
 
-> make
+Windows **MSYS2** (CLANG64) also can follow these instructions and
+is known to work well, but is much slower than on **Linux**.
 
-Running tests (Linux)
+```shell
+# Build and install patched version of ECS
+pacman -S git make clang sdl2-compat
+git clone https://github.com/tenko/ECS.git
+cd ECS
+make toolchain=clang all # takes some time to finish
+# install to ~/.local/[bin|lib|share] or other setup of choice
+make toolchain=clang prefix=~/.local install
+make clean
+# add to PATH variable (adapt to your shell and setup)
+echo "export PATH=~/.local/bin/:~/.local/lib/ecs/tools/:$PATH" >> ~/.bashrc
+cd ..
 
-> make TestMain
-
-Running tests (Windows)
-
-> make TestMain.exe
+# Build and install ECSStdLib
+pacman -S dos2unix
+git clone https://github.com/tenko/ECSStdLib.git
+cd ECSStdLib
+# Build native library
+make 
+make install # install to ~/.local/lib
+make TestMain # run library tests (use TestMain.exe on Windows)
+```
 
 ## Example
 
