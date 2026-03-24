@@ -36,6 +36,9 @@ be possible to adapt to other **Linux** distributions.
 Windows **MSYS2** (CLANG64) also can follow these instructions and
 is known to work well, but is much slower than on **Linux**.
 
+Note that your Windows systems anti-virus software might indentify the resulting .exe file as a threath
+and in that case this check automatic must exemt these files. 
+
 ```shell
 # Build and install patched version of ECS
 pacman -S git make clang sdl2-compat
