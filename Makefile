@@ -7,16 +7,17 @@ OPT = OptSpeed
 # Real64 or Real32
 Real = Real64
 
+# Installation prefix
+PREFIX = /usr/local
+
 ifdef MSYSTEM
 	PRG = .exe
 	SYS = Win
-	DESTDIR = /c/EigenCompilerSuite/
-	RTS = $(DESTDIR)runtime/win64api.obf
+	RTS = -r win64api.obf
 	CONV = unix2dos
 else
 	PRG = 
 	SYS = Lin
-	DESTDIR = ~/.local/lib/ecs/
 	RTS = 
 	CONV = dos2unix
 endif
@@ -76,7 +77,7 @@ std.lib : $(OBF)
 	@echo linking $@
 	@-rm $@
 	@touch $@
-	@linklib $@ $^
+	@ecsd -l $@ $^
 
 build/TestADTBasicType.obf : src/Std.ADTBasicType.mod
 build/TestADTDictionary.obf : src/Std.ADTDictionary.mod
@@ -110,7 +111,7 @@ TestMain$(PRG) : $(TOBF) std.lib
 	@echo compiling $<
 	@mkdir -p build
 	@cd build && cp -f ../tests/Main.mod .
-	@cd build && ecsd Main.mod  $(notdir $(TOBF)) ../std.lib $(RTS)
+	@cd build && ecsd $(RTS) Main.mod  $(notdir $(TOBF)) ../std.lib
 	@cp build/Main$(PRG) TestMain$(PRG)
 	@./TestMain$(PRG)
 
@@ -118,14 +119,14 @@ Test$(PRG) : misc/Test.mod std.lib
 	@echo compiling $<
 	@mkdir -p build
 	@cd build && cp -f $(addprefix ../, $<) .
-	@cd build && ecsd $(notdir $<) ../std.lib $(RTS)
+	@cd build && ecsd $(RTS) $(notdir $<) ../std.lib
 	@cp build/$@ .
 
 perfLength$(PRG) : misc/perfLength.mod std.lib
 	@echo compiling $<
 	@mkdir -p build
 	@cd build && cp -f $(addprefix ../, $<) .
-	@cd build && ecsd $(notdir $<) ../std.lib $(RTS)
+	@cd build && ecsd $(RTS)  $(notdir $<) ../std.lib
 	@cp build/$@ .
 	@./$@
 
@@ -133,7 +134,7 @@ perfIndex$(PRG) : misc/perfIndex.mod std.lib
 	@echo compiling $<
 	@mkdir -p build
 	@cd build && cp -f $(addprefix ../, $<) .
-	@cd build && ecsd $(notdir $<) ../std.lib $(RTS)
+	@cd build && ecsd $(RTS) $(notdir $<) ../std.lib
 	@cp build/$@ .
 	@./$@
 
@@ -141,7 +142,7 @@ perfFillChar$(PRG) : misc/perfFillChar.mod std.lib
 	@echo compiling $<
 	@mkdir -p build
 	@cd build && cp -f $(addprefix ../, $<) .
-	@cd build && ecsd $(notdir $<) ../std.lib $(RTS)
+	@cd build && ecsd $(RTS) $(notdir $<) ../std.lib
 	@cp build/$@ .
 	@./$@
 
@@ -149,7 +150,7 @@ perfCompare$(PRG) : misc/perfCompare.mod std.lib
 	@echo compiling $<
 	@mkdir -p build
 	@cd build && cp -f $(addprefix ../, $<) .
-	@cd build && ecsd $(notdir $<) ../std.lib $(RTS)
+	@cd build && ecsd $(RTS) $(notdir $<) ../std.lib
 	@cp build/$@ .
 	@./$@
 
@@ -290,8 +291,8 @@ doc: $(DRST)
 .PHONY: install
 install: std.lib
 	@echo Install
-	@cp -f std.lib $(DESTDIR)runtime/
-	@cp -f build/std.*.sym $(DESTDIR)libraries/oberon/
+	@cp -f std.lib $(PREFIX)/lib/ecs/runtime/
+	@cp -f build/std.*.sym $(PREFIX)/lib/ecs/libraries/oberon/
 
 .PHONY: clean
 clean:

@@ -46,7 +46,8 @@ make toolchain=clang all # takes some time to finish
 make toolchain=clang prefix=~/.local install
 make clean
 # add to PATH variable (adapt to your shell and setup)
-echo "export PATH=~/.local/bin/:~/.local/lib/ecs/tools/:$PATH" >> ~/.bashrc
+echo 'export PATH=~/.local/bin/:~/.local/lib/ecs/tools/:$PATH' >> ~/.bashrc
+echo 'export ECSBASE=~/.local/lib/ecs/' >> ~/.bashrc
 cd ..
 
 # Build and install ECSStdLib
@@ -55,7 +56,7 @@ git clone https://github.com/tenko/ECSStdLib.git
 cd ECSStdLib
 # Build native library
 make 
-make install # install to ~/.local/lib
+make PREFIX=~/.local install # install to ~/.local/lib
 make TestMain # run library tests (use TestMain.exe on Windows)
 ```
 
@@ -159,7 +160,7 @@ END test.
 Running (Windows)
 
 ```
-ecsd Test.mod std.lib /c/EigenCompilerSuite/runtime/win64api.obf
+ecsd -r std.lib -r win64api.obf Test.mod # Remove -r win64api.obf on other platforms
 ./test.exe README.md
  36 : https
  34 : std
