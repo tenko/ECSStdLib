@@ -242,6 +242,24 @@ PROCEDURE ^ HostEnvVar ["HostEnvVar"](VAR value: ARRAY OF CHAR; name-: ARRAY OF 
 PROCEDURE EnvVar*(VAR value: ARRAY OF CHAR; name-: ARRAY OF CHAR);
 BEGIN HostEnvVar(value, name) END EnvVar;
 
+(**
+Execute cmd with arguments.
+STDIN, STDOUT & STDERR is redirected to /dev/null.
+Returns 0 on success.
+*)
+PROCEDURE ^ HostExecuteArgs ["HostExecuteArgs"](cmd- : ARRAY OF CHAR; args- : ARRAY OF Type.STRING): INTEGER;
+PROCEDURE ExecuteArgs*(cmd- : ARRAY OF CHAR; args- : ARRAY OF Type.STRING): INTEGER;
+BEGIN RETURN HostExecuteArgs(cmd, args) END ExecuteArgs;
+
+(**
+Execute cmd with arguments and capture STDOUT & STDERR.
+STDIN is redirected to /dev/null.
+Returns 0 on success.
+*)
+PROCEDURE ^ HostExecuteWithCapture ["HostExecuteWithCapture"](cmd- : ARRAY OF CHAR; args- : ARRAY OF Type.STRING; VAR fh : Type.Stream): INTEGER;
+PROCEDURE ExecuteWithCapture*(cmd- : ARRAY OF CHAR; args- : ARRAY OF Type.STRING; VAR fh : Type.Stream): INTEGER;
+BEGIN RETURN HostExecuteWithCapture(cmd, args, fh) END ExecuteWithCapture;
+
 (** Exit with return code *)
 PROCEDURE ^ HostExit ["HostExit"](code : INTEGER);
 PROCEDURE Exit*(code : INTEGER);

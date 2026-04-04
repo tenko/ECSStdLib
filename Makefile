@@ -24,7 +24,7 @@ endif
 
 OLS += Const Config$(SYS) Type Char ArrayOfChar$(OPT) OSHost$(SYS) Integer Cardinal $(Real)
 OLS += ArrayOfByte$(OPT) ArrayOfSet DateTime String StringPattern ADTBasicType ADTRingBuffer
-OLS += ADTStream ADTList ADTVector ADTPair ADTSet ADTDictionary ADTTree O2Testing O2Timing$(SYS)
+OLS += ADTStream ADTList ADTVector ADTPair ADTSet ADTDictionary ADTTree O2Scanner O2Testing O2Timing$(SYS)
 OLS += Coroutine OS OSStream OSFile OSDir OSPath DataConfig DataLZ4
 MOD = $(addprefix src/, $(addprefix Std., $(addsuffix .mod, $(OLS))))
 OBF = $(addprefix build/, $(addprefix Std., $(addsuffix .obf, $(OLS))))
@@ -57,6 +57,7 @@ build/Std.Cardinal.obf : src/Std.Const.mod src/Std.Type.mod src/Std.Char.mod src
 build/Std.DateTime.obf : src/Std.Const.mod src/Std.Type.mod src/Std.Char.mod src/Std.Integer.mod src/Std.OSHost$(SYS).mod src/Std.ArrayOfChar$(OPT).mod
 build/Std.Integer.obf : src/Std.Const.mod src/Std.Type.mod src/Std.Char.mod
 build/Std.$(Real).obf : src/Std.Const.mod src/Std.Type.mod src/Std.Char.mod src/Std.ArrayOfChar$(OPT).mod
+build/Std.O2Scanner.obf : src/Std.Type.mod
 build/Std.O2Testing.obf : src/Std.ArrayOfChar$(OPT).mod
 build/Std.OS.obf : src/Std.Char.mod src/Std.ArrayOfChar$(OPT).mod src/Std.String.mod src/Std.OSHost$(SYS).mod
 build/Std.OSDir.obf : src/Std.String.mod src/Std.OSHost$(SYS).mod

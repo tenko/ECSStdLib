@@ -2,7 +2,7 @@
 MODULE OSHost IN Std;
 
 IMPORT SYSTEM;
-IN Std IMPORT Const, Char, ArrayOfChar;
+IN Std IMPORT Const, Type, Char, ArrayOfChar;
 
 CONST
     INVALID_HANDLE* = -1;
@@ -521,6 +521,22 @@ END EnvVarLength;
 (** Get environment variable *)
 PROCEDURE EnvVar*(VAR value: ARRAY OF CHAR; name-: ARRAY OF CHAR);
 BEGIN END EnvVar;
+
+(**
+Execute cmd with arguments.
+STDIN, STDOUT & STDERR is redirected to /dev/null.
+Returns 0 on success.
+*)
+PROCEDURE ExecuteArgs*(cmd- : ARRAY OF CHAR; args- : ARRAY OF Type.STRING): INTEGER;
+BEGIN RETURN -1 END ExecuteArgs;
+
+(**
+Execute cmd with arguments and capture STDOUT & STDERR.
+STDIN is redirected to /dev/null.
+Returns 0 on success.
+*)
+PROCEDURE ExecuteWithCapture*(cmd- : ARRAY OF CHAR; args- : ARRAY OF Type.STRING; VAR fh : Type.Stream): INTEGER;
+BEGIN RETURN -1 END ExecuteWithCapture;
 
 (** Exit with return code *)
 PROCEDURE Exit*(code : INTEGER);

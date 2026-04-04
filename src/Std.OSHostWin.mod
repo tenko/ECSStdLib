@@ -3,7 +3,7 @@ MODULE OSHost IN Std;
 
 IMPORT API := Windows IN API, SYSTEM;
 
-IN Std IMPORT Const, ArrayOfChar;
+IN Std IMPORT Const, Type, ArrayOfChar;
 
 TYPE
     ArgStr = POINTER TO - ARRAY MAX(LENGTH) OF CHAR;
@@ -455,6 +455,22 @@ BEGIN
     IGNORE(API.GetEnvironmentVariableA(SYSTEM.ADR(name), SYSTEM.ADR(value), DWORD(LEN(value))))
 END EnvVar;
 
+(**
+Execute cmd with arguments.
+STDIN, STDOUT & STDERR is redirected to /dev/null.
+Returns 0 on success.
+*)
+PROCEDURE ExecuteArgs*(cmd- : ARRAY OF CHAR; args- : ARRAY OF Type.STRING): INTEGER;
+BEGIN RETURN -1 END ExecuteArgs;
+
+(**
+Execute cmd with arguments and capture STDOUT & STDERR.
+STDIN is redirected to /dev/null.
+Returns 0 on success.
+*)
+PROCEDURE ExecuteWithCapture*(cmd- : ARRAY OF CHAR; args- : ARRAY OF Type.STRING; VAR fh : Type.Stream): INTEGER;
+BEGIN RETURN -1 END ExecuteWithCapture;
+    
 (** Exit with return code *)
 PROCEDURE Exit*(code : INTEGER);
 BEGIN API.ExitProcess(code)
