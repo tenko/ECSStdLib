@@ -22,8 +22,8 @@ else
 	CONV = dos2unix
 endif
 
-OLS += Const Config$(SYS) Type Char ArrayOfChar$(OPT) OSHost$(SYS) Integer Cardinal $(Real)
-OLS += ArrayOfByte$(OPT) ArrayOfSet DateTime String StringPattern ADTBasicType ADTRingBuffer
+OLS += Const Config$(SYS) Type Char ArrayOfChar$(OPT)  ArrayOfByte$(OPT) OSHost$(SYS) Integer
+OLS += Cardinal $(Real) ArrayOfSet DateTime String StringPattern ADTBasicType ADTRingBuffer
 OLS += ADTStream ADTList ADTVector ADTPair ADTSet ADTDictionary ADTTree O2Scanner O2Testing O2Timing$(SYS)
 OLS += Coroutine OS OSStream OSFile OSDir OSPath DataConfig DataLZ4
 MOD = $(addprefix src/, $(addprefix Std., $(addsuffix .mod, $(OLS))))
@@ -292,7 +292,9 @@ doc: $(DRST)
 .PHONY: install
 install: std.lib
 	@echo Install
+	@mkdir -p $(PREFIX)/lib/ecs/runtime/ 
 	@cp -f std.lib $(PREFIX)/lib/ecs/runtime/
+	@mkdir -p $(PREFIX)/lib/ecs/libraries/oberon/ 
 	@cp -f build/std.*.sym $(PREFIX)/lib/ecs/libraries/oberon/
 
 .PHONY: clean
