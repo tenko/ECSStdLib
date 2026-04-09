@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ADTVector &mdash; ECSStdLib 0.1 documentation</title>
+  <title>ADTRingBuffer &mdash; ECSStdLib 0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=7ab3649f" />
 
@@ -19,8 +19,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="DataConfig" href="Std.DataConfig.mod.html" />
-    <link rel="prev" title="ADTTree" href="Std.ADTTree.mod.html" /> 
+    <link rel="next" title="ADTSet" href="Std.ADTSet.mod.html" />
+    <link rel="prev" title="ADTPair" href="Std.ADTPair.mod.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -390,16 +390,16 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="Std.ADTRingBuffer.mod.html">ADTRingBuffer</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="Std.ADTRingBuffer.mod.html#types">Types</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Std.ADTRingBuffer.mod.html#procedures">Procedures</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="Std.ADTRingBuffer.mod.html#init">Init</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Std.ADTRingBuffer.mod.html#ringbuffer-capacity">RingBuffer.Capacity</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Std.ADTRingBuffer.mod.html#ringbuffer-size">RingBuffer.Size</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Std.ADTRingBuffer.mod.html#ringbuffer-clear">RingBuffer.Clear</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Std.ADTRingBuffer.mod.html#ringbuffer-push">RingBuffer.Push</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Std.ADTRingBuffer.mod.html#ringbuffer-pop">RingBuffer.Pop</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Std.ADTRingBuffer.mod.html#ringbuffer-peek">RingBuffer.Peek</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ADTRingBuffer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#types">Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#procedures">Procedures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#init">Init</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ringbuffer-capacity">RingBuffer.Capacity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ringbuffer-size">RingBuffer.Size</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ringbuffer-clear">RingBuffer.Clear</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ringbuffer-push">RingBuffer.Push</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ringbuffer-pop">RingBuffer.Pop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ringbuffer-peek">RingBuffer.Peek</a></li>
 </ul>
 </li>
 </ul>
@@ -477,33 +477,33 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">ADTVector</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#types">Types</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#procedures">Procedures</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#defaultduplicateelement">DefaultDuplicateElement</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#defaultdisposeelement">DefaultDisposeElement</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#vector-init">Vector.Init</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#vector-size">Vector.Size</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#vector-capacity">Vector.Capacity</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#vector-clear">Vector.Clear</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#vector-dispose">Vector.Dispose</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#vector-reserve">Vector.Reserve</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#vector-shrink">Vector.Shrink</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#vector-append">Vector.Append</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#vector-at">Vector.At</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#vector-set">Vector.Set</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#vector-get">Vector.Get</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#vector-pop">Vector.Pop</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#vector-reverse">Vector.Reverse</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#vector-shuffle">Vector.Shuffle</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#vector-sort">Vector.Sort</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#vector-find">Vector.Find</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#vector-bisectleft">Vector.BisectLeft</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#vector-bisectright">Vector.BisectRight</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#vector-heapsiftdown">Vector.HeapSiftDown</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#vector-heapify">Vector.Heapify</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#vector-heappop">Vector.HeapPop</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#vector-heapinsert">Vector.HeapInsert</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Std.ADTVector.mod.html">ADTVector</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Std.ADTVector.mod.html#types">Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Std.ADTVector.mod.html#procedures">Procedures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#defaultduplicateelement">DefaultDuplicateElement</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#defaultdisposeelement">DefaultDisposeElement</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-init">Vector.Init</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-size">Vector.Size</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-capacity">Vector.Capacity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-clear">Vector.Clear</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-dispose">Vector.Dispose</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-reserve">Vector.Reserve</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-shrink">Vector.Shrink</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-append">Vector.Append</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-at">Vector.At</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-set">Vector.Set</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-get">Vector.Get</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-pop">Vector.Pop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-reverse">Vector.Reverse</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-shuffle">Vector.Shuffle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-sort">Vector.Sort</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-find">Vector.Find</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-bisectleft">Vector.BisectLeft</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-bisectright">Vector.BisectRight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-heapsiftdown">Vector.HeapSiftDown</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-heapify">Vector.Heapify</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-heappop">Vector.HeapPop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-heapinsert">Vector.HeapInsert</a></li>
 </ul>
 </li>
 </ul>
@@ -726,9 +726,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">ADTVector</li>
+      <li class="breadcrumb-item active">ADTRingBuffer</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/src/Std.ADTVector.mod.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/src/Std.ADTRingBuffer.mod.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -736,232 +736,86 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="adtvector">
-<span id="index-0"></span><span id="id1"></span><h1>ADTVector<a class="headerlink" href="#adtvector" title="Link to this heading"></a></h1>
-<p>The <cite>Vector</cite> module implements resizable container.
-It is fast to append and remove at end of array.
-and fast for random access to elements.</p>
-<p>If life time handling of allocated elements is needed
-the callback procedures duplicate and dispose can be used.</p>
-<p>By default the vectors only takes references of elements and
-the caller is responsible for keeping elements alive.</p>
+  <section id="adtringbuffer">
+<span id="index-0"></span><span id="id1"></span><h1>ADTRingBuffer<a class="headerlink" href="#adtringbuffer" title="Link to this heading"></a></h1>
+<p>The <cite>RingBuffer</cite> module implements buffer with
+with fixed size and type where data is pushed
+to the tail and popped from the head.
+This is therefore a FIFO (First in first out) queue.</p>
+<p>The size of the buffer must be of power of two and
+the available capacity is equal to the buffer size
+minus one, due to the last element used as an end marker.</p>
 <section id="types">
 <h2>Types<a class="headerlink" href="#types" title="Link to this heading"></a></h2>
-<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="n">DuplicateElementProc</span><span class="o">*</span> <span class="o">=</span> <span class="kr">PROCEDURE</span><span class="p">(</span><span class="kr">VAR</span> <span class="n">dst</span><span class="p">:</span> <span class="n">Element</span><span class="p">;</span>
+<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="n">RingBuffer</span><span class="o">*</span> <span class="o">=</span> <span class="kr">RECORD</span>
+        <span class="n">data</span> <span class="p">:</span> <span class="kr">ARRAY</span> <span class="n">Size</span> <span class="kr">OF</span> <span class="n">Type</span><span class="p">;</span>
+        <span class="n">head</span><span class="p">,</span> <span class="n">tail</span> <span class="p">:</span> <span class="nb">CARDINAL</span><span class="p">;</span>
+    <span class="kr">END</span><span class="p">;</span>
 </pre></div>
 </div>
 </section>
 <section id="procedures">
 <h2>Procedures<a class="headerlink" href="#procedures" title="Link to this heading"></a></h2>
-<section id="defaultduplicateelement">
-<span id="adtvector-defaultduplicateelement"></span><h3>DefaultDuplicateElement<a class="headerlink" href="#defaultduplicateelement" title="Link to this heading"></a></h3>
-<blockquote>
-<div><p>defaults to assignment</p>
-</div></blockquote>
-<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="n">DefaultDuplicateElement</span><span class="o">*</span> <span class="p">(</span><span class="kr">VAR</span> <span class="n">dst</span><span class="p">:</span> <span class="n">Element</span><span class="p">;</span> <span class="n">src</span><span class="o">-</span><span class="p">:</span> <span class="n">Element</span><span class="p">);</span>
-</pre></div>
-</div>
-</section>
-<section id="defaultdisposeelement">
-<span id="adtvector-defaultdisposeelement"></span><h3>DefaultDisposeElement<a class="headerlink" href="#defaultdisposeelement" title="Link to this heading"></a></h3>
-<blockquote>
-<div><p>defaults to no operation</p>
-</div></blockquote>
-<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="n">DefaultDisposeElement</span><span class="o">*</span> <span class="p">(</span><span class="kr">VAR</span> <span class="n">dst</span><span class="p">:</span> <span class="n">Element</span><span class="p">);</span>
-</pre></div>
-</div>
-</section>
-<section id="vector-init">
-<span id="adtvector-vector-init"></span><h3>Vector.Init<a class="headerlink" href="#vector-init" title="Link to this heading"></a></h3>
+<section id="init">
+<span id="adtringbuffer-init"></span><h3>Init<a class="headerlink" href="#init" title="Link to this heading"></a></h3>
 <blockquote>
 <div><p>Initialize</p>
 </div></blockquote>
-<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="p">(</span><span class="kr">VAR</span> <span class="n">this</span> <span class="p">:</span> <span class="n">Vector</span><span class="p">)</span> <span class="n">Init</span><span class="o">*</span><span class="p">(</span><span class="n">size</span> <span class="p">:</span> <span class="nb">LENGTH</span><span class="p">);</span>
+<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="n">Init</span><span class="o">*</span><span class="p">(</span><span class="kr">VAR</span> <span class="n">this</span> <span class="p">:</span> <span class="n">RingBuffer</span><span class="p">);</span>
 </pre></div>
 </div>
 </section>
-<section id="vector-size">
-<span id="adtvector-vector-size"></span><h3>Vector.Size<a class="headerlink" href="#vector-size" title="Link to this heading"></a></h3>
+<section id="ringbuffer-capacity">
+<span id="adtringbuffer-ringbuffer-capacity"></span><h3>RingBuffer.Capacity<a class="headerlink" href="#ringbuffer-capacity" title="Link to this heading"></a></h3>
 <blockquote>
-<div><p>Length of vector</p>
+<div><p>Return capacity of buffer</p>
 </div></blockquote>
-<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="p">(</span><span class="kr">VAR</span> <span class="n">this</span><span class="o">-</span> <span class="p">:</span> <span class="n">Vector</span><span class="p">)</span> <span class="n">Size</span><span class="o">*</span><span class="p">():</span> <span class="nb">LENGTH</span><span class="p">;</span>
+<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="p">(</span><span class="kr">VAR</span> <span class="n">this</span> <span class="p">:</span> <span class="n">RingBuffer</span><span class="p">)</span> <span class="n">Capacity</span><span class="o">*</span><span class="p">():</span> <span class="nb">LENGTH</span><span class="p">;</span>
 </pre></div>
 </div>
 </section>
-<section id="vector-capacity">
-<span id="adtvector-vector-capacity"></span><h3>Vector.Capacity<a class="headerlink" href="#vector-capacity" title="Link to this heading"></a></h3>
+<section id="ringbuffer-size">
+<span id="adtringbuffer-ringbuffer-size"></span><h3>RingBuffer.Size<a class="headerlink" href="#ringbuffer-size" title="Link to this heading"></a></h3>
 <blockquote>
-<div><p>Item capacity of vector</p>
+<div><p>Return current size of buffer</p>
 </div></blockquote>
-<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="p">(</span><span class="kr">VAR</span> <span class="n">this</span><span class="o">-</span> <span class="p">:</span> <span class="n">Vector</span><span class="p">)</span> <span class="n">Capacity</span><span class="o">*</span><span class="p">():</span> <span class="nb">LENGTH</span><span class="p">;</span>
+<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="p">(</span><span class="kr">VAR</span> <span class="n">this</span> <span class="p">:</span> <span class="n">RingBuffer</span><span class="p">)</span> <span class="n">Size</span><span class="o">*</span><span class="p">():</span> <span class="nb">LENGTH</span><span class="p">;</span>
 </pre></div>
 </div>
 </section>
-<section id="vector-clear">
-<span id="adtvector-vector-clear"></span><h3>Vector.Clear<a class="headerlink" href="#vector-clear" title="Link to this heading"></a></h3>
+<section id="ringbuffer-clear">
+<span id="adtringbuffer-ringbuffer-clear"></span><h3>RingBuffer.Clear<a class="headerlink" href="#ringbuffer-clear" title="Link to this heading"></a></h3>
 <blockquote>
-<div><p>Clear Vector to zero size</p>
+<div><p>Clear content of buffer</p>
 </div></blockquote>
-<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="p">(</span><span class="kr">VAR</span> <span class="n">this</span> <span class="p">:</span> <span class="n">Vector</span><span class="p">)</span> <span class="n">Clear</span><span class="o">*</span><span class="p">();</span>
+<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="p">(</span><span class="kr">VAR</span> <span class="n">this</span> <span class="p">:</span> <span class="n">RingBuffer</span><span class="p">)</span> <span class="n">Clear</span><span class="o">*</span><span class="p">();</span>
 </pre></div>
 </div>
 </section>
-<section id="vector-dispose">
-<span id="adtvector-vector-dispose"></span><h3>Vector.Dispose<a class="headerlink" href="#vector-dispose" title="Link to this heading"></a></h3>
+<section id="ringbuffer-push">
+<span id="adtringbuffer-ringbuffer-push"></span><h3>RingBuffer.Push<a class="headerlink" href="#ringbuffer-push" title="Link to this heading"></a></h3>
 <blockquote>
-<div><p>Free storage</p>
+<div><p>Push value to tail. Return TRUE if the buffer was not full</p>
 </div></blockquote>
-<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="p">(</span><span class="kr">VAR</span> <span class="n">this</span> <span class="p">:</span> <span class="n">Vector</span><span class="p">)</span> <span class="n">Dispose</span><span class="o">*</span><span class="p">();</span>
+<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="p">(</span><span class="kr">VAR</span> <span class="n">this</span> <span class="p">:</span> <span class="n">RingBuffer</span><span class="p">)</span> <span class="n">Push</span><span class="o">*</span><span class="p">(</span><span class="n">value</span><span class="o">-</span> <span class="p">:</span> <span class="n">Type</span><span class="p">):</span> <span class="nb">BOOLEAN</span><span class="p">;</span>
 </pre></div>
 </div>
 </section>
-<section id="vector-reserve">
-<span id="adtvector-vector-reserve"></span><h3>Vector.Reserve<a class="headerlink" href="#vector-reserve" title="Link to this heading"></a></h3>
+<section id="ringbuffer-pop">
+<span id="adtringbuffer-ringbuffer-pop"></span><h3>RingBuffer.Pop<a class="headerlink" href="#ringbuffer-pop" title="Link to this heading"></a></h3>
 <blockquote>
-<div><p>Resize storage to accomodate capacity</p>
+<div><p>Pop value from head. Return TRUE if data was avaiable</p>
 </div></blockquote>
-<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="p">(</span><span class="kr">VAR</span> <span class="n">this</span> <span class="p">:</span> <span class="n">Vector</span><span class="p">)</span> <span class="n">Reserve</span><span class="o">*</span><span class="p">(</span><span class="n">capacity</span>  <span class="p">:</span> <span class="nb">LENGTH</span><span class="p">);</span>
+<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="p">(</span><span class="kr">VAR</span> <span class="n">this</span> <span class="p">:</span> <span class="n">RingBuffer</span><span class="p">)</span> <span class="n">Pop</span><span class="o">*</span><span class="p">(</span><span class="kr">VAR</span> <span class="n">value</span> <span class="p">:</span> <span class="n">Type</span><span class="p">):</span> <span class="nb">BOOLEAN</span><span class="p">;</span>
 </pre></div>
 </div>
 </section>
-<section id="vector-shrink">
-<span id="adtvector-vector-shrink"></span><h3>Vector.Shrink<a class="headerlink" href="#vector-shrink" title="Link to this heading"></a></h3>
+<section id="ringbuffer-peek">
+<span id="adtringbuffer-ringbuffer-peek"></span><h3>RingBuffer.Peek<a class="headerlink" href="#ringbuffer-peek" title="Link to this heading"></a></h3>
 <blockquote>
-<div><p>Shrink storage</p>
+<div><p>Peek value at index. Return TRUE if data was avaiable</p>
 </div></blockquote>
-<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="p">(</span><span class="kr">VAR</span> <span class="n">this</span> <span class="p">:</span> <span class="n">Vector</span><span class="p">)</span> <span class="n">Shrink</span><span class="o">*</span><span class="p">();</span>
-</pre></div>
-</div>
-</section>
-<section id="vector-append">
-<span id="adtvector-vector-append"></span><h3>Vector.Append<a class="headerlink" href="#vector-append" title="Link to this heading"></a></h3>
-<blockquote>
-<div><p>Append Element to end of Vector</p>
-</div></blockquote>
-<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="p">(</span><span class="kr">VAR</span> <span class="n">this</span> <span class="p">:</span> <span class="n">Vector</span><span class="p">)</span> <span class="n">Append</span><span class="o">*</span><span class="p">(</span><span class="n">value</span><span class="o">-</span> <span class="p">:</span> <span class="n">Element</span><span class="p">);</span>
-</pre></div>
-</div>
-</section>
-<section id="vector-at">
-<span id="adtvector-vector-at"></span><h3>Vector.At<a class="headerlink" href="#vector-at" title="Link to this heading"></a></h3>
-<p>Return value at idx.
-Note this may return a reference to a element.</p>
-<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="p">(</span><span class="kr">VAR</span> <span class="n">this</span><span class="o">-</span> <span class="p">:</span> <span class="n">Vector</span><span class="p">)</span> <span class="n">At</span><span class="o">*</span><span class="p">(</span><span class="n">idx</span> <span class="p">:</span> <span class="nb">LENGTH</span><span class="p">):</span> <span class="n">Element</span><span class="p">;</span>
-</pre></div>
-</div>
-</section>
-<section id="vector-set">
-<span id="adtvector-vector-set"></span><h3>Vector.Set<a class="headerlink" href="#vector-set" title="Link to this heading"></a></h3>
-<blockquote>
-<div><p>Set value at idx</p>
-</div></blockquote>
-<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="p">(</span><span class="kr">VAR</span> <span class="n">this</span> <span class="p">:</span> <span class="n">Vector</span><span class="p">)</span> <span class="n">Set</span><span class="o">*</span><span class="p">(</span><span class="n">idx</span> <span class="p">:</span> <span class="nb">LENGTH</span><span class="p">;</span> <span class="n">value</span><span class="o">-</span> <span class="p">:</span> <span class="n">Element</span><span class="p">);</span>
-</pre></div>
-</div>
-</section>
-<section id="vector-get">
-<span id="adtvector-vector-get"></span><h3>Vector.Get<a class="headerlink" href="#vector-get" title="Link to this heading"></a></h3>
-<blockquote>
-<div><p>Get value at idx.</p>
-</div></blockquote>
-<p>Note: this potentially set the value to a reference.</p>
-<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="p">(</span><span class="kr">VAR</span> <span class="n">this</span> <span class="p">:</span> <span class="n">Vector</span><span class="p">)</span> <span class="n">Get</span><span class="o">*</span><span class="p">(</span><span class="n">idx</span> <span class="p">:</span> <span class="nb">LENGTH</span><span class="p">;</span> <span class="kr">VAR</span> <span class="n">value</span> <span class="p">:</span> <span class="n">Element</span><span class="p">);</span>
-</pre></div>
-</div>
-</section>
-<section id="vector-pop">
-<span id="adtvector-vector-pop"></span><h3>Vector.Pop<a class="headerlink" href="#vector-pop" title="Link to this heading"></a></h3>
-<p>Remove and return last element of vector.
-Return FALSE if vector is empty.
-Note: this potentially transfere key ownership to caller.</p>
-<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="p">(</span><span class="kr">VAR</span> <span class="n">this</span> <span class="p">:</span> <span class="n">Vector</span><span class="p">)</span> <span class="n">Pop</span><span class="o">*</span><span class="p">(</span><span class="kr">VAR</span> <span class="n">element</span> <span class="p">:</span> <span class="n">Element</span><span class="p">)</span> <span class="p">:</span> <span class="nb">BOOLEAN</span><span class="p">;</span>
-</pre></div>
-</div>
-</section>
-<section id="vector-reverse">
-<span id="adtvector-vector-reverse"></span><h3>Vector.Reverse<a class="headerlink" href="#vector-reverse" title="Link to this heading"></a></h3>
-<blockquote>
-<div><p>Reverse array in-place</p>
-</div></blockquote>
-<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="p">(</span><span class="kr">VAR</span> <span class="n">this</span> <span class="p">:</span> <span class="n">Vector</span><span class="p">)</span> <span class="n">Reverse</span><span class="o">*</span><span class="p">();</span>
-</pre></div>
-</div>
-</section>
-<section id="vector-shuffle">
-<span id="adtvector-vector-shuffle"></span><h3>Vector.Shuffle<a class="headerlink" href="#vector-shuffle" title="Link to this heading"></a></h3>
-<blockquote>
-<div><p>Random shuffle array in-place</p>
-</div></blockquote>
-<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="p">(</span><span class="kr">VAR</span> <span class="n">this</span> <span class="p">:</span> <span class="n">Vector</span><span class="p">)</span> <span class="n">Shuffle</span><span class="o">*</span><span class="p">();</span>
-</pre></div>
-</div>
-</section>
-<section id="vector-sort">
-<span id="adtvector-vector-sort"></span><h3>Vector.Sort<a class="headerlink" href="#vector-sort" title="Link to this heading"></a></h3>
-<blockquote>
-<div><p>Sort array in-place (QuickSort)</p>
-</div></blockquote>
-<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="p">(</span><span class="kr">VAR</span> <span class="n">this</span> <span class="p">:</span> <span class="n">Vector</span><span class="p">)</span> <span class="n">Sort</span><span class="o">*</span> <span class="p">(</span><span class="n">Cmp</span> <span class="p">:</span> <span class="n">Compare</span><span class="p">);</span>
-</pre></div>
-</div>
-</section>
-<section id="vector-find">
-<span id="adtvector-vector-find"></span><h3>Vector.Find<a class="headerlink" href="#vector-find" title="Link to this heading"></a></h3>
-<p>Find position in array. Expect array to be sorted in ascending order.
-Return -1 if not found.</p>
-<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="p">(</span><span class="kr">VAR</span> <span class="n">this</span><span class="o">-</span> <span class="p">:</span> <span class="n">Vector</span><span class="p">)</span> <span class="n">Find</span><span class="o">*</span> <span class="p">(</span><span class="n">Cmp</span> <span class="p">:</span> <span class="n">Compare</span><span class="p">;</span> <span class="n">value</span><span class="o">-</span> <span class="p">:</span> <span class="n">Element</span><span class="p">):</span> <span class="nb">LENGTH</span><span class="p">;</span>
-</pre></div>
-</div>
-</section>
-<section id="vector-bisectleft">
-<span id="adtvector-vector-bisectleft"></span><h3>Vector.BisectLeft<a class="headerlink" href="#vector-bisectleft" title="Link to this heading"></a></h3>
-<p>Find leftmost insertion position in array for value.
-Expect array to be sorted in ascending order.</p>
-<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="p">(</span><span class="kr">VAR</span> <span class="n">this</span><span class="o">-</span> <span class="p">:</span> <span class="n">Vector</span><span class="p">)</span> <span class="n">BisectLeft</span><span class="o">*</span> <span class="p">(</span><span class="n">Cmp</span> <span class="p">:</span> <span class="n">Compare</span><span class="p">;</span> <span class="n">value</span><span class="o">-</span> <span class="p">:</span> <span class="n">Element</span><span class="p">):</span> <span class="nb">LENGTH</span><span class="p">;</span>
-</pre></div>
-</div>
-</section>
-<section id="vector-bisectright">
-<span id="adtvector-vector-bisectright"></span><h3>Vector.BisectRight<a class="headerlink" href="#vector-bisectright" title="Link to this heading"></a></h3>
-<p>Find rightmost insertion position in array for value.
-Expect array to be sorted in ascending order.</p>
-<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="p">(</span><span class="kr">VAR</span> <span class="n">this</span><span class="o">-</span> <span class="p">:</span> <span class="n">Vector</span><span class="p">)</span> <span class="n">BisectRight</span><span class="o">*</span> <span class="p">(</span><span class="n">Cmp</span> <span class="p">:</span> <span class="n">Compare</span><span class="p">;</span> <span class="n">value</span><span class="o">-</span> <span class="p">:</span> <span class="n">Element</span><span class="p">):</span> <span class="nb">LENGTH</span><span class="p">;</span>
-</pre></div>
-</div>
-</section>
-<section id="vector-heapsiftdown">
-<span id="adtvector-vector-heapsiftdown"></span><h3>Vector.HeapSiftDown<a class="headerlink" href="#vector-heapsiftdown" title="Link to this heading"></a></h3>
-<blockquote>
-<div><p>move a node down in the tree to restore heap relationship</p>
-</div></blockquote>
-<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="p">(</span><span class="kr">VAR</span> <span class="n">this</span> <span class="p">:</span> <span class="n">Vector</span><span class="p">)</span> <span class="n">HeapSiftDown</span><span class="o">*</span><span class="p">(</span><span class="n">Cmp</span> <span class="p">:</span> <span class="n">Compare</span><span class="p">;</span> <span class="n">i</span> <span class="p">:</span> <span class="nb">LENGTH</span><span class="p">);</span>
-</pre></div>
-</div>
-</section>
-<section id="vector-heapify">
-<span id="adtvector-vector-heapify"></span><h3>Vector.Heapify<a class="headerlink" href="#vector-heapify" title="Link to this heading"></a></h3>
-<blockquote>
-<div><p>Heapify array in-place</p>
-</div></blockquote>
-<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="p">(</span><span class="kr">VAR</span> <span class="n">this</span> <span class="p">:</span> <span class="n">Vector</span><span class="p">)</span> <span class="n">Heapify</span><span class="o">*</span><span class="p">(</span><span class="n">Cmp</span> <span class="p">:</span> <span class="n">Compare</span><span class="p">);</span>
-</pre></div>
-</div>
-</section>
-<section id="vector-heappop">
-<span id="adtvector-vector-heappop"></span><h3>Vector.HeapPop<a class="headerlink" href="#vector-heappop" title="Link to this heading"></a></h3>
-<p>Remove first element of heap. Return FALSE if heap is empty.
-Note: this potentially transfere key ownership to caller.</p>
-<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="p">(</span><span class="kr">VAR</span> <span class="n">this</span> <span class="p">:</span> <span class="n">Vector</span><span class="p">)</span> <span class="n">HeapPop</span><span class="o">*</span><span class="p">(</span><span class="n">Cmp</span> <span class="p">:</span> <span class="n">Compare</span><span class="p">;</span> <span class="kr">VAR</span> <span class="n">element</span> <span class="p">:</span> <span class="n">Element</span><span class="p">)</span> <span class="p">:</span> <span class="nb">BOOLEAN</span><span class="p">;</span>
-</pre></div>
-</div>
-</section>
-<section id="vector-heapinsert">
-<span id="adtvector-vector-heapinsert"></span><h3>Vector.HeapInsert<a class="headerlink" href="#vector-heapinsert" title="Link to this heading"></a></h3>
-<blockquote>
-<div><p>Insert Element into Vector and update heap relationship</p>
-</div></blockquote>
-<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="p">(</span><span class="kr">VAR</span> <span class="n">this</span> <span class="p">:</span> <span class="n">Vector</span><span class="p">)</span> <span class="n">HeapInsert</span><span class="o">*</span><span class="p">(</span><span class="n">Cmp</span> <span class="p">:</span> <span class="n">Compare</span><span class="p">;</span> <span class="n">value</span> <span class="p">:</span> <span class="n">Element</span><span class="p">);</span>
+<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="p">(</span><span class="kr">VAR</span> <span class="n">this</span> <span class="p">:</span> <span class="n">RingBuffer</span><span class="p">)</span> <span class="n">Peek</span><span class="o">*</span><span class="p">(</span><span class="n">index</span> <span class="p">:</span> <span class="nb">CARDINAL</span><span class="p">;</span> <span class="kr">VAR</span> <span class="n">value</span> <span class="p">:</span> <span class="n">Type</span><span class="p">):</span> <span class="nb">BOOLEAN</span><span class="p">;</span>
 </pre></div>
 </div>
 </section>
@@ -972,8 +826,8 @@ Note: this potentially transfere key ownership to caller.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="Std.ADTTree.mod.html" class="btn btn-neutral float-left" title="ADTTree" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="Std.DataConfig.mod.html" class="btn btn-neutral float-right" title="DataConfig" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="Std.ADTPair.mod.html" class="btn btn-neutral float-left" title="ADTPair" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Std.ADTSet.mod.html" class="btn btn-neutral float-right" title="ADTSet" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

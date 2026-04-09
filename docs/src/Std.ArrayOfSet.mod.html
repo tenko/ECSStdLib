@@ -8,14 +8,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ArrayOfSet &mdash; ECSStdLib 0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=7ab3649f" />
 
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../_static/documentation_options.js?v=2709fde1"></script>
-      <script src="../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -146,6 +146,7 @@
 <li class="toctree-l3"><a class="reference internal" href="Std.ArrayOfChar.mod.html#indexchar">IndexChar</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ArrayOfChar.mod.html#index">Index</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ArrayOfChar.mod.html#delete">Delete</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ArrayOfChar.mod.html#insertchar">InsertChar</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ArrayOfChar.mod.html#insert">Insert</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ArrayOfChar.mod.html#replace">Replace</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ArrayOfChar.mod.html#lefttrim">LeftTrim</a></li>
@@ -322,6 +323,7 @@
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTBasicType.mod.html#max">Max</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTBasicType.mod.html#swap">Swap</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTBasicType.mod.html#compare">Compare</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTBasicType.mod.html#icompare">ICompare</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTBasicType.mod.html#equal">Equal</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTBasicType.mod.html#hash">Hash</a></li>
 </ul>
@@ -384,6 +386,20 @@
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTPair.mod.html#hash">Hash</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTPair.mod.html#equal">Equal</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTPair.mod.html#compare">Compare</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Std.ADTRingBuffer.mod.html">ADTRingBuffer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Std.ADTRingBuffer.mod.html#types">Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Std.ADTRingBuffer.mod.html#procedures">Procedures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTRingBuffer.mod.html#init">Init</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTRingBuffer.mod.html#ringbuffer-capacity">RingBuffer.Capacity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTRingBuffer.mod.html#ringbuffer-size">RingBuffer.Size</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTRingBuffer.mod.html#ringbuffer-clear">RingBuffer.Clear</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTRingBuffer.mod.html#ringbuffer-push">RingBuffer.Push</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTRingBuffer.mod.html#ringbuffer-pop">RingBuffer.Pop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTRingBuffer.mod.html#ringbuffer-peek">RingBuffer.Peek</a></li>
 </ul>
 </li>
 </ul>
@@ -482,6 +498,12 @@
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-shuffle">Vector.Shuffle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-sort">Vector.Sort</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-find">Vector.Find</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-bisectleft">Vector.BisectLeft</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-bisectright">Vector.BisectRight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-heapsiftdown">Vector.HeapSiftDown</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-heapify">Vector.Heapify</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-heappop">Vector.HeapPop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-heapinsert">Vector.HeapInsert</a></li>
 </ul>
 </li>
 </ul>
@@ -548,6 +570,10 @@
 <li class="toctree-l3"><a class="reference internal" href="Std.OS.mod.html#nextargument">NextArgument</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.OS.mod.html#hasenv">HasEnv</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.OS.mod.html#env">Env</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OS.mod.html#consolereadkey">ConsoleReadKey</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OS.mod.html#execute">Execute</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OS.mod.html#executeargs">ExecuteArgs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OS.mod.html#executewithcapture">ExecuteWithCapture</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.OS.mod.html#getlasterror">GetLastError</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.OS.mod.html#exit">Exit</a></li>
 </ul>
@@ -591,6 +617,7 @@
 <li class="toctree-l3"><a class="reference internal" href="Std.OSHost.mod.html#arglength">ArgLength</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.OSHost.mod.html#arg">Arg</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.OSHost.mod.html#stdhandle">StdHandle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSHost.mod.html#consolereadkey">ConsoleReadKey</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.OSHost.mod.html#fileopen">FileOpen</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.OSHost.mod.html#fileclose">FileClose</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.OSHost.mod.html#fileread">FileRead</a></li>
@@ -621,6 +648,8 @@
 <li class="toctree-l3"><a class="reference internal" href="Std.OSHost.mod.html#removedirectory">RemoveDirectory</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.OSHost.mod.html#envvarlength">EnvVarLength</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.OSHost.mod.html#envvar">EnvVar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSHost.mod.html#executeargs">ExecuteArgs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OSHost.mod.html#executewithcapture">ExecuteWithCapture</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.OSHost.mod.html#exit">Exit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.OSHost.mod.html#getlasterror">GetLastError</a></li>
 </ul>

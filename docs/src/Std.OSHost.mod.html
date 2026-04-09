@@ -8,14 +8,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>OSHost &mdash; ECSStdLib 0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=7ab3649f" />
 
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../_static/documentation_options.js?v=2709fde1"></script>
-      <script src="../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -146,6 +146,7 @@
 <li class="toctree-l3"><a class="reference internal" href="Std.ArrayOfChar.mod.html#indexchar">IndexChar</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ArrayOfChar.mod.html#index">Index</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ArrayOfChar.mod.html#delete">Delete</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ArrayOfChar.mod.html#insertchar">InsertChar</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ArrayOfChar.mod.html#insert">Insert</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ArrayOfChar.mod.html#replace">Replace</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ArrayOfChar.mod.html#lefttrim">LeftTrim</a></li>
@@ -322,6 +323,7 @@
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTBasicType.mod.html#max">Max</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTBasicType.mod.html#swap">Swap</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTBasicType.mod.html#compare">Compare</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTBasicType.mod.html#icompare">ICompare</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTBasicType.mod.html#equal">Equal</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTBasicType.mod.html#hash">Hash</a></li>
 </ul>
@@ -384,6 +386,20 @@
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTPair.mod.html#hash">Hash</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTPair.mod.html#equal">Equal</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTPair.mod.html#compare">Compare</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Std.ADTRingBuffer.mod.html">ADTRingBuffer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Std.ADTRingBuffer.mod.html#types">Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Std.ADTRingBuffer.mod.html#procedures">Procedures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTRingBuffer.mod.html#init">Init</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTRingBuffer.mod.html#ringbuffer-capacity">RingBuffer.Capacity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTRingBuffer.mod.html#ringbuffer-size">RingBuffer.Size</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTRingBuffer.mod.html#ringbuffer-clear">RingBuffer.Clear</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTRingBuffer.mod.html#ringbuffer-push">RingBuffer.Push</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTRingBuffer.mod.html#ringbuffer-pop">RingBuffer.Pop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTRingBuffer.mod.html#ringbuffer-peek">RingBuffer.Peek</a></li>
 </ul>
 </li>
 </ul>
@@ -482,6 +498,12 @@
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-shuffle">Vector.Shuffle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-sort">Vector.Sort</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-find">Vector.Find</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-bisectleft">Vector.BisectLeft</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-bisectright">Vector.BisectRight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-heapsiftdown">Vector.HeapSiftDown</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-heapify">Vector.Heapify</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-heappop">Vector.HeapPop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.ADTVector.mod.html#vector-heapinsert">Vector.HeapInsert</a></li>
 </ul>
 </li>
 </ul>
@@ -548,6 +570,10 @@
 <li class="toctree-l3"><a class="reference internal" href="Std.OS.mod.html#nextargument">NextArgument</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.OS.mod.html#hasenv">HasEnv</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.OS.mod.html#env">Env</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OS.mod.html#consolereadkey">ConsoleReadKey</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OS.mod.html#execute">Execute</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OS.mod.html#executeargs">ExecuteArgs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Std.OS.mod.html#executewithcapture">ExecuteWithCapture</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.OS.mod.html#getlasterror">GetLastError</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Std.OS.mod.html#exit">Exit</a></li>
 </ul>
@@ -591,6 +617,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#arglength">ArgLength</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#arg">Arg</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#stdhandle">StdHandle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#consolereadkey">ConsoleReadKey</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fileopen">FileOpen</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fileclose">FileClose</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fileread">FileRead</a></li>
@@ -621,6 +648,8 @@
 <li class="toctree-l3"><a class="reference internal" href="#removedirectory">RemoveDirectory</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#envvarlength">EnvVarLength</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#envvar">EnvVar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#executeargs">ExecuteArgs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#executewithcapture">ExecuteWithCapture</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#exit">Exit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#getlasterror">GetLastError</a></li>
 </ul>
@@ -714,28 +743,29 @@
 </div></blockquote>
 <section id="const">
 <h2>Const<a class="headerlink" href="#const" title="Link to this heading"></a></h2>
-<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="n">INVALID_HANDLE</span><span class="o">*</span> <span class="o">=</span> <span class="n">API</span><span class="p">.</span><span class="n">INVALID_HANDLE_VALUE</span><span class="p">;</span>
+<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="n">INVALID_HANDLE</span><span class="o">*</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
 </pre></div>
 </div>
-<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="n">STDIN</span><span class="o">*</span> <span class="o">=</span> <span class="o">-</span><span class="mi">10</span><span class="p">;</span>
+<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="n">STDIN</span><span class="o">*</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 </pre></div>
 </div>
-<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="n">STDOUT</span><span class="o">*</span> <span class="o">=</span> <span class="o">-</span><span class="mi">11</span><span class="p">;</span>
+<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="n">STDOUT</span><span class="o">*</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
 </pre></div>
 </div>
-<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="n">STDERR</span><span class="o">*</span> <span class="o">=</span> <span class="o">-</span><span class="mi">12</span><span class="p">;</span>
+<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="n">STDERR</span><span class="o">*</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
 </pre></div>
 </div>
 </section>
 <section id="types">
 <h2>Types<a class="headerlink" href="#types" title="Link to this heading"></a></h2>
-<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="n">HANDLE</span><span class="o">*</span> <span class="o">=</span> <span class="n">API</span><span class="p">.</span><span class="n">HANDLE</span><span class="p">;</span>
+<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="n">HANDLE</span><span class="o">*</span> <span class="o">=</span> <span class="nb">INTEGER</span><span class="p">;</span>
 </pre></div>
 </div>
-<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="n">DirEntry</span><span class="o">*</span> <span class="o">=</span> <span class="kr">RECORD</span>
-        <span class="n">handle</span><span class="o">*</span> <span class="p">:</span> <span class="n">HANDLE</span><span class="p">;</span>
-        <span class="n">data</span><span class="o">*</span><span class="p">:</span> <span class="n">API</span><span class="p">.</span><span class="n">WIN32_FIND_DATAA</span><span class="p">;</span>
-        <span class="n">first</span><span class="o">*</span><span class="p">:</span> <span class="nb">BOOLEAN</span><span class="p">;</span>
+<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="n">DirEntry</span> <span class="o">*=</span> <span class="kr">RECORD</span>
+        <span class="n">handle</span> <span class="p">:</span> <span class="n">HANDLE</span><span class="p">;</span>
+        <span class="n">data</span> <span class="p">:</span> <span class="kr">POINTER</span> <span class="kr">TO</span> <span class="kr">ARRAY</span> <span class="kr">OF</span> <span class="bp">SYSTEM</span><span class="p">.</span><span class="bp">BYTE</span><span class="p">;</span>
+        <span class="n">size</span><span class="p">,</span> <span class="n">idx</span> <span class="p">:</span> <span class="nb">LENGTH</span><span class="p">;</span>
+        <span class="n">adr</span> <span class="p">:</span> <span class="bp">SYSTEM</span><span class="p">.</span><span class="bp">ADDRESS</span><span class="p">;</span>
     <span class="kr">END</span><span class="p">;</span>
 </pre></div>
 </div>
@@ -788,6 +818,15 @@
 <div><p>Open one of the standard streams STDING, STDOUT or STDERR. Return TRUE on success.</p>
 </div></blockquote>
 <div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="n">StdHandle</span><span class="o">*</span><span class="p">(</span><span class="kr">VAR</span> <span class="n">handle</span> <span class="p">:</span> <span class="n">HANDLE</span><span class="p">;</span> <span class="n">type</span> <span class="p">:</span> <span class="nb">INTEGER</span><span class="p">):</span> <span class="nb">BOOLEAN</span><span class="p">;</span>
+</pre></div>
+</div>
+</section>
+<section id="consolereadkey">
+<span id="oshost-consolereadkey"></span><h3>ConsoleReadKey<a class="headerlink" href="#consolereadkey" title="Link to this heading"></a></h3>
+<blockquote>
+<div><p>Read single key from console without echo.</p>
+</div></blockquote>
+<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="n">ConsoleReadKey</span><span class="o">*</span><span class="p">():</span> <span class="nb">CHAR</span><span class="p">;</span>
 </pre></div>
 </div>
 </section>
@@ -1052,6 +1091,24 @@ Return TRUE on success.</p>
 <div><p>Get environment variable</p>
 </div></blockquote>
 <div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="n">EnvVar</span><span class="o">*</span><span class="p">(</span><span class="kr">VAR</span> <span class="n">value</span><span class="p">:</span> <span class="kr">ARRAY</span> <span class="kr">OF</span> <span class="nb">CHAR</span><span class="p">;</span> <span class="n">name</span><span class="o">-</span><span class="p">:</span> <span class="kr">ARRAY</span> <span class="kr">OF</span> <span class="nb">CHAR</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="executeargs">
+<span id="oshost-executeargs"></span><h3>ExecuteArgs<a class="headerlink" href="#executeargs" title="Link to this heading"></a></h3>
+<p>Execute cmd with arguments.
+STDIN, STDOUT &amp; STDERR is redirected to /dev/null.
+Returns 0 on success.</p>
+<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="n">ExecuteArgs</span><span class="o">*</span><span class="p">(</span><span class="n">cmd</span><span class="o">-</span> <span class="p">:</span> <span class="kr">ARRAY</span> <span class="kr">OF</span> <span class="nb">CHAR</span><span class="p">;</span> <span class="n">args</span><span class="o">-</span> <span class="p">:</span> <span class="kr">ARRAY</span> <span class="kr">OF</span> <span class="n">Type</span><span class="p">.</span><span class="n">STRING</span><span class="p">):</span> <span class="nb">INTEGER</span><span class="p">;</span>
+</pre></div>
+</div>
+</section>
+<section id="executewithcapture">
+<span id="oshost-executewithcapture"></span><h3>ExecuteWithCapture<a class="headerlink" href="#executewithcapture" title="Link to this heading"></a></h3>
+<p>Execute cmd with arguments and capture STDOUT &amp; STDERR.
+STDIN is redirected to /dev/null.
+Returns 0 on success.</p>
+<div class="highlight-modula2 notranslate"><div class="highlight"><pre><span></span><span class="kr">PROCEDURE</span> <span class="n">ExecuteWithCapture</span><span class="o">*</span><span class="p">(</span><span class="n">cmd</span><span class="o">-</span> <span class="p">:</span> <span class="kr">ARRAY</span> <span class="kr">OF</span> <span class="nb">CHAR</span><span class="p">;</span> <span class="n">args</span><span class="o">-</span> <span class="p">:</span> <span class="kr">ARRAY</span> <span class="kr">OF</span> <span class="n">Type</span><span class="p">.</span><span class="n">STRING</span><span class="p">;</span> <span class="kr">VAR</span> <span class="n">fh</span> <span class="p">:</span> <span class="n">Type</span><span class="p">.</span><span class="n">Stream</span><span class="p">):</span> <span class="nb">INTEGER</span><span class="p">;</span>
 </pre></div>
 </div>
 </section>
