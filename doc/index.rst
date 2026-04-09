@@ -49,6 +49,7 @@ For more complete usage the example in `misc/Test.mod` can be inspected.
     src/Std.ADTDictionary.mod
     src/Std.ADTList.mod
     src/Std.ADTPair.mod
+    src/Std.ADTRingBuffer.mod
     src/Std.ADTSet.mod
     src/Std.ADTStream.mod
     src/Std.ADTTree.mod

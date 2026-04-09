@@ -2,7 +2,7 @@
 MODULE OSHost IN Std;
 
 IMPORT API := Linux IN API, SYSTEM;
-IN Std IMPORT Const, ArrayOfChar;
+IN Std IMPORT Const, Type, ArrayOfChar;
 
 CONST
     INVALID_HANDLE* = -1;
@@ -127,6 +127,42 @@ BEGIN
     handle := type;
     RETURN TRUE
 END StdHandle;
+
+(* Read single key from console without echo. *)
+PROCEDURE ConsoleReadKey*(): CHAR;
+CONST
+    TCGETS = 00005401H;
+    TCSETSW = 00005403H;
+    STDIN_FILENO = 0;
+    ICANON = 1;
+    ECHO = 3;
+TYPE
+    Termios = RECORD-
+        c_iflag: INTEGER;
+        c_oflag: INTEGER;
+        c_cflag: INTEGER;
+        c_lflag: INTEGER;
+        c_cc: ARRAY 64 OF SYSTEM.BYTE;
+    END;
+VAR
+    termios : Termios;
+    saved : INTEGER;
+    s : SET;
+    ret : CHAR;
+BEGIN
+    IGNORE(API.IOCtl(STDIN_FILENO, TCGETS, SYSTEM.ADR(termios)));
+    saved := termios.c_lflag;
+    s := SET(termios.c_lflag);
+    s := s - {ICANON} - {ECHO};
+    termios.c_lflag := SYSTEM.VAL(INTEGER, s);
+    IGNORE(API.IOCtl(STDIN_FILENO, TCSETSW, SYSTEM.ADR(termios)));
+    IF API.Read(STDIN_FILENO, SYSTEM.ADR(ret), 1) # 1 THEN
+        ret := 00X;
+    END;
+    termios.c_lflag := saved;
+    IGNORE(API.IOCtl(STDIN_FILENO, TCSETSW, SYSTEM.ADR(termios)));
+    RETURN ret;
+END ConsoleReadKey;
 
 (* Open new or existing file with mode flags. Return TRUE on success.*)
 PROCEDURE FileOpen*(VAR handle : HANDLE; filename- : ARRAY OF CHAR; mode : SET): BOOLEAN;
@@ -606,6 +642,111 @@ BEGIN
     END;
     value[i] := 00X;
 END EnvVar;
+
+(**
+Execute cmd with arguments.
+STDIN, STDOUT & STDERR is redirected to /dev/null.
+Returns 0 on success.
+*)
+PROCEDURE ExecuteArgs*(cmd- : ARRAY OF CHAR; args- : ARRAY OF Type.STRING): INTEGER;
+TYPE
+    PCHAR = POINTER TO VAR- CHAR;
+VAR
+    argv : POINTER TO ARRAY OF PCHAR;
+    filename : ARRAY 32 OF CHAR;
+    i : LENGTH;
+    status, pid, outfd, infd : INTEGER;
+BEGIN
+    status := -1;
+    (* build argument array *)
+    NEW(argv, LEN(args) + 2);
+    IF argv = NIL THEN RETURN -1 END;
+    argv[0] := PTR(cmd[0]);
+    FOR i := 0 TO LEN(args) - 1 DO
+        argv[i + 1] := PTR(args[i]^[0]);
+    END;
+    argv[LEN(args) + 1] := NIL;
+    (* Fork process *)
+    pid := API.Fork();
+	IF pid = -1 THEN RETURN -1
+	ELSIF pid = 0 THEN
+	   (* In child process *)
+	   (* redirect stdin *)
+	   filename := "/dev/null";
+	   infd := API.Open(SYSTEM.ADR(filename[0]), API.O_RDWR + API.O_CREAT, 0666O);
+       IF infd = -1 THEN API.ExitGroup(1) END;
+       IF API.Dup2(infd, 0) = -1 THEN API.ExitGroup(1) END;
+       (* redirect stdout & stderr *)
+       outfd := API.Open(SYSTEM.ADR(filename[0]), API.O_WRONLY + API.O_CREAT, 0666O);
+       IF outfd = -1 THEN API.ExitGroup(1) END;
+       IF API.Dup2(outfd, 1) = -1 THEN API.ExitGroup(1) END;
+       IF API.Dup2(outfd, 2) = -1 THEN API.ExitGroup(1) END;
+	   IGNORE(API.ExecVE(SYSTEM.ADR(cmd[0]), SYSTEM.ADR(argv^[0]), 0));
+       API.ExitGroup(1) (* only on failure *)
+	ELSE
+	   IGNORE(API.Wait4(pid, SYSTEM.ADR(status), 0, 0));
+    END;
+    DISPOSE(argv);
+    RETURN status
+END ExecuteArgs;
+
+(**
+Execute cmd with arguments and capture STDOUT & STDERR.
+STDIN is redirected to /dev/null.
+Returns 0 on success.
+*)
+PROCEDURE ExecuteWithCapture*(cmd- : ARRAY OF CHAR; args- : ARRAY OF Type.STRING; VAR fh : Type.Stream): INTEGER;
+TYPE
+    PCHAR = POINTER TO VAR- CHAR;
+VAR
+    argv : POINTER TO ARRAY OF PCHAR;
+    buffer : ARRAY 256 OF SYSTEM.BYTE;
+    filename : ARRAY 32 OF CHAR;
+    pipefd : ARRAY 2 OF INTEGER;
+    i, len : LENGTH;
+    status, pid, infd: INTEGER;
+BEGIN
+    status := -1;
+    IF fh.Closed() OR ~fh.Writeable() THEN RETURN -1 END;
+    (* Create pipe *)
+	IF API.Pipe(SYSTEM.ADR(pipefd[0])) = -1 THEN RETURN -1 END;
+    (* build argument array *)
+    NEW(argv, LEN(args) + 2);
+    IF argv = NIL THEN RETURN -1 END;
+    argv[0] := PTR(cmd[0]);
+    FOR i := 0 TO LEN(args) - 1 DO
+        argv[i + 1] := PTR(args[i]^[0]);
+    END;
+    argv[LEN(args) + 1] := NIL;
+    (* Fork process *)
+    pid := API.Fork();
+	IF pid = -1 THEN RETURN -1
+	ELSIF pid = 0 THEN
+	   (* In child process *)
+	   (* redirect stdin *)
+	   filename := "/dev/null";
+	   infd := API.Open(SYSTEM.ADR(filename[0]), API.O_RDWR + API.O_CREAT, 0666O);
+       IF infd = -1 THEN API.ExitGroup(1) END;
+       IF API.Dup2(infd, 0) = -1 THEN API.ExitGroup(1) END;
+       (* redirect stdout & stderr *)
+       IGNORE(API.Close(pipefd[0]));
+       IF API.Dup2(pipefd[1], 1) = -1 THEN API.ExitGroup(1) END;
+       IF API.Dup2(pipefd[1], 2) = -1 THEN API.ExitGroup(1) END;
+	   IGNORE(API.ExecVE(SYSTEM.ADR(cmd[0]), SYSTEM.ADR(argv^[0]), 0));
+       API.ExitGroup(1) (* only on failure *)
+	ELSE
+	   IGNORE(API.Close(pipefd[1]));
+	   LOOP
+	       len := API.Read(pipefd[0], SYSTEM.ADR(buffer[0]), LEN(buffer));
+	       IF len <= 0 THEN EXIT END;
+	       IGNORE(fh.WriteBytes(buffer, 0, len));
+	   END;
+	   IGNORE(API.Wait4(pid, SYSTEM.ADR(status), 0, 0));
+	   IGNORE(API.Close(pipefd[0]));
+    END;
+    DISPOSE(argv);
+    RETURN status
+END ExecuteWithCapture;
 
 (** Exit with return code *)
 PROCEDURE Exit*(code : INTEGER);

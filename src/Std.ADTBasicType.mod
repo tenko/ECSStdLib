@@ -51,6 +51,20 @@ BEGIN
     RETURN 0
 END Compare;
 
+(**
+Inverse compare `left` and `right`.
+
+* 0 if left = right
+* +1 if left < right
+* -1 if left > right
+*)
+PROCEDURE ICompare* (left-, right-: Type): INTEGER;
+BEGIN
+    IF left < right THEN RETURN 1 END;
+    IF left > right THEN RETURN -1 END;
+    RETURN 0
+END ICompare;
+
 (** Test if `left` and `right` is equal. *)
 PROCEDURE Equal* (left-, right-: Type): BOOLEAN;
 BEGIN RETURN left = right

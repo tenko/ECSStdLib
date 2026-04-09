@@ -1,3 +1,4 @@
+# This Makefile expects the ECSBASE environment variable set to ECS installation folder
 .SUFFIXES:
 MAKEFLAGS += --no-builtin-rules --no-builtin-variables
 
@@ -5,10 +6,12 @@ OB := ecsd
 AS := armt32asm
 DAS := armt32dism
 LK := linkmem
-QEMU := qemu-system-arm
+QEMU := qemu-system-arm # xpack-qemu-arm 7.2.5
 DEVICE := mps2-an386 # cortex-m4
 ADR := 0x00000000
-ECS := /c/EigenCompilerSuite/runtime
+
+# Installation prefix
+PREFIX = /usr/local
 
 # OptSpeed or OptSize
 OPT = OptSize
@@ -20,19 +23,19 @@ CPU = armt32
 # Semihost or Baremetal
 SYS = Semihost
 
-RTS = armv7mrun.obf $(ECS)/armt32run.obf $(ECS)/obarmt32run.lib
+RTS = armv7mrun.obf $(ECSBASE)/runtime/armt32run.obf $(ECSBASE)/runtime/obarmt32run.lib
 
-OLS += Const Config$(SYS) Type Char ArrayOfChar$(OPT) Integer Cardinal $(Real) ArrayOfByte$(OPT)
-OLS += ArrayOfSet DateTime String StringPattern ADTBasicType ADTStream ADTList ADTVector
-OLS += ADTSet ADTPair ADTDictionary ADTTree O2Testing
-OLS += OSHost$(SYS) OSStream OSFile OSDir OSPath DataConfig DataLZ4 SysMem
+OLS += Const Config$(SYS) Type Char ArrayOfChar$(OPT) Integer OSHost$(SYS) Cardinal $(Real) ArrayOfByte$(OPT)
+OLS += ArrayOfSet DateTime String StringPattern ADTBasicType ADTRingBuffer ADTStream
+OLS += ADTList ADTVector ADTSet ADTPair ADTDictionary ADTTree O2Scanner O2Testing
+OLS += Coroutine OSStream OSFile OSDir OSPath DataConfig DataLZ4 SysMem
 
 MOD = $(addprefix src/, $(addprefix Std., $(addsuffix .mod, $(OLS))))
 OBF = $(addprefix build/, $(addprefix Std., $(addsuffix .obf, $(OLS))))
 
 OTS  = TestArrayOfByte TestArrayOfChar TestArrayOfSet TestCardinal TestInteger TestReal
 OTS += TestString TestStringPattern TestDateTime TestADTBasicType TestADTList TestADTSet
-OTS += TestADTDictionary TestADTVector TestADTTree TestADTStream
+OTS += TestADTDictionary TestADTVector TestADTTree TestADTRingBuffer TestADTStream
 OTS += TestOSPath TestOS$(SYS) TestDataConfig TestDataLZ4 MainNoOS
 
 TMOD = $(addprefix tests/, $(addsuffix .mod, $(OTS)))
@@ -52,6 +55,7 @@ build/Std.Cardinal.obf : src/Std.Const.mod src/Std.Type.mod src/Std.Char.mod src
 build/Std.DateTime.obf : src/Std.Const.mod src/Std.Type.mod src/Std.Char.mod src/Std.Integer.mod src/Std.OSHost$(SYS).mod src/Std.ArrayOfChar$(OPT).mod
 build/Std.Integer.obf : src/Std.Const.mod src/Std.Type.mod src/Std.Char.mod
 build/Std.$(Real).obf : src/Std.Const.mod src/Std.Type.mod src/Std.Char.mod src/Std.ArrayOfChar$(OPT).mod
+build/Std.O2Scanner.obf : src/Std.Type.mod
 build/Std.O2Testing.obf : src/Std.ArrayOfChar$(OPT).mod
 build/Std.OS.obf : src/Std.Char.mod src/Std.ArrayOfChar$(OPT).mod src/Std.String.mod src/Std.OSHost$(SYS).mod
 build/Std.OSDir.obf : src/Std.String.mod src/Std.OSHost$(SYS).mod
@@ -89,6 +93,7 @@ build/armv7mrun.obf : src/armv7mrun.asm
 build/TestADTBasicType.obf : src/Std.ADTBasicType.mod
 build/TestADTDictionary.obf : src/Std.ADTDictionary.mod
 build/TestADTList.obf : src/Std.ADTList.mod
+build/TestADTRingBuffer.obf : src/Std.ADTRingBuffer.mod
 build/TestADTSet.obf : src/Std.ADTSet.mod
 build/TestADTTree.obf : src/Std.ADTTree.mod
 build/TestADTVector.obf : src/Std.ADTVector.mod
@@ -116,8 +121,9 @@ build/%.obf: tests/%.mod
 TestMain : $(TOBF) std$(CPU).lib build/armv7mrun.obf
 	@echo compiling $<
 	@mkdir -p build
-	@cd build && $(LK) $(notdir $(TOBF)) ../std$(CPU).lib $(RTS)
-	@cd build && $(QEMU) -M $(DEVICE) -semihosting -nographic -device loader,file=TestArrayOfByte.rom,addr=$(ADR)
+	@cd build && touch TestMain.obf
+	@cd build && $(LK) TestMain.obf $(notdir $(TOBF)) ../std$(CPU).lib $(RTS)
+	@cd build && $(QEMU) -M $(DEVICE) -semihosting -nographic -device loader,file=TestMain.rom,addr=$(ADR)
 
 .PHONY: Test
 Test : misc/Test.mod std$(CPU).lib build/armv7mrun.obf
@@ -131,9 +137,9 @@ Test : misc/Test.mod std$(CPU).lib build/armv7mrun.obf
 .PHONY: install
 install: std$(CPU).lib
 	@echo Install
-	@cp -f std$(CPU).lib /c/EigenCompilerSuite/runtime/
-	@cp -f build/std.*.sym /c/EigenCompilerSuite/libraries/oberon/
-
+	@cp -f std$(CPU).lib $(PREFIX)/lib/ecs/runtime/
+	@cp -f build/std.*.sym $(PREFIX)/lib/ecs/libraries/oberon/
+	
 .PHONY: clean
 clean:
 	@echo Clean

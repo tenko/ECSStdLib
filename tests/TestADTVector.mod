@@ -32,6 +32,7 @@ BEGIN
     vint.Append(4); vint.Append(1); vint.Append(8); vint.Append(5); vint.Append(6);
     vint.Append(2); vint.Append(9); vint.Append(0); vint.Append(7); vint.Append(3);
     vint.Sort(Compare);
+    
     ret := vint.Pop(ival); Assert(ret & (ival = 9), __LINE__);
     ret := vint.Pop(ival); Assert(ret & (ival = 8), __LINE__);
     ret := vint.Pop(ival); Assert(ret & (ival = 7), __LINE__);
@@ -53,6 +54,46 @@ BEGIN
     Assert(vint.Find(Compare, 0) = 0, __LINE__);
     Assert(vint.Find(Compare, 9) = 9, __LINE__);
     Assert(vint.Find(Compare, -1) = -1, __LINE__);
+
+    vint.Clear();
+    Assert(vint.Size() = 0, __LINE__);
+    vint.Append(0); vint.Append(2); vint.Append(4); vint.Append(6); vint.Append(8);
+    vint.Append(10); vint.Append(12); vint.Append(14); vint.Append(16); vint.Append(18);
+    Assert(vint.BisectLeft(Compare, 0) = 0, __LINE__);
+    Assert(vint.BisectLeft(Compare, 7) = 4, __LINE__);
+    Assert(vint.BisectLeft(Compare, 8) = 4, __LINE__);
+    Assert(vint.BisectLeft(Compare, 9) = 5, __LINE__);
+    Assert(vint.BisectLeft(Compare, 19) = 10, __LINE__);
+    Assert(vint.BisectRight(Compare, 0) = 1, __LINE__);
+    Assert(vint.BisectRight(Compare, 7) = 4, __LINE__);
+    Assert(vint.BisectRight(Compare, 8) = 5, __LINE__);
+    Assert(vint.BisectRight(Compare, 9) = 5, __LINE__);
+    Assert(vint.BisectRight(Compare, 19) = 10, __LINE__);
+
+    vint.Clear();
+    vint.HeapInsert(Compare, 4); vint.HeapInsert(Compare, 10);
+    vint.HeapInsert(Compare, 2); vint.HeapInsert(Compare, 5);
+    vint.HeapInsert(Compare, 12); vint.HeapInsert(Compare, 3);
+    ret := vint.HeapPop(Compare, ival); Assert(ret & (ival = 12), __LINE__);
+    ret := vint.HeapPop(Compare, ival); Assert(ret & (ival = 10), __LINE__);
+    ret := vint.HeapPop(Compare, ival); Assert(ret & (ival = 5), __LINE__);
+    ret := vint.HeapPop(Compare, ival); Assert(ret & (ival = 4), __LINE__);
+    ret := vint.HeapPop(Compare, ival); Assert(ret & (ival = 3), __LINE__);
+    ret := vint.HeapPop(Compare, ival); Assert(ret & (ival = 2), __LINE__);
+    ret := vint.HeapPop(Compare, ival); Assert(~ret, __LINE__);
+
+    vint.Clear();
+    vint.Append(4); vint.Append(10);
+    vint.Append(2); vint.Append(5);
+    vint.Append(12); vint.Append(3);
+    vint.Heapify(Compare);
+    ret := vint.HeapPop(Compare, ival); Assert(ret & (ival = 12), __LINE__);
+    ret := vint.HeapPop(Compare, ival); Assert(ret & (ival = 10), __LINE__);
+    ret := vint.HeapPop(Compare, ival); Assert(ret & (ival = 5), __LINE__);
+    ret := vint.HeapPop(Compare, ival); Assert(ret & (ival = 4), __LINE__);
+    ret := vint.HeapPop(Compare, ival); Assert(ret & (ival = 3), __LINE__);
+    ret := vint.HeapPop(Compare, ival); Assert(ret & (ival = 2), __LINE__);
+    ret := vint.HeapPop(Compare, ival); Assert(~ret, __LINE__);
     
     vint.Dispose();
 

@@ -203,7 +203,32 @@ BEGIN
     chr[0] := "a";
     Str.Delete(chr, 0, 1);
     Assert(Str.Length(chr) = 0, __LINE__) ;
-    
+
+    (* InsertChar *)
+    chr[0] := Char.NUL;
+    Str.InsertChar(chr, 'a', 0);
+    Assert(Str.Length(chr) = 1, __LINE__) ;
+    Assert(chr[0] = "a", __LINE__) ;
+
+    Str.InsertChar(chr, 'b', 0);
+    Assert(Str.Length(chr) = 1, __LINE__) ;
+    Assert(chr[0] = "a", __LINE__) ;
+
+    str := "";
+    Str.Insert(str, 'a', 0);
+    Assert(Str.Length(str) = 1, __LINE__) ;
+    Assert((str[0] = "a") & (str[1] = Char.NUL), __LINE__) ;
+
+    str := "abc";
+    Str.InsertChar(str, " ", 0);
+    Assert(Str.Length(str) = 4, __LINE__) ;
+    Assert((str[0] = " ") & (str[1] = "a") & (str[2] = "b") & (str[3] = "c") & (str[4] = Char.NUL), __LINE__) ;
+
+    str := "abc";
+    Str.InsertChar(str, " ", 3);
+    Assert(Str.Length(str) = 4, __LINE__) ;
+    Assert((str[0] = "a") & (str[1] = "b") & (str[2] = "c") & (str[3] = " ") & (str[4] = Char.NUL), __LINE__) ;
+
     (* Insert *)
     chr[0] := Char.NUL;
     Str.Insert(chr, 'a', 0);

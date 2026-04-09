@@ -6,15 +6,16 @@ with the **[ECS Oberon](https://ecs.openbrace.org/manual/manualch7.html)** compi
  * Modules for basic types : [Char](https://tenko.github.io/ECSStdLib/src/Std.Char.mod.html), [Integer](https://tenko.github.io/ECSStdLib/src/Std.Integer.mod.html), [Cardinal](https://tenko.github.io/ECSStdLib/src/Std.Cardinal.mod.html), [Real](https://tenko.github.io/ECSStdLib/src/Std.Real.mod.html), [ArrayOfChar](https://tenko.github.io/ECSStdLib/src/Std.ArrayOfChar.mod.html), [ArrayOfByte](https://tenko.github.io/ECSStdLib/src/Std.ArrayOfByte.mod.html) & [ArrayOfSet](https://tenko.github.io/ECSStdLib/src/Std.ArrayOfSet.mod.html) .
  * Modules for string handling : [String](https://tenko.github.io/ECSStdLib/src/Std.String.mod.html) & [StringPattern](https://tenko.github.io/ECSStdLib/src/Std.StringPattern.mod.html).
  * Module for date and time support : [DateTime](https://tenko.github.io/ECSStdLib/src/Std.DateTime.mod.html).
- * Module for container and alogrithms : [ADTStream](https://tenko.github.io/ECSStdLib/src/Std.ADTStream.mod.html), [ADTDictionary](https://tenko.github.io/ECSStdLib/src/Std.ADTDictionary.mod.html), [ADTList](https://tenko.github.io/ECSStdLib/src/Std.ADTList.mod.html), [ADTSet](https://tenko.github.io/ECSStdLib/src/Std.ADTSet.mod.html), [ADTPair](https://tenko.github.io/ECSStdLib/src/Std.ADTPair.mod.html), [ADTTree](https://tenko.github.io/ECSStdLib/src/Std.ADTTree.mod.html) & [ADTVector](https://tenko.github.io/ECSStdLib/src/Std.ADTVector.mod.html).
+ * Module for container and alogrithms : [ADTStream](https://tenko.github.io/ECSStdLib/src/Std.ADTStream.mod.html), [ADTDictionary](https://tenko.github.io/ECSStdLib/src/Std.ADTDictionary.mod.html), [ADTList](https://tenko.github.io/ECSStdLib/src/Std.ADTList.mod.html), [ADTSet](https://tenko.github.io/ECSStdLib/src/Std.ADTSet.mod.html), [ADTPair](https://tenko.github.io/ECSStdLib/src/Std.ADTPair.mod.html), [ADTRingBuffer](https://tenko.github.io/ECSStdLib/src/Std.ADTRingBuffer.mod.html), [ADTTree](https://tenko.github.io/ECSStdLib/src/Std.ADTTree.mod.html) & [ADTVector](https://tenko.github.io/ECSStdLib/src/Std.ADTVector.mod.html).
  * Module for cross platform basic OS support : [OS](https://tenko.github.io/ECSStdLib/src/Std.OS.mod.html), [OSDir](https://tenko.github.io/ECSStdLib/src/Std.OSDir.mod.html), [OSFile](https://tenko.github.io/ECSStdLib/src/Std.OSFile.mod.html), [OSPath](https://tenko.github.io/ECSStdLib/src/Std.OSPath.mod.html) & [OSStream](https://tenko.github.io/ECSStdLib/src/Std.OSStream.mod.html).
  * Module for testing & benchmark : [O2Testing](https://tenko.github.io/ECSStdLib/src/Std.O2Testing.mod.html) & [O2Timing](https://tenko.github.io/ECSStdLib/src/Std.O2Timing.mod.html).
  * Modules for data handling: [DataLZ4](https://tenko.github.io/ECSStdLib/src/Std.DataLZ4.mod.html) & [DataConfig](https://tenko.github.io/ECSStdLib/src/Std.DataConfig.mod.html) .
+ * Module for coroutines : [Coroutine](https://github.com/tenko/ECSStdLib/blob/main/src/Std.Coroutine.mod).
  * Module for memory allocation on embedded platforms : [SysMem](https://github.com/tenko/ECSStdLib/blob/main/src/Std.SysMem.mod).
 
 The [Const](https://tenko.github.io/ECSStdLib/src/Std.Const.mod.html) module defines constants reused throughout the library.
 
-The stream concept is used troughout the modules to support formatting, reading and writing of data.  
+The stream concept is used throughout the modules to support formatting, reading and writing of data.  
 The module [Type](https://tenko.github.io/ECSStdLib/src/Std.Type.mod.html) defines the basic stream type interface. 
 
 OS support is covered for the **Windows** and **Linux** platforms.  
@@ -29,17 +30,38 @@ Oberon-2 [report](https://www.ssw.uni-linz.ac.at/Research/Papers/Oberon2.pdf) wi
 
 ## Building & Running tests
 
-Building
+Build instructions here are for a current **ArchLinux** version, but should
+be possible to adapt to other **Linux** distributions.
 
-> make
+Windows **MSYS2** (CLANG64) also can follow these instructions and
+is known to work well, but is much slower than on **Linux**.
 
-Running tests (Linux)
+Note that your Windows systems anti-virus software might indentify the resulting .exe file as a threath
+and in that case this check automatic must exemt these files. 
 
-> make TestMain
+```shell
+# Build and install patched version of ECS
+pacman -S git make clang sdl2-compat
+git clone https://github.com/tenko/ECS.git
+cd ECS
+make toolchain=clang all # takes some time to finish
+# install to ~/.local/[bin|lib|share] or other setup of choice
+make toolchain=clang prefix=~/.local install
+make clean
+# add to PATH variable (adapt to your shell and setup)
+echo 'export PATH=~/.local/bin/:~/.local/lib/ecs/tools/:$PATH' >> ~/.bashrc
+echo 'export ECSBASE=~/.local/lib/ecs/' >> ~/.bashrc
+cd ..
 
-Running tests (Windows)
-
-> make TestMain.exe
+# Build and install ECSStdLib
+pacman -S dos2unix
+git clone https://github.com/tenko/ECSStdLib.git
+cd ECSStdLib
+# Build native library
+make 
+make PREFIX=~/.local install # install to ~/.local/lib
+make TestMain # run library tests (use TestMain.exe on Windows)
+```
 
 ## Example
 
@@ -141,7 +163,7 @@ END test.
 Running (Windows)
 
 ```
-ecsd Test.mod std.lib /c/EigenCompilerSuite/runtime/win64api.obf
+ecsd -r std.lib -r win64api.obf Test.mod # Remove -r win64api.obf on other platforms
 ./test.exe README.md
  36 : https
  34 : std
@@ -154,6 +176,10 @@ ecsd Test.mod std.lib /c/EigenCompilerSuite/runtime/win64api.obf
  29 : io
  24 : string
 ```
+
+## TODO
+
+* Add support for embedded filesystems. First candidate is Squashfs and later FAT16.
 
 ## Note
 

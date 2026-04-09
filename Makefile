@@ -7,36 +7,37 @@ OPT = OptSpeed
 # Real64 or Real32
 Real = Real64
 
+# Installation prefix
+PREFIX = /usr/local
+
 ifdef MSYSTEM
 	PRG = .exe
 	SYS = Win
-	DESTDIR = /c/EigenCompilerSuite/
-	RTS = $(DESTDIR)runtime/win64api.obf
+	RTS = -r win64api.obf
 	CONV = unix2dos
 else
 	PRG = 
 	SYS = Lin
-	DESTDIR = ~/.local/lib/ecs/
 	RTS = 
 	CONV = dos2unix
 endif
 
-OLS += Const Config$(SYS) Type Char ArrayOfChar$(OPT) OSHost$(SYS) Integer Cardinal $(Real)
-OLS += ArrayOfByte$(OPT) ArrayOfSet DateTime String StringPattern ADTBasicType ADTStream ADTList ADTVector
-OLS += ADTPair ADTSet ADTDictionary ADTTree O2Testing O2Timing$(SYS)
-OLS += OS OSStream OSFile OSDir OSPath DataConfig DataLZ4
+OLS += Const Config$(SYS) Type Char ArrayOfChar$(OPT)  ArrayOfByte$(OPT) OSHost$(SYS) Integer
+OLS += Cardinal $(Real) ArrayOfSet DateTime String StringPattern ADTBasicType ADTRingBuffer
+OLS += ADTStream ADTList ADTVector ADTPair ADTSet ADTDictionary ADTTree O2Scanner O2Testing O2Timing$(SYS)
+OLS += Coroutine OS OSStream OSFile OSDir OSPath DataConfig DataLZ4
 MOD = $(addprefix src/, $(addprefix Std., $(addsuffix .mod, $(OLS))))
 OBF = $(addprefix build/, $(addprefix Std., $(addsuffix .obf, $(OLS))))
 
 OTS  = TestArrayOfByte TestArrayOfChar TestArrayOfSet TestCardinal TestInteger TestReal
 OTS += TestString TestStringPattern TestDateTime TestADTBasicType TestADTList TestADTSet
-OTS += TestADTDictionary TestADTVector TestADTTree TestADTStream TestOSPath TestOS
-OTS += TestDataConfig TestDataLZ4
+OTS += TestADTDictionary TestADTVector TestADTTree TestADTRingBuffer TestADTStream TestOSPath
+OTS += TestOS TestDataConfig TestDataLZ4
 
 TMOD = $(addprefix tests/, $(addsuffix .mod, $(OTS)))
 TOBF = $(addprefix build/, $(addsuffix .obf, $(OTS)))
 
-DOC = ADTBasicType ADTDictionary ADTList ADTPair ADTSet ADTStream ADTTree ADTVector ArrayOfByte
+DOC = ADTBasicType ADTRingBuffer ADTDictionary ADTList ADTPair ADTSet ADTStream ADTTree ADTVector ArrayOfByte
 DOC += ArrayOfChar ArrayOfSet Cardinal Char Config Const DataConfig DataLZ4 DateTime Integer
 DOC += O2Testing O2Timing OS OSDir OSFile OSHost OSPath OSStream Real String StringPattern Type
 
@@ -56,6 +57,7 @@ build/Std.Cardinal.obf : src/Std.Const.mod src/Std.Type.mod src/Std.Char.mod src
 build/Std.DateTime.obf : src/Std.Const.mod src/Std.Type.mod src/Std.Char.mod src/Std.Integer.mod src/Std.OSHost$(SYS).mod src/Std.ArrayOfChar$(OPT).mod
 build/Std.Integer.obf : src/Std.Const.mod src/Std.Type.mod src/Std.Char.mod
 build/Std.$(Real).obf : src/Std.Const.mod src/Std.Type.mod src/Std.Char.mod src/Std.ArrayOfChar$(OPT).mod
+build/Std.O2Scanner.obf : src/Std.Type.mod
 build/Std.O2Testing.obf : src/Std.ArrayOfChar$(OPT).mod
 build/Std.OS.obf : src/Std.Char.mod src/Std.ArrayOfChar$(OPT).mod src/Std.String.mod src/Std.OSHost$(SYS).mod
 build/Std.OSDir.obf : src/Std.String.mod src/Std.OSHost$(SYS).mod
@@ -76,11 +78,12 @@ std.lib : $(OBF)
 	@echo linking $@
 	@-rm $@
 	@touch $@
-	@linklib $@ $^
+	@ecsd -l $@ $^
 
 build/TestADTBasicType.obf : src/Std.ADTBasicType.mod
 build/TestADTDictionary.obf : src/Std.ADTDictionary.mod
 build/TestADTList.obf : src/Std.ADTList.mod
+build/TestADTRingBuffer.obf : src/Std.ADTRingBuffer.mod
 build/TestADTSet.obf : src/Std.ADTSet.mod
 build/TestADTTree.obf : src/Std.ADTTree.mod
 build/TestADTVector.obf : src/Std.ADTVector.mod
@@ -109,7 +112,7 @@ TestMain$(PRG) : $(TOBF) std.lib
 	@echo compiling $<
 	@mkdir -p build
 	@cd build && cp -f ../tests/Main.mod .
-	@cd build && ecsd Main.mod  $(notdir $(TOBF)) ../std.lib $(RTS)
+	@cd build && ecsd $(RTS) Main.mod  $(notdir $(TOBF)) ../std.lib
 	@cp build/Main$(PRG) TestMain$(PRG)
 	@./TestMain$(PRG)
 
@@ -117,14 +120,14 @@ Test$(PRG) : misc/Test.mod std.lib
 	@echo compiling $<
 	@mkdir -p build
 	@cd build && cp -f $(addprefix ../, $<) .
-	@cd build && ecsd $(notdir $<) ../std.lib $(RTS)
+	@cd build && ecsd $(RTS) $(notdir $<) ../std.lib
 	@cp build/$@ .
 
 perfLength$(PRG) : misc/perfLength.mod std.lib
 	@echo compiling $<
 	@mkdir -p build
 	@cd build && cp -f $(addprefix ../, $<) .
-	@cd build && ecsd $(notdir $<) ../std.lib $(RTS)
+	@cd build && ecsd $(RTS)  $(notdir $<) ../std.lib
 	@cp build/$@ .
 	@./$@
 
@@ -132,7 +135,7 @@ perfIndex$(PRG) : misc/perfIndex.mod std.lib
 	@echo compiling $<
 	@mkdir -p build
 	@cd build && cp -f $(addprefix ../, $<) .
-	@cd build && ecsd $(notdir $<) ../std.lib $(RTS)
+	@cd build && ecsd $(RTS) $(notdir $<) ../std.lib
 	@cp build/$@ .
 	@./$@
 
@@ -140,7 +143,7 @@ perfFillChar$(PRG) : misc/perfFillChar.mod std.lib
 	@echo compiling $<
 	@mkdir -p build
 	@cd build && cp -f $(addprefix ../, $<) .
-	@cd build && ecsd $(notdir $<) ../std.lib $(RTS)
+	@cd build && ecsd $(RTS) $(notdir $<) ../std.lib
 	@cp build/$@ .
 	@./$@
 
@@ -148,7 +151,7 @@ perfCompare$(PRG) : misc/perfCompare.mod std.lib
 	@echo compiling $<
 	@mkdir -p build
 	@cd build && cp -f $(addprefix ../, $<) .
-	@cd build && ecsd $(notdir $<) ../std.lib $(RTS)
+	@cd build && ecsd $(RTS) $(notdir $<) ../std.lib
 	@cp build/$@ .
 	@./$@
 
@@ -156,6 +159,10 @@ doc/src/Std.ADTBasicType.mod.rst : src/Std.ADTBasicType.mod
 	@-mkdir -p doc/src
 	./tools/docgen.py $< -o $@
 
+doc/src/Std.ADTRingBuffer.mod.rst : src/Std.ADTRingBuffer.mod
+	@-mkdir -p doc/src
+	./tools/docgen.py $< -o $@
+	
 doc/src/Std.ADTDictionary.mod.rst : src/Std.ADTDictionary.mod
 	@-mkdir -p doc/src
 	@./tools/docgen.py $< -o $@
@@ -285,8 +292,10 @@ doc: $(DRST)
 .PHONY: install
 install: std.lib
 	@echo Install
-	@cp -f std.lib $(DESTDIR)runtime/
-	@cp -f build/std.*.sym $(DESTDIR)libraries/oberon/
+	@mkdir -p $(PREFIX)/lib/ecs/runtime/ 
+	@cp -f std.lib $(PREFIX)/lib/ecs/runtime/
+	@mkdir -p $(PREFIX)/lib/ecs/libraries/oberon/ 
+	@cp -f build/std.*.sym $(PREFIX)/lib/ecs/libraries/oberon/
 
 .PHONY: clean
 clean:

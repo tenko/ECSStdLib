@@ -3,7 +3,7 @@ MODULE OSHost IN Std;
 
 IMPORT API := Windows IN API, SYSTEM;
 
-IN Std IMPORT Const, ArrayOfChar;
+IN Std IMPORT Const, Type, ArrayOfChar, ArrayOfByte;
 
 TYPE
     ArgStr = POINTER TO - ARRAY MAX(LENGTH) OF CHAR;
@@ -98,6 +98,24 @@ BEGIN
     handle := API.GetStdHandle(DWORD(type));
     RETURN handle # INVALID_HANDLE
 END StdHandle;
+
+(* Read single key from console without echo. *)
+PROCEDURE ConsoleReadKey*(): CHAR;
+VAR
+    handle : HANDLE;
+    mode : DWORD;
+    ch : CHAR;
+BEGIN
+    ch := 00X;
+    handle := API.GetStdHandle(API.STD_INPUT_HANDLE);
+    IF handle = API.INVALID_HANDLE_VALUE THEN RETURN 00X END;
+    IGNORE(API.GetConsoleMode(handle, SYSTEM.ADR(mode)));
+    IGNORE(API.SetConsoleMode(handle, 0));
+    IGNORE(API.WaitForSingleObject(handle, API.INFINITE));
+    IGNORE(API.ReadFile(handle, SYSTEM.ADR(ch), 1, 0, NIL));
+    IGNORE(API.SetConsoleMode(handle, mode));
+    RETURN ch
+END ConsoleReadKey;
 
 (* Open new or existing file with mode flags. Return TRUE on success.*)
 PROCEDURE FileOpen*(VAR handle : HANDLE; filename- : ARRAY OF CHAR; mode : SET): BOOLEAN;
@@ -437,6 +455,155 @@ BEGIN
     IGNORE(API.GetEnvironmentVariableA(SYSTEM.ADR(name), SYSTEM.ADR(value), DWORD(LEN(value))))
 END EnvVar;
 
+(**
+Execute cmd with arguments.
+STDIN, STDOUT & STDERR is redirected to /dev/null.
+Returns 0 on success.
+*)
+PROCEDURE ExecuteArgs*(cmd- : ARRAY OF CHAR; args- : ARRAY OF Type.STRING): INTEGER;
+CONST
+    STARTF_USESTDHANDLES = 00000100H;
+VAR
+    si : API.STARTUPINFO;
+    pi : API.PROCESS_INFORMATION;
+    sa : API.SECURITY_ATTRIBUTES;
+    filename : ARRAY 8 OF CHAR;
+    hNul : API.HANDLE;
+    str : Type.STRING;
+    i, len, arg, slen : LENGTH;
+BEGIN
+    len := ArrayOfChar.Length(cmd);
+    IF len = 0 THEN RETURN -1 END;
+    arg := 0;
+    FOR i := 0 TO LEN(args) - 1 DO
+        IF args[i] # NIL THEN
+            slen := ArrayOfChar.Length(args[i]^);
+            INC(len, slen + 1);
+            INC(arg, slen);
+        END;
+    END;
+    NEW(str, len + 3);
+    IF str = NIL THEN RETURN -1 END;
+    str[0] := 00X;
+    ArrayOfChar.AppendChar(str^, '"');
+    ArrayOfChar.Append(str^, cmd);
+    ArrayOfChar.AppendChar(str^, '"');
+    IF arg > 0 THEN
+        FOR i := 0 TO LEN(args) - 1 DO
+            IF args[i] # NIL THEN
+                ArrayOfChar.AppendChar(str^, ' ');
+                ArrayOfChar.Append(str^, args[i]^)
+            END;
+        END;
+    END;
+    sa.nLength := SIZE(API.SECURITY_ATTRIBUTES);
+    sa.lpSecurityDescriptor := 0;
+    sa.bInheritHandle := 1;
+    filename := "NUL";
+    hNul := API.CreateFileA(SYSTEM.ADR(filename[0]),  API.DWORD(API.GENERIC_READ + API.GENERIC_WRITE),
+                            API.DWORD(API.FILE_SHARE_READ + API.FILE_SHARE_WRITE), 
+                           SYSTEM.VAL(API.LPSECURITY_ATTRIBUTES, SYSTEM.ADR(sa)), API.OPEN_EXISTING, 0, 0);
+    ArrayOfByte.Zero(si);
+    ArrayOfByte.Zero(pi);
+    si.cb := SIZE(API.STARTUPINFO);
+    si.dwFlags := STARTF_USESTDHANDLES;
+    si.hStdOutput := hNul;
+    si.hStdError := hNul;
+    si.hStdInput := hNul;
+    IF ~API.CreateProcessA(0, SYSTEM.ADR(str^[0]), SYSTEM.VAL(API.LPSECURITY_ATTRIBUTES, 0),
+                           SYSTEM.VAL(API.LPSECURITY_ATTRIBUTES, 0), 1, 0, 0, 0,
+                           SYSTEM.VAL(API.LPSTARTUPINFO, SYSTEM.ADR(si)), SYSTEM.VAL(API.LPPROCESS_INFORMATION, SYSTEM.ADR(pi))) THEN
+        DISPOSE(str);
+        RETURN -1
+    END;
+    IGNORE(API.WaitForSingleObject(pi.hProcess, API.INFINITE));
+    IGNORE(API.CloseHandle(hNul));
+    IGNORE(API.CloseHandle(pi.hProcess));
+    IGNORE(API.CloseHandle(pi.hThread));
+    DISPOSE(str);
+    RETURN 0;
+END ExecuteArgs;
+
+(**
+Execute cmd with arguments and capture STDOUT & STDERR.
+STDIN is redirected to /dev/null.
+Returns 0 on success.
+*)
+PROCEDURE ExecuteWithCapture*(cmd- : ARRAY OF CHAR; args- : ARRAY OF Type.STRING; VAR fh : Type.Stream): INTEGER;
+CONST
+    STARTF_USESTDHANDLES = 0100H;
+    HANDLE_FLAG_INHERIT = 01H;
+VAR
+    si : API.STARTUPINFO;
+    pi : API.PROCESS_INFORMATION;
+    sa : API.SECURITY_ATTRIBUTES;
+    buffer : ARRAY 64 OF CHAR;
+    hNul, hPipeRd, hPipeWr : API.HANDLE;
+    nbytes : API.DWORD;
+    str : Type.STRING;
+    i, len, arg, slen : LENGTH;
+BEGIN
+    len := ArrayOfChar.Length(cmd);
+    IF len = 0 THEN RETURN -1 END;
+    arg := 0;
+    FOR i := 0 TO LEN(args) - 1 DO
+        IF args[i] # NIL THEN
+            slen := ArrayOfChar.Length(args[i]^);
+            INC(len, slen + 1);
+            INC(arg, slen);
+        END;
+    END;
+    NEW(str, len + 3);
+    IF str = NIL THEN RETURN -1 END;
+    str[0] := 00X;
+    ArrayOfChar.AppendChar(str^, '"');
+    ArrayOfChar.Append(str^, cmd);
+    ArrayOfChar.AppendChar(str^, '"');
+    IF arg > 0 THEN
+        FOR i := 0 TO LEN(args) - 1 DO
+            IF args[i] # NIL THEN
+                ArrayOfChar.AppendChar(str^, ' ');
+                ArrayOfChar.Append(str^, args[i]^)
+            END;
+        END;
+    END;
+    sa.nLength := SIZE(API.SECURITY_ATTRIBUTES);
+    sa.lpSecurityDescriptor := 0;
+    sa.bInheritHandle := 1;
+    buffer := "NUL";
+    hNul := API.CreateFileA(SYSTEM.ADR(buffer[0]),  API.DWORD(API.GENERIC_READ + API.GENERIC_WRITE),
+                            API.DWORD(API.FILE_SHARE_READ + API.FILE_SHARE_WRITE), 
+                            SYSTEM.VAL(API.LPSECURITY_ATTRIBUTES, SYSTEM.ADR(sa)), API.OPEN_EXISTING, 0, 0);
+    
+    IGNORE(API.CreatePipe(SYSTEM.ADR(hPipeRd), SYSTEM.ADR(hPipeWr), SYSTEM.VAL(API.LPSECURITY_ATTRIBUTES, SYSTEM.ADR(sa)), 0));
+    IGNORE(API.SetHandleInformation(hPipeRd, HANDLE_FLAG_INHERIT, 0));
+    
+    ArrayOfByte.Zero(si);
+    ArrayOfByte.Zero(pi);
+    si.cb := SIZE(API.STARTUPINFO);
+    si.dwFlags := STARTF_USESTDHANDLES;
+    si.hStdOutput := hPipeWr;
+    si.hStdError := hPipeWr;
+    si.hStdInput := hNul;
+    IF ~API.CreateProcessA(0, SYSTEM.ADR(str^[0]), SYSTEM.VAL(API.LPSECURITY_ATTRIBUTES, 0),
+                           SYSTEM.VAL(API.LPSECURITY_ATTRIBUTES, 0), 1, 0, 0, 0,
+                           SYSTEM.VAL(API.LPSTARTUPINFO, SYSTEM.ADR(si)), SYSTEM.VAL(API.LPPROCESS_INFORMATION, SYSTEM.ADR(pi))) THEN
+        DISPOSE(str);
+        RETURN -1
+    END;
+    IGNORE(API.CloseHandle(hPipeWr));
+    WHILE API.ReadFile(hPipeRd, SYSTEM.ADR(buffer), API.DWORD(LEN(buffer)), SYSTEM.ADR(nbytes), NIL) # 0 DO
+        IGNORE(fh.WriteBytes(buffer, 0, nbytes));
+    END;
+    IGNORE(API.WaitForSingleObject(pi.hProcess, API.INFINITE));
+    IGNORE(API.CloseHandle(hPipeRd));
+    IGNORE(API.CloseHandle(hNul));
+    IGNORE(API.CloseHandle(pi.hProcess));
+    IGNORE(API.CloseHandle(pi.hThread));
+    DISPOSE(str);
+    RETURN 0;
+END ExecuteWithCapture;
+    
 (** Exit with return code *)
 PROCEDURE Exit*(code : INTEGER);
 BEGIN API.ExitProcess(code)

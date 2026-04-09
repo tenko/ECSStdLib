@@ -2,7 +2,7 @@
 MODULE OSHost IN Std;
 
 IMPORT SYSTEM;
-IN Std IMPORT Const, Char, ArrayOfChar;
+IN Std IMPORT Const, Type, Char, ArrayOfChar;
 
 CONST
     INVALID_HANDLE* = -1;
@@ -252,6 +252,11 @@ BEGIN
     handle := SemiHost(SYS_OPEN, SYSTEM.ADR(args));
     RETURN handle # INVALID_HANDLE
 END StdHandle;
+
+(* Read single key from console without echo. *)
+PROCEDURE ConsoleReadKey*(): CHAR;
+BEGIN RETURN SYSTEM.VAL(CHAR, Getchar())
+END ConsoleReadKey;
 
 (* Open new or existing file with mode flags. Return TRUE on success.*)
 PROCEDURE FileOpen*(VAR handle : HANDLE; filename- : ARRAY OF CHAR; mode : SET): BOOLEAN;
@@ -516,6 +521,22 @@ END EnvVarLength;
 (** Get environment variable *)
 PROCEDURE EnvVar*(VAR value: ARRAY OF CHAR; name-: ARRAY OF CHAR);
 BEGIN END EnvVar;
+
+(**
+Execute cmd with arguments.
+STDIN, STDOUT & STDERR is redirected to /dev/null.
+Returns 0 on success.
+*)
+PROCEDURE ExecuteArgs*(cmd- : ARRAY OF CHAR; args- : ARRAY OF Type.STRING): INTEGER;
+BEGIN RETURN -1 END ExecuteArgs;
+
+(**
+Execute cmd with arguments and capture STDOUT & STDERR.
+STDIN is redirected to /dev/null.
+Returns 0 on success.
+*)
+PROCEDURE ExecuteWithCapture*(cmd- : ARRAY OF CHAR; args- : ARRAY OF Type.STRING; VAR fh : Type.Stream): INTEGER;
+BEGIN RETURN -1 END ExecuteWithCapture;
 
 (** Exit with return code *)
 PROCEDURE Exit*(code : INTEGER);

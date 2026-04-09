@@ -3,7 +3,7 @@ Module for basic OS functionality
 *)
 MODULE OS IN Std;
 
-IN Std IMPORT String, Char, Str := ArrayOfChar, OSHost;
+IN Std IMPORT Type, String, Char, Str := ArrayOfChar, OSHost;
 
 CONST
     Unknown*    = 0;
@@ -174,18 +174,49 @@ BEGIN
 END NextArgument;
 
 (** Check if environment variable exists *)
-PROCEDURE HasEnv*(name : ARRAY OF CHAR): BOOLEAN;
+PROCEDURE HasEnv*(name- : ARRAY OF CHAR): BOOLEAN;
 BEGIN RETURN OSHost.EnvVarLength(name) > 0
 END HasEnv;
 
 (** Get environment variable *)
-PROCEDURE Env*(VAR value : String.STRING; name : ARRAY OF CHAR);
+PROCEDURE Env*(VAR value : String.STRING; name- : ARRAY OF CHAR);
 BEGIN
     IF OSHost.EnvVarLength(name) = 0 THEN RETURN END;
     String.Reserve(value, OSHost.EnvVarLength(name) + 1, FALSE);
     Str.Clear(value^);
     OSHost.EnvVar(value^, name)
 END Env;
+
+(** Read single key from console without echo. *)
+PROCEDURE ConsoleReadKey*(): CHAR;
+BEGIN RETURN OSHost.ConsoleReadKey()
+END ConsoleReadKey;
+
+(**
+Execute cmd without arguments.
+STDIN, STDOUT & STDERR is redirected to /dev/null.
+Returns 0 on success.
+*)
+PROCEDURE Execute*(cmd- : ARRAY OF CHAR): INTEGER;
+VAR args : ARRAY 1 OF Type.STRING;
+BEGIN RETURN OSHost.ExecuteArgs(cmd, args)
+END Execute;
+
+(**
+Execute cmd with arguments.
+STDIN, STDOUT & STDERR is redirected to /dev/null.
+Returns 0 on success.
+*)
+PROCEDURE ExecuteArgs*(cmd- : ARRAY OF CHAR; args- : ARRAY OF Type.STRING): INTEGER;
+BEGIN RETURN OSHost.ExecuteArgs(cmd, args) END ExecuteArgs;
+
+(**
+Execute cmd with arguments and capture STDOUT & STDERR.
+STDIN is redirected to /dev/null.
+Returns 0 on success.
+*)
+PROCEDURE ExecuteWithCapture*(cmd- : ARRAY OF CHAR; args- : ARRAY OF Type.STRING; VAR fh : Type.Stream): INTEGER;
+BEGIN RETURN OSHost.ExecuteWithCapture(cmd, args, fh) END ExecuteWithCapture;
 
 (** Get last error code or OK on no error. *)
 PROCEDURE GetLastError*(VAR error: INTEGER);
