@@ -26,7 +26,7 @@ TYPE
     END;
     ArgStr = POINTER TO - ARRAY MAX(LENGTH) OF CHAR;
     ADDRESS = SYSTEM.ADDRESS;
-    Stat = RECORD-
+    StatRec = RECORD-
     	st_dev: LENGTH;
     	st_ino: LENGTH;
     	st_mode: INTEGER;
@@ -49,6 +49,15 @@ VAR
 VAR ^ argc ["_argc"]: INTEGER;
 VAR ^ argv ["_argv"]: POINTER TO - ARRAY MAX(LENGTH) OF ArgStr;
 PROCEDURE ^ GetEnv ["getenv"] (addr: SYSTEM.ADDRESS): SYSTEM.ADDRESS;
+
+PROCEDURE ^ Stat ["sys_stat"] (pathname: SYSTEM.ADDRESS; statbuf: SYSTEM.ADDRESS): INTEGER;
+PROCEDURE ^ IOCtl ["sys_ioctl"] (fd, cmd: INTEGER; arg: SYSTEM.ADDRESS): INTEGER;
+PROCEDURE ^ Pipe ["sys_pipe"] (arg: SYSTEM.ADDRESS): INTEGER;
+PROCEDURE ^ Dup2 ["sys_dup2"] (oldfd: CARDINAL; newfd: CARDINAL): INTEGER;
+PROCEDURE ^ Fork ["sys_fork"] (): INTEGER;
+PROCEDURE ^ Wait4 ["sys_wait4"] (pid : INTEGER; stat_addr: SYSTEM.ADDRESS; options: INTEGER; ru: SYSTEM.ADDRESS): INTEGER;
+PROCEDURE ^ Kill ["sys_kill"] (pid : INTEGER; sig : INTEGER): INTEGER;
+PROCEDURE ^ ExecVE ["sys_execve"] (filename: SYSTEM.ADDRESS; argv: SYSTEM.ADDRESS; envp: SYSTEM.ADDRESS): INTEGER;
 
 PROCEDURE CheckForError(error : INTEGER);
 BEGIN
@@ -150,17 +159,17 @@ VAR
     s : SET;
     ret : CHAR;
 BEGIN
-    IGNORE(API.IOCtl(STDIN_FILENO, TCGETS, SYSTEM.ADR(termios)));
+    IGNORE(IOCtl(STDIN_FILENO, TCGETS, SYSTEM.ADR(termios)));
     saved := termios.c_lflag;
     s := SET(termios.c_lflag);
     s := s - {ICANON} - {ECHO};
     termios.c_lflag := SYSTEM.VAL(INTEGER, s);
-    IGNORE(API.IOCtl(STDIN_FILENO, TCSETSW, SYSTEM.ADR(termios)));
+    IGNORE(IOCtl(STDIN_FILENO, TCSETSW, SYSTEM.ADR(termios)));
     IF API.Read(STDIN_FILENO, SYSTEM.ADR(ret), 1) # 1 THEN
         ret := 00X;
     END;
     termios.c_lflag := saved;
-    IGNORE(API.IOCtl(STDIN_FILENO, TCSETSW, SYSTEM.ADR(termios)));
+    IGNORE(IOCtl(STDIN_FILENO, TCSETSW, SYSTEM.ADR(termios)));
     RETURN ret;
 END ConsoleReadKey;
 
@@ -195,7 +204,7 @@ BEGIN
         END;
         mode_t := 644O;
     END;
-    handle := API.Open(SYSTEM.ADR(filename[0]), flags, mode_t);
+    handle := API.Open(PTR(filename[0]), flags, mode_t);
     IF handle < 0 THEN
         CheckForError(handle);
         handle := INVALID_HANDLE;
@@ -333,10 +342,10 @@ END FileFlush;
 (** Check if file exists *)
 PROCEDURE FileExists*(filename- : ARRAY OF CHAR): BOOLEAN;
 VAR
-    stat : Stat;
+    stat : StatRec;
     ret : INTEGER;
 BEGIN
-    ret := API.Stat(SYSTEM.ADR(filename[0]), SYSTEM.ADR(stat));
+    ret := Stat(SYSTEM.ADR(filename[0]), SYSTEM.ADR(stat));
     CheckForError(ret);
     RETURN ret = 0
 END FileExists;
@@ -345,7 +354,7 @@ END FileExists;
 PROCEDURE FileRemove*(filename- : ARRAY OF CHAR): BOOLEAN;
 VAR ret : INTEGER;
 BEGIN
-    ret := API.Unlink(SYSTEM.ADR(filename[0]));
+    ret := API.Unlink(PTR(filename[0]));
     CheckForError(ret);
     RETURN ret = 0
 END FileRemove;
@@ -354,7 +363,7 @@ END FileRemove;
 PROCEDURE FileRename*(oldname-, newname-: ARRAY OF CHAR): BOOLEAN;
 VAR ret : INTEGER;
 BEGIN
-    ret := API.Rename(SYSTEM.ADR(oldname[0]), SYSTEM.ADR(newname[0]));
+    ret := API.Rename(PTR(oldname[0]), PTR(newname[0]));
     CheckForError(ret);
     RETURN ret = 0
 END FileRename;
@@ -362,10 +371,10 @@ END FileRename;
 (** Try to get modification time for file. Return `TRUE` on success *)
 PROCEDURE FileModificationTime*(VAR time : DateTime; VAR delta : HUGEINT; filename-: ARRAY OF CHAR): BOOLEAN;
 VAR
-    stat : Stat;
+    stat : StatRec;
     ret : INTEGER;
 BEGIN
-    ret := API.Stat(SYSTEM.ADR(filename[0]), SYSTEM.ADR(stat));
+    ret := Stat(SYSTEM.ADR(filename[0]), SYSTEM.ADR(stat));
     CheckForError(ret);
     IF ret # 0 THEN RETURN FALSE END;
     time.year := 1970;
@@ -385,9 +394,9 @@ VAR sname : ARRAY 2 OF CHAR;
 BEGIN
     IF ArrayOfChar.Length(name) = 0 THEN
         sname := '.';
-        dir.handle := API.Open(SYSTEM.ADR(sname[0]), API.O_RDONLY + API.O_DIRECTORY, 0);
+        dir.handle := API.Open(PTR(sname[0]), API.O_RDONLY + API.O_DIRECTORY, 0);
     ELSE
-        dir.handle := API.Open(SYSTEM.ADR(name[0]), API.O_RDONLY + API.O_DIRECTORY, 0);
+        dir.handle := API.Open(PTR(name[0]), API.O_RDONLY + API.O_DIRECTORY, 0);
     END;
     IF dir.handle < 0 THEN
         CheckForError(dir.handle);
@@ -485,11 +494,11 @@ END DirName;
 (** Return TRUE if current entry is a directory *)
 PROCEDURE DirIsDir*(dir-: DirEntry): BOOLEAN;
 VAR
-    stat : Stat;
+    stat : StatRec;
     ret : INTEGER;
 BEGIN
     IF (dir.handle # INVALID_HANDLE) & (dir.size # -1) THEN
-        ret := API.Stat(dir.adr + dir.idx + OFSSTR, SYSTEM.ADR(stat));
+        ret := Stat(dir.adr + dir.idx + OFSSTR, SYSTEM.ADR(stat));
         CheckForError(ret);
         IF ret # 0 THEN
             RETURN FALSE
@@ -502,11 +511,11 @@ END DirIsDir;
 (** Return TRUE if current entry is a file *)
 PROCEDURE DirIsFile*(dir-: DirEntry): BOOLEAN;
 VAR
-    stat : Stat;
+    stat : StatRec;
     ret : INTEGER;
 BEGIN
     IF (dir.handle # INVALID_HANDLE) & (dir.size # -1) THEN
-        ret := API.Stat(dir.adr + dir.idx + OFSSTR, SYSTEM.ADR(stat));
+        ret := Stat(dir.adr + dir.idx + OFSSTR, SYSTEM.ADR(stat));
         CheckForError(ret);
         IF ret # 0 THEN
             RETURN FALSE
@@ -526,7 +535,7 @@ BEGIN
     time.min := 0;
     time.sec := 0;
     time.msec := 0;
-    delta := API.Time(0);
+    delta := API.Time(NIL);
     IF delta < 0 THEN
         CheckForError(INTEGER(delta));
         delta := -1;
@@ -546,7 +555,7 @@ VAR
     len : LENGTH;
     ret : ADDRESS;
 BEGIN
-    ret := API.GetCWD(SYSTEM.ADR(str[0]), 64);
+    ret := SYSTEM.VAL(ADDRESS, API.GetCWD(PTR(str[0]), 64));
     IF ret < 0 THEN
         CheckForError(INTEGER(ret));
         RETURN 0
@@ -554,7 +563,7 @@ BEGIN
     IF ret = 0 THEN
         NEW(arr, 4096);
         IF arr = NIL THEN RETURN -1 END;
-        ret := API.GetCWD(SYSTEM.ADR(arr^[0]), 4096);
+        ret := SYSTEM.VAL(ADDRESS, API.GetCWD(PTR(arr^[0]), 4096));
         IF ret <= 0 THEN
             CheckForError(INTEGER(ret));
             RETURN 0
@@ -570,7 +579,7 @@ END CDNameLength;
 PROCEDURE CDName*(VAR name: ARRAY OF CHAR; length: LENGTH);
 VAR ret : ADDRESS;
 BEGIN
-    ret := API.GetCWD(SYSTEM.ADR(name[0]), length);
+    ret := SYSTEM.VAL(ADDRESS, API.GetCWD(PTR(name[0]), length));
     IF ret < 0 THEN CheckForError(INTEGER(ret)) END;
 END CDName;
 
@@ -578,7 +587,7 @@ END CDName;
 PROCEDURE SetCD*(name-: ARRAY OF CHAR): BOOLEAN;
 VAR ret : INTEGER;
 BEGIN
-    ret := API.ChDir(SYSTEM.ADR(name[0]));
+    ret := API.ChDir(PTR(name[0]));
     IF ret < 0 THEN CheckForError(ret) END;
     RETURN ret = 0
 END SetCD;
@@ -587,7 +596,7 @@ END SetCD;
 PROCEDURE CreateDirectory*(name-: ARRAY OF CHAR): BOOLEAN;
 VAR ret : INTEGER;
 BEGIN
-    ret := API.MkDir(SYSTEM.ADR(name[0]), 755O);
+    ret := API.MkDir(PTR(name[0]), 755O);
     IF ret < 0 THEN CheckForError(ret) END;
     RETURN ret = 0
 END CreateDirectory;
@@ -596,7 +605,7 @@ END CreateDirectory;
 PROCEDURE RemoveDirectory*(name-: ARRAY OF CHAR): BOOLEAN;
 VAR ret : INTEGER;
 BEGIN
-    ret := API.RmDir(SYSTEM.ADR(name[0]));
+    ret := API.RmDir(PTR(name[0]));
     IF ret < 0 THEN CheckForError(ret) END;
     RETURN ret = 0
 END RemoveDirectory;
@@ -667,24 +676,24 @@ BEGIN
     END;
     argv[LEN(args) + 1] := NIL;
     (* Fork process *)
-    pid := API.Fork();
+    pid := Fork();
 	IF pid = -1 THEN RETURN -1
 	ELSIF pid = 0 THEN
 	   (* In child process *)
 	   (* redirect stdin *)
 	   filename := "/dev/null";
-	   infd := API.Open(SYSTEM.ADR(filename[0]), API.O_RDWR + API.O_CREAT, 0666O);
+	   infd := API.Open(PTR(filename[0]), API.O_RDWR + API.O_CREAT, 0666O);
        IF infd = -1 THEN API.ExitGroup(1) END;
-       IF API.Dup2(infd, 0) = -1 THEN API.ExitGroup(1) END;
+       IF Dup2(infd, 0) = -1 THEN API.ExitGroup(1) END;
        (* redirect stdout & stderr *)
-       outfd := API.Open(SYSTEM.ADR(filename[0]), API.O_WRONLY + API.O_CREAT, 0666O);
+       outfd := API.Open(PTR(filename[0]), API.O_WRONLY + API.O_CREAT, 0666O);
        IF outfd = -1 THEN API.ExitGroup(1) END;
-       IF API.Dup2(outfd, 1) = -1 THEN API.ExitGroup(1) END;
-       IF API.Dup2(outfd, 2) = -1 THEN API.ExitGroup(1) END;
-	   IGNORE(API.ExecVE(SYSTEM.ADR(cmd[0]), SYSTEM.ADR(argv^[0]), 0));
+       IF Dup2(outfd, 1) = -1 THEN API.ExitGroup(1) END;
+       IF Dup2(outfd, 2) = -1 THEN API.ExitGroup(1) END;
+	   IGNORE(ExecVE(SYSTEM.ADR(cmd[0]), SYSTEM.ADR(argv^[0]), 0));
        API.ExitGroup(1) (* only on failure *)
 	ELSE
-	   IGNORE(API.Wait4(pid, SYSTEM.ADR(status), 0, 0));
+	   IGNORE(Wait4(pid, SYSTEM.ADR(status), 0, 0));
     END;
     DISPOSE(argv);
     RETURN status
@@ -709,7 +718,7 @@ BEGIN
     status := -1;
     IF fh.Closed() OR ~fh.Writeable() THEN RETURN -1 END;
     (* Create pipe *)
-	IF API.Pipe(SYSTEM.ADR(pipefd[0])) = -1 THEN RETURN -1 END;
+	IF Pipe(SYSTEM.ADR(pipefd[0])) = -1 THEN RETURN -1 END;
     (* build argument array *)
     NEW(argv, LEN(args) + 2);
     IF argv = NIL THEN RETURN -1 END;
@@ -719,20 +728,20 @@ BEGIN
     END;
     argv[LEN(args) + 1] := NIL;
     (* Fork process *)
-    pid := API.Fork();
+    pid := Fork();
 	IF pid = -1 THEN RETURN -1
 	ELSIF pid = 0 THEN
 	   (* In child process *)
 	   (* redirect stdin *)
 	   filename := "/dev/null";
-	   infd := API.Open(SYSTEM.ADR(filename[0]), API.O_RDWR + API.O_CREAT, 0666O);
+	   infd := API.Open(PTR(filename[0]), API.O_RDWR + API.O_CREAT, 0666O);
        IF infd = -1 THEN API.ExitGroup(1) END;
-       IF API.Dup2(infd, 0) = -1 THEN API.ExitGroup(1) END;
+       IF Dup2(infd, 0) = -1 THEN API.ExitGroup(1) END;
        (* redirect stdout & stderr *)
        IGNORE(API.Close(pipefd[0]));
-       IF API.Dup2(pipefd[1], 1) = -1 THEN API.ExitGroup(1) END;
-       IF API.Dup2(pipefd[1], 2) = -1 THEN API.ExitGroup(1) END;
-	   IGNORE(API.ExecVE(SYSTEM.ADR(cmd[0]), SYSTEM.ADR(argv^[0]), 0));
+       IF Dup2(pipefd[1], 1) = -1 THEN API.ExitGroup(1) END;
+       IF Dup2(pipefd[1], 2) = -1 THEN API.ExitGroup(1) END;
+	   IGNORE(ExecVE(SYSTEM.ADR(cmd[0]), SYSTEM.ADR(argv^[0]), 0));
        API.ExitGroup(1) (* only on failure *)
 	ELSE
 	   IGNORE(API.Close(pipefd[1]));
@@ -741,7 +750,7 @@ BEGIN
 	       IF len <= 0 THEN EXIT END;
 	       IGNORE(fh.WriteBytes(buffer, 0, len));
 	   END;
-	   IGNORE(API.Wait4(pid, SYSTEM.ADR(status), 0, 0));
+	   IGNORE(Wait4(pid, SYSTEM.ADR(status), 0, 0));
 	   IGNORE(API.Close(pipefd[0]));
     END;
     DISPOSE(argv);

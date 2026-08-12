@@ -27,7 +27,9 @@ OLS += Cardinal $(Real) ArrayOfSet DateTime String StringPattern ADTBasicType AD
 OLS += ADTStream ADTList ADTVector ADTPair ADTSet ADTDictionary ADTTree O2Scanner O2Testing O2Timing$(SYS)
 OLS += Coroutine OS OSStream OSFile OSDir OSPath DataConfig DataLZ4
 MOD = $(addprefix src/, $(addprefix Std., $(addsuffix .mod, $(OLS))))
-OBF = $(addprefix build/, $(addprefix Std., $(addsuffix .obf, $(OLS))))
+
+OBF = build/$(SYS)run.obf
+OBF += $(addprefix build/, $(addprefix Std., $(addsuffix .obf, $(OLS))))
 
 OTS  = TestArrayOfByte TestArrayOfChar TestArrayOfSet TestCardinal TestInteger TestReal
 OTS += TestString TestStringPattern TestDateTime TestADTBasicType TestADTList TestADTSet
@@ -74,11 +76,17 @@ build/%.obf: src/%.mod
 	@mkdir -p build
 	@cd build && ecsd -c $(addprefix ../, $<)
 
+build/%.obf: src/%.asm
+	@echo compiling $<
+	@mkdir -p build
+	@cd build && cp -f $(addprefix ../, $<) .
+	@cd build && ecsd -c $(notdir $<)
+	
 std.lib : $(OBF)
 	@echo linking $@
 	@-rm $@
 	@touch $@
-	@ecsd -l $@ $^
+	@ecsd -l $^ $@
 
 build/TestADTBasicType.obf : src/Std.ADTBasicType.mod
 build/TestADTDictionary.obf : src/Std.ADTDictionary.mod
@@ -112,7 +120,7 @@ TestMain$(PRG) : $(TOBF) std.lib
 	@echo compiling $<
 	@mkdir -p build
 	@cd build && cp -f ../tests/Main.mod .
-	@cd build && ecsd $(RTS) Main.mod  $(notdir $(TOBF)) ../std.lib
+	@cd build && ecsd $(RTS) $(notdir $(TOBF)) ../std.lib Main.mod
 	@cp build/Main$(PRG) TestMain$(PRG)
 	@./TestMain$(PRG)
 
@@ -120,14 +128,14 @@ Test$(PRG) : misc/Test.mod std.lib
 	@echo compiling $<
 	@mkdir -p build
 	@cd build && cp -f $(addprefix ../, $<) .
-	@cd build && ecsd $(RTS) $(notdir $<) ../std.lib
+	@cd build && ecsd $(RTS) ../std.lib Test.mod
 	@cp build/$@ .
 
 perfLength$(PRG) : misc/perfLength.mod std.lib
 	@echo compiling $<
 	@mkdir -p build
 	@cd build && cp -f $(addprefix ../, $<) .
-	@cd build && ecsd $(RTS)  $(notdir $<) ../std.lib
+	@cd build && ecsd $(RTS) ../std.lib perfLength.mod
 	@cp build/$@ .
 	@./$@
 
@@ -135,7 +143,7 @@ perfIndex$(PRG) : misc/perfIndex.mod std.lib
 	@echo compiling $<
 	@mkdir -p build
 	@cd build && cp -f $(addprefix ../, $<) .
-	@cd build && ecsd $(RTS) $(notdir $<) ../std.lib
+	@cd build && ecsd $(RTS) ../std.lib perfIndex.mod
 	@cp build/$@ .
 	@./$@
 
@@ -143,7 +151,7 @@ perfFillChar$(PRG) : misc/perfFillChar.mod std.lib
 	@echo compiling $<
 	@mkdir -p build
 	@cd build && cp -f $(addprefix ../, $<) .
-	@cd build && ecsd $(RTS) $(notdir $<) ../std.lib
+	@cd build && ecsd $(RTS) ../std.lib perfFillChar.mod
 	@cp build/$@ .
 	@./$@
 
@@ -151,7 +159,7 @@ perfCompare$(PRG) : misc/perfCompare.mod std.lib
 	@echo compiling $<
 	@mkdir -p build
 	@cd build && cp -f $(addprefix ../, $<) .
-	@cd build && ecsd $(RTS) $(notdir $<) ../std.lib
+	@cd build && ecsd $(RTS) ../std.lib perfCompare.mod
 	@cp build/$@ .
 	@./$@
 

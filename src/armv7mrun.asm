@@ -24,44 +24,44 @@
     #endrep
 
 #define exception_code
-	.code #0
-		.replaceable
-        .alignment    4
+    .code #0
+    .default
+    .alignment    4
         bkpt    0x00        ; try to go to debugger
 loop:   b.n    loop         ; loop forever if return from bkpt
 #enddef
-	exception_code	isr_nmi
-    exception_code	isr_hardfault
-    exception_code	isr_memmanage
-    exception_code	isr_busfault
-    exception_code	isr_usagefault
+    exception_code  isr_nmi
+    exception_code  isr_hardfault
+    exception_code  isr_memmanage
+    exception_code  isr_busfault
+    exception_code  isr_usagefault
 #undef exception_code
 
 #define isr_code
-	.code #0
-		.replaceable
-        .alignment    4
-        bx.n	 lr   ; ignore interrupt
+    .code #0
+    .default
+    .alignment    4
+    bx.n   lr   ; ignore interrupt
 #enddef
     isr_code    isr_svc
     isr_code    isr_debugmonitor
     isr_code    isr_pendsvc
-    isr_code	isr_systick
+    isr_code    isr_systick
 #undef isr_code
 
 .data ram
-	.required
-	.origin	0x20000000 ; ram start
-    .require	_init_ram
+    .required
+    .origin 0x20000000 ; ram start
+    .require  _init_ram
 
 .initdata _init_ram
     .alignment    4
 
     mov     r0, 0
-	ldr	    r1, [pc, offset (start)]
+    ldr     r1, [pc, offset (start)]
     ldr     r2, [pc, offset (ext)]
     b       cond
-start:  .qbyte	0x20000000
+start:  .qbyte  0x20000000
 ext:    .qbyte  extent (@_trailer)
 loop:    
     str     r0, [r1]
@@ -75,7 +75,7 @@ cond:
 
 ; standard abort function
 .code abort
-    .replaceable
+    .default
     .alignment    4
 loop:
     b.n    loop
@@ -83,70 +83,69 @@ loop:
 ; standard _Exit function
 .code _Exit
     .alignment    4
-	bl       @abort
+    bl       @abort
 
 ; standard getchar function
 .code getchar
-    .replaceable
+    .default
     .alignment    4
-    bx.n	 lr
+    bx.n   lr
 
 ; standard free function
 .code free
-    .replaceable
+    .default
     .alignment    4
-	bx.n	lr
+    bx.n  lr
 
 ; standard malloc function
 .code malloc
-    .replaceable
+    .default
     .alignment    4
 
     ldr.n   r2, offset (heap) + offset (heap) % 4
-	ldr.n	r0, [r2, 0]
-	ldr.n	r3, [sp, 0]
+    ldr.n r0, [r2, 0]
+    ldr.n r3, [sp, 0]
 
     ; round up to nearest word
-    mov	r1, 3
-	add	r4, r3, r1
-    mov	r1, 4
-	rsb	r1, 0
-	and	r3, r4, r1
+    mov r1, 3
+    add r4, r3, r1
+    mov r1, 4
+    rsb r1, 0
+    and r3, r4, r1
+    
+    add.n r3, r3, r0
+    str.n r3, [r2, 0]
+    bx.n  lr
 
-	add.n	r3, r3, r0
-	str.n	r3, [r2, 0]
-	bx.n	lr
-
-heap:	.qbyte	@_heap_start
+heap: .qbyte  @_heap_start
 
 ; heap start
 .data _heap_start
-
-	.alignment	4
-	.reserve	4
-	.require	_init_heap
+    .alignment  4
+    .reserve  4
+    .require  _init_heap
 
 .initdata _init_heap
     .alignment    4
 
-	ldr	    r0, [pc, offset (heap)]
+    ldr     r0, [pc, offset (heap)]
     ldr     r3, [pc, offset (start)]
 
     ; round up to nearest word
-    mov	r1, 3
-	add	r4, r3, r1
-    mov	r1, 4
-	rsb	r1, 0
-	and	r3, r4, r1
-    
-	str	    r3, [r0, 0]
-	b	    skip
-heap:   .qbyte	@_heap_start
+    mov r1, 3
+    add r4, r3, r1
+    mov r1, 4
+    rsb r1, 0
+    and r3, r4, r1
+      
+    str     r3, [r0, 0]
+    b     skip
+heap:   .qbyte  @_heap_start
 start:  .qbyte  extent (@_trailer)
 skip:
 
 ; standard putchar function
 .code putchar
-    .replaceable
+    .default
     .alignment    4
-    bx.n	 lr
+    bx.n   lr

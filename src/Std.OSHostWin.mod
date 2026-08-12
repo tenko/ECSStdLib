@@ -39,6 +39,8 @@ CONST
 VAR ^ argc ["_argc"]: INTEGER;
 VAR ^ argv ["_argv"]: POINTER TO - ARRAY MAX(LENGTH) OF ArgStr;
 
+PROCEDURE ^ CreateProcessA ["CreateProcessA"] (lpApplicationName: API.LPCSTR; lpCommandLine: API.LPSTR; lpProcessAttributes: API.LPSECURITY_ATTRIBUTES; lpThreadAttributes: API.LPSECURITY_ATTRIBUTES; bInheritHandles: API.BOOL; dwCreationFlags: API.DWORD; lpEnvironment: API.LPVOID; lpCurrentDirectory: API.LPCSTR; lpStartupInfo: API.LPSTARTUPINFO; lpProcessInformation: API.LPPROCESS_INFORMATION): API.BOOL;
+
 (**
 Get length of program name string
 *)
@@ -268,10 +270,12 @@ PROCEDURE FileModificationTime*(VAR time : DateTime; VAR delta : HUGEINT; filena
 VAR
     fh: HANDLE;
     fdata: API.WIN32_FIND_DATAA;
+    lpFindFileData: API.LPWIN32_FIND_DATAA;
     lftime: API.FILETIME;
     stime: API.SYSTEMTIME;
 BEGIN
-    fh := API.FindFirstFileA(SYSTEM.ADR(filename), fdata);
+    lpFindFileData := SYSTEM.VAL(API.LPWIN32_FIND_DATAA, SYSTEM.ADR(fdata));
+    fh := API.FindFirstFileA(SYSTEM.ADR(filename), lpFindFileData);
     IF fh = INVALID_HANDLE THEN RETURN FALSE END;
     IF API.FileTimeToLocalFileTime(fdata.ftLastWriteTime, lftime) = 0 THEN
         IGNORE(API.FindClose(fh));
@@ -295,6 +299,7 @@ END FileModificationTime;
 (** Open file/directory listing *)
 PROCEDURE DirOpen*(VAR dir: DirEntry; name-: ARRAY OF CHAR);
 VAR
+    lpFindFileData: API.LPWIN32_FIND_DATAA;
     s : ARRAY API.MAX_PATH OF CHAR;
     i, len : LENGTH;
 BEGIN
@@ -314,7 +319,8 @@ BEGIN
             s[i + 4] := 00X;
         END;
     END;
-    dir.handle := API.FindFirstFileA(SYSTEM.ADR(s), dir.data);
+    lpFindFileData := SYSTEM.VAL(API.LPWIN32_FIND_DATAA, SYSTEM.ADR(dir.data));
+    dir.handle := API.FindFirstFileA(SYSTEM.ADR(s), lpFindFileData);
     dir.first := TRUE
 END DirOpen;
 
@@ -330,6 +336,7 @@ END DirClose;
 (** Return FALSE when end of file/directory listing is reached *)
 PROCEDURE DirNext*(VAR dir: DirEntry): BOOLEAN;
 VAR
+    lpFindFileData: API.LPWIN32_FIND_DATAA;
     ret : BOOLEAN;
     handle : HANDLE;
 BEGIN
@@ -339,7 +346,8 @@ BEGIN
             RETURN TRUE;
         END;
         handle := dir.handle;
-        ret := API.FindNextFileA(handle, dir.data) # 0;
+        lpFindFileData := SYSTEM.VAL(API.LPWIN32_FIND_DATAA, SYSTEM.ADR(dir.data));
+        ret := API.FindNextFileA(handle, lpFindFileData) # 0;
         IF ~ret THEN dir.handle := INVALID_HANDLE END;
         RETURN ret
     END;
@@ -510,9 +518,9 @@ BEGIN
     si.hStdOutput := hNul;
     si.hStdError := hNul;
     si.hStdInput := hNul;
-    IF ~API.CreateProcessA(0, SYSTEM.ADR(str^[0]), SYSTEM.VAL(API.LPSECURITY_ATTRIBUTES, 0),
+    IF CreateProcessA(0, SYSTEM.ADR(str^[0]), SYSTEM.VAL(API.LPSECURITY_ATTRIBUTES, 0),
                            SYSTEM.VAL(API.LPSECURITY_ATTRIBUTES, 0), 1, 0, 0, 0,
-                           SYSTEM.VAL(API.LPSTARTUPINFO, SYSTEM.ADR(si)), SYSTEM.VAL(API.LPPROCESS_INFORMATION, SYSTEM.ADR(pi))) THEN
+                           SYSTEM.VAL(API.LPSTARTUPINFO, SYSTEM.ADR(si)), SYSTEM.VAL(API.LPPROCESS_INFORMATION, SYSTEM.ADR(pi))) = 0 THEN
         DISPOSE(str);
         RETURN -1
     END;
@@ -576,7 +584,7 @@ BEGIN
                             SYSTEM.VAL(API.LPSECURITY_ATTRIBUTES, SYSTEM.ADR(sa)), API.OPEN_EXISTING, 0, 0);
     
     IGNORE(API.CreatePipe(SYSTEM.ADR(hPipeRd), SYSTEM.ADR(hPipeWr), SYSTEM.VAL(API.LPSECURITY_ATTRIBUTES, SYSTEM.ADR(sa)), 0));
-    IGNORE(API.SetHandleInformation(hPipeRd, HANDLE_FLAG_INHERIT, 0));
+    (* IGNORE(API.SetHandleInformation(hPipeRd, HANDLE_FLAG_INHERIT, 0)); *)
     
     ArrayOfByte.Zero(si);
     ArrayOfByte.Zero(pi);
@@ -585,9 +593,9 @@ BEGIN
     si.hStdOutput := hPipeWr;
     si.hStdError := hPipeWr;
     si.hStdInput := hNul;
-    IF ~API.CreateProcessA(0, SYSTEM.ADR(str^[0]), SYSTEM.VAL(API.LPSECURITY_ATTRIBUTES, 0),
+    IF CreateProcessA(0, SYSTEM.ADR(str^[0]), SYSTEM.VAL(API.LPSECURITY_ATTRIBUTES, 0),
                            SYSTEM.VAL(API.LPSECURITY_ATTRIBUTES, 0), 1, 0, 0, 0,
-                           SYSTEM.VAL(API.LPSTARTUPINFO, SYSTEM.ADR(si)), SYSTEM.VAL(API.LPPROCESS_INFORMATION, SYSTEM.ADR(pi))) THEN
+                           SYSTEM.VAL(API.LPSTARTUPINFO, SYSTEM.ADR(si)), SYSTEM.VAL(API.LPPROCESS_INFORMATION, SYSTEM.ADR(pi))) = 0 THEN
         DISPOSE(str);
         RETURN -1
     END;

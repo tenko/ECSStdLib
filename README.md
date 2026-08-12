@@ -37,14 +37,18 @@ Windows **MSYS2** (CLANG64) also can follow these instructions and
 is known to work well, but is much slower than on **Linux**.
 
 Note that your Windows systems anti-virus software might identify the resulting .exe file as a threat
-and in that case this check automatic must exempt these files. 
+and in that case this check automatic must exempt these files.
+
+Alternative on the **Windows** platform is just to download the official installer.
 
 ```shell
 # Build and install patched version of ECS
-pacman -S git make clang sdl2-compat
-git clone https://github.com/tenko/ECS.git
-cd ECS
-make toolchain=clang all # takes some time to finish
+pacman -S wget make clang sdl2-compat
+wget https://software.openbrace.org/attachments/download/418/ecs-2026.08.10.tar.gz
+tar -xavf ecs-2026.08.10.tar.gz
+cd ecs
+sed -i 's/@cp $(wildcard $(pdf))/#@cp $(wildcard $(pdf))/g' makefile # avoid stop on PDF installation
+make -j 4 toolchain=clang all # adjust j argument to your CPU core count
 # install to ~/.local/[bin|lib|share] or other setup of choice
 make toolchain=clang prefix=~/.local install
 make clean

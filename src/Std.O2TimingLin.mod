@@ -15,7 +15,7 @@ BEGIN END StartTimer;
 PROCEDURE Elapsed* (): SIGNED64;
 VAR res : Linux.Timespec;
 BEGIN
-    IGNORE(Linux.ClockGetTime(0, SYSTEM.ADR(res)));
+    IGNORE(Linux.ClockGetTime(0, PTR(res)));
     RETURN res.tv_sec * 1000 + res.tv_nsec DIV 1000000;
 END Elapsed;
 

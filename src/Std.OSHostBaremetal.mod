@@ -2,7 +2,7 @@
 MODULE OSHost IN Std;
 
 IMPORT SYSTEM;
-IN Std IMPORT Const, Char;
+IN Std IMPORT Const, Type, Char;
 
 CONST
     INVALID_HANDLE* = -1;

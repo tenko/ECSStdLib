@@ -82,7 +82,7 @@ std$(CPU).lib : $(OBF)
 	@echo linking $@
 	@-rm $@
 	@touch $@
-	@linklib $@ $^
+	@linklib $^ $@
 
 build/armv7mrun.obf : src/armv7mrun.asm
 	@echo compiling $<
@@ -122,7 +122,7 @@ TestMain : $(TOBF) std$(CPU).lib build/armv7mrun.obf
 	@echo compiling $<
 	@mkdir -p build
 	@cd build && touch TestMain.obf
-	@cd build && $(LK) TestMain.obf $(notdir $(TOBF)) ../std$(CPU).lib $(RTS)
+	@cd build && $(LK) $(notdir $(TOBF)) ../std$(CPU).lib $(RTS) TestMain.obf
 	@cd build && $(QEMU) -M $(DEVICE) -semihosting -nographic -device loader,file=TestMain.rom,addr=$(ADR)
 
 .PHONY: Test
