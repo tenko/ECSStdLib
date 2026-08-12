@@ -43,11 +43,12 @@ Alternative on the **Windows** platform is just to download the official install
 
 ```shell
 # Build and install patched version of ECS
-pacman -S wget make clang sdl2-compat
+pacman -S wget patch make clang sdl2-compat
 wget https://software.openbrace.org/attachments/download/418/ecs-2026.08.10.tar.gz
+wget https://software.openbrace.org/attachments/download/420/install.patch
 tar -xavf ecs-2026.08.10.tar.gz
 cd ecs
-sed -i 's/@cp $(wildcard $(pdf))/#@cp $(wildcard $(pdf))/g' makefile # avoid stop on PDF installation
+patch -p0 < ../install.patch
 make -j 4 toolchain=clang all # adjust j argument to your CPU core count
 # install to ~/.local/[bin|lib|share] or other setup of choice
 make toolchain=clang prefix=~/.local install
