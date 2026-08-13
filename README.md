@@ -33,7 +33,7 @@ Oberon-2 [report](https://www.ssw.uni-linz.ac.at/Research/Papers/Oberon2.pdf) wi
 Build instructions here are for a current **ArchLinux** version, but should
 be possible to adapt to other **Linux** distributions.
 
-Windows **MSYS2** (CLANG64) also can follow these instructions and
+Windows **MSYS2** also can follow these instructions and
 is known to work well, but is much slower than on **Linux**.
 
 Alternative on the **Windows** platform is just to download the official installer.
