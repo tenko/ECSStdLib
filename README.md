@@ -36,9 +36,6 @@ be possible to adapt to other **Linux** distributions.
 Windows **MSYS2** (CLANG64) also can follow these instructions and
 is known to work well, but is much slower than on **Linux**.
 
-Note that your Windows systems anti-virus software might identify the resulting .exe file as a threat
-and in that case this check automatic must exempt these files.
-
 Alternative on the **Windows** platform is just to download the official installer.
 
 ```shell
@@ -182,8 +179,6 @@ ecsd -r std.lib -r win64api.obf Test.mod # Remove -r win64api.obf on other platf
  24 : string
 ```
 
-## Note
+## Documentation
 
 Complete API Documentation: [Link](https://tenko.github.io/ECSStdLib/)  
-Currently a patched version of the **ECS** compiler is needed [Link](https://github.com/tenko/ECS)  
-With the next release of the **ECS** compiler these patches should be included. 
