@@ -79,8 +79,7 @@ build/%.obf: src/%.mod
 build/%.obf: src/%.asm
 	@echo compiling $<
 	@mkdir -p build
-	@cd build && cp -f $(addprefix ../, $<) .
-	@cd build && ecsd -c $(notdir $<)
+	@cd build && ecsd -c $(addprefix ../, $<)
 	
 std.lib : $(OBF)
 	@echo linking $@
@@ -163,42 +162,6 @@ perfCompare$(PRG) : misc/perfCompare.mod std.lib
 	@cp build/$@ .
 	@./$@
 
-doc/src/Std.ADTBasicType.mod.rst : src/Std.ADTBasicType.mod
-	@-mkdir -p doc/src
-	./tools/docgen.py $< -o $@
-
-doc/src/Std.ADTRingBuffer.mod.rst : src/Std.ADTRingBuffer.mod
-	@-mkdir -p doc/src
-	./tools/docgen.py $< -o $@
-	
-doc/src/Std.ADTDictionary.mod.rst : src/Std.ADTDictionary.mod
-	@-mkdir -p doc/src
-	@./tools/docgen.py $< -o $@
-
-doc/src/Std.ADTList.mod.rst : src/Std.ADTList.mod
-	@-mkdir -p doc/src
-	@./tools/docgen.py $< -o $@
-
-doc/src/Std.ADTPair.mod.rst : src/Std.ADTPair.mod
-	@-mkdir -p doc/src
-	@./tools/docgen.py $< -o $@
-	
-doc/src/Std.ADTSet.mod.rst : src/Std.ADTSet.mod
-	@-mkdir -p doc/src
-	@./tools/docgen.py $< -o $@
-
-doc/src/Std.ADTStream.mod.rst : src/Std.ADTStream.mod
-	@-mkdir -p doc/src
-	@./tools/docgen.py $< -o $@
-
-doc/src/Std.ADTTree.mod.rst : src/Std.ADTTree.mod
-	@-mkdir -p doc/src
-	@./tools/docgen.py $< -o $@
-
-doc/src/Std.ADTVector.mod.rst : src/Std.ADTVector.mod
-	@-mkdir -p doc/src
-	@./tools/docgen.py $< -o $@
-
 doc/src/Std.ArrayOfByte.mod.rst : src/Std.ArrayOfByte$(OPT).mod
 	@-mkdir -p doc/src
 	@./tools/docgen.py $< -o $@
@@ -207,43 +170,7 @@ doc/src/Std.ArrayOfChar.mod.rst : src/Std.ArrayOfChar$(OPT).mod
 	@-mkdir -p doc/src
 	@./tools/docgen.py $< -o $@
 
-doc/src/Std.ArrayOfSet.mod.rst : src/Std.ArrayOfSet.mod
-	@-mkdir -p doc/src
-	@./tools/docgen.py $< -o $@
-
-doc/src/Std.Cardinal.mod.rst : src/Std.Cardinal.mod
-	@-mkdir -p doc/src
-	@./tools/docgen.py $< -o $@
-
-doc/src/Std.Char.mod.rst : src/Std.Char.mod
-	@-mkdir -p doc/src
-	@./tools/docgen.py $< -o $@
-
 doc/src/Std.Config.mod.rst : src/Std.Config$(SYS).mod
-	@-mkdir -p doc/src
-	@./tools/docgen.py $< -o $@
-
-doc/src/Std.Const.mod.rst : src/Std.Const.mod
-	@-mkdir -p doc/src
-	@./tools/docgen.py $< -o $@
-
-doc/src/Std.DataConfig.mod.rst : src/Std.DataConfig.mod
-	@-mkdir -p doc/src
-	@./tools/docgen.py $< -o $@
-
-doc/src/Std.DataLZ4.mod.rst : src/Std.DataLZ4.mod
-	@-mkdir -p doc/src
-	@./tools/docgen.py $< -o $@
-
-doc/src/Std.DateTime.mod.rst : src/Std.DateTime.mod
-	@-mkdir -p doc/src
-	@./tools/docgen.py $< -o $@
-
-doc/src/Std.Integer.mod.rst : src/Std.Integer.mod
-	@-mkdir -p doc/src
-	@./tools/docgen.py $< -o $@
-
-doc/src/Std.O2Testing.mod.rst : src/Std.O2Testing.mod
 	@-mkdir -p doc/src
 	@./tools/docgen.py $< -o $@
 
@@ -251,27 +178,7 @@ doc/src/Std.O2Timing.mod.rst : src/Std.O2Timing$(SYS).mod
 	@-mkdir -p doc/src
 	@./tools/docgen.py $< -o $@
 
-doc/src/Std.OS.mod.rst : src/Std.OS.mod
-	@-mkdir -p doc/src
-	@./tools/docgen.py $< -o $@
-
-doc/src/Std.OSDir.mod.rst : src/Std.OSDir.mod
-	@-mkdir -p doc/src
-	@./tools/docgen.py $< -o $@
-
-doc/src/Std.OSFile.mod.rst : src/Std.OSFile.mod
-	@-mkdir -p doc/src
-	@./tools/docgen.py $< -o $@
-
 doc/src/Std.OSHost.mod.rst : src/Std.OSHost$(SYS).mod
-	@-mkdir -p doc/src
-	@./tools/docgen.py $< -o $@
-
-doc/src/Std.OSPath.mod.rst : src/Std.OSPath.mod
-	@-mkdir -p doc/src
-	@./tools/docgen.py $< -o $@
-
-doc/src/Std.OSStream.mod.rst : src/Std.OSStream.mod
 	@-mkdir -p doc/src
 	@./tools/docgen.py $< -o $@
 
@@ -279,17 +186,10 @@ doc/src/Std.Real.mod.rst : src/Std.$(Real).mod
 	@-mkdir -p doc/src
 	@./tools/docgen.py $< -o $@
 
-doc/src/Std.String.mod.rst : src/Std.String.mod
+doc/src/%.mod.rst: src/%.mod
+	@echo compiling $<
 	@-mkdir -p doc/src
-	@./tools/docgen.py $< -o $@
-
-doc/src/Std.StringPattern.mod.rst : src/Std.StringPattern.mod
-	@-mkdir -p doc/src
-	@./tools/docgen.py $< -o $@
-
-doc/src/Std.Type.mod.rst : src/Std.Type.mod
-	@-mkdir -p doc/src
-	@./tools/docgen.py $< -o $@
+	./tools/docgen.py $< -o $@
 
 .PHONY: doc
 doc: $(DRST)
@@ -305,6 +205,12 @@ install: std.lib
 	@mkdir -p $(PREFIX)/lib/ecs/libraries/oberon/ 
 	@cp -f build/std.*.sym $(PREFIX)/lib/ecs/libraries/oberon/
 
+.PHONY: update
+update:
+	@git stash
+	git pull
+	@git stash pop
+    
 .PHONY: clean
 clean:
 	@echo Clean

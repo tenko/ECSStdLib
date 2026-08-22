@@ -69,26 +69,18 @@ build/Std.DataConfig.obf : src/Std.Const.mod src/Std.Char.mod src/Std.ArrayOfCha
 build/%.obf: src/%.mod
 	@echo compiling $<
 	@mkdir -p build
-	@cd build && cp -f $(addprefix ../, $<) .
-	@cd build && $(OB) -t armt32 -c $(notdir $<)
+	@cd build && $(OB) -t armt32 -c $(addprefix ../, $<)
 
 build/%.obf: src/%.asm
 	@echo compiling $<
 	@mkdir -p build
-	@cd build && cp -f $(addprefix ../, $<) .
-	@cd build && $(AS) $(notdir $<)
+	@cd build && $(AS) $(addprefix ../, $<)
 
 std$(CPU).lib : $(OBF)
 	@echo linking $@
 	@-rm $@
 	@touch $@
 	@linklib $^ $@
-
-build/armv7mrun.obf : src/armv7mrun.asm
-	@echo compiling $<
-	@mkdir -p build
-	@cd build && cp -f $(addprefix ../, $<) .
-	@cd build && $(AS) $(notdir $<)
 
 build/TestADTBasicType.obf : src/Std.ADTBasicType.mod
 build/TestADTDictionary.obf : src/Std.ADTDictionary.mod
@@ -139,7 +131,13 @@ install: std$(CPU).lib
 	@echo Install
 	@cp -f std$(CPU).lib $(PREFIX)/lib/ecs/runtime/
 	@cp -f build/std.*.sym $(PREFIX)/lib/ecs/libraries/oberon/
-	
+
+.PHONY: update
+update:
+	@git stash
+	git pull
+	@git stash pop
+
 .PHONY: clean
 clean:
 	@echo Clean
