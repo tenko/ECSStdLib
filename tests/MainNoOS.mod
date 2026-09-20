@@ -42,7 +42,7 @@ BEGIN
     TestReal.Run(test);
     TestString.Run(test);
     TestStringPattern.Run(test);
-    (* TestDateTime.Run(test); *) (* Currenly fails due to error in code generator *)
+    TestDateTime.Run(test);
     TestOSPath.Run(test);
     TestOS.Run(test);
     TestADTBasicType.Run(test);

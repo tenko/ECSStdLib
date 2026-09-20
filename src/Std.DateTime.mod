@@ -211,17 +211,17 @@ BEGIN
       | Month :
             datetime := IncMonth(datetime, INTEGER(value));
       | Week :
-            datetime := datetime +  7 * value * 86400000;
+            INC(datetime, 7 * value * 86400000);
       | Day :
-            datetime := datetime +  value * 86400000;
+            INC(datetime, value * 86400000);
       | Hour :
-            datetime := datetime +  value * 3600000;
+            INC(datetime, value * 3600000);
       | Min :
-            datetime := datetime +  value * 60000;
+            INC(datetime, value * 60000);
       | Sec :
-            datetime := datetime +  value * 1000;
+            INC(datetime, value * 1000);
       | MSec :
-           datetime := datetime +  value;
+           INC(datetime, value);
     END;
 END Inc;
 
@@ -236,17 +236,17 @@ BEGIN
       | Month :
             datetime := DecMonth(datetime, INTEGER(value));
       | Week :
-            datetime := datetime - 7 * value * 86400000;
+            DEC(datetime, 7 * value * 86400000);
       | Day :
-            datetime := datetime - value * 86400000;
+            DEC(datetime, value * 86400000);
       | Hour :
-            datetime := datetime - value * 3600000;
+            DEC(datetime, value * 3600000);
       | Min :
-            datetime := datetime - value * 60000;
+            DEC(datetime, value * 60000);
       | Sec :
-            datetime := datetime - value * 1000;
+            DEC(datetime, value * 1000);
       | MSec :
-           datetime := datetime - value;
+           DEC(datetime, value);
     END;
 END Dec;
 
