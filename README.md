@@ -44,11 +44,15 @@ pacman -S base-devel gcc wget # Windows : run from MSYS2 shell
 wget https://software.openbrace.org/attachments/download/418/ecs-2026.08.10.tar.gz
 wget https://software.openbrace.org/attachments/download/420/install.patch
 wget https://software.openbrace.org/attachments/download/421/msys.patch
+wget https://software.openbrace.org/attachments/download/424/trace.patch
+wget https://software.openbrace.org/attachments/download/425/ptr.patch
 tar -xavf ecs-2026.08.10.tar.gz
 cd ecs
 patch -p0 < ../install.patch
 patch -p0 < ../msys.patch
-make all # adjust -j argument to your CPU core count for faster compilation
+patch -p0 < ../trace.patch
+patch -p0 < ../ptr.patch
+make toolchain=gcc all # adjust -j argument to your CPU core count for faster compilation
 make prefix=~/.local install
 make clean
 # add to PATH variable (adapt to your shell and setup)
