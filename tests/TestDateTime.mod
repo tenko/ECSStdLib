@@ -50,7 +50,7 @@ BEGIN
     Assert(DateTime.Extract(DateTime.EncodeDate(1989, 6, 22), DateTime.Day) = 22, __LINE__) ;
     Assert(DateTime.Extract(DateTime.EncodeDate(2005, 1, 1), DateTime.Week) = 53, __LINE__) ;
     Assert(DateTime.Extract(DateTime.EncodeDate(2004, 12, 31), DateTime.Week) = 53, __LINE__) ;
-
+	
     (* Diff *)
     start := DateTime.EncodeDate(2011,11,18);
     end := DateTime.EncodeDate(2023,08,01);
@@ -59,31 +59,31 @@ BEGIN
     Assert(year = 11, __LINE__) ;
     Assert(month = 8, __LINE__) ;
     Assert(day = 14, __LINE__) ;
-
+	
     (* Span *)
     start := DateTime.EncodeDate(2011,11,18);
     end := DateTime.EncodeDate(2023,08,01);
     Assert(DateTime.Span(start, end, DateTime.Year) = 11, __LINE__) ;
     Assert(DateTime.Span(start, end, DateTime.Month) = 140, __LINE__) ;
     Assert(DateTime.Span(start, end, DateTime.Day) = 4274, __LINE__) ;
-
+	
     (* Inc *)
     d := DateTime.EncodeDateTime(2019,11,15,16,43,20,0);
     DateTime.Inc(d,DateTime.Year,1);
     Assert(d = DateTime.EncodeDateTime(2020,11,15,16,43,20,0), __LINE__) ;
-
+	
     d := DateTime.EncodeDateTime(2019,11,15,16,43,20,0);
     DateTime.Inc(d,DateTime.Month,12);
     Assert(d = DateTime.EncodeDateTime(2020,11,15,16,43,20,0), __LINE__) ;
-
+	
     d := DateTime.EncodeDateTime(2019,11,15,16,43,20,0);
     DateTime.Inc(d,DateTime.Month,1);
     Assert(d = DateTime.EncodeDateTime(2019,12,15,16,43,20,0), __LINE__) ;
-
+	
     d := DateTime.EncodeDateTime(2019,11,15,16,43,20,0);
     DateTime.Inc(d,DateTime.Day,1);
     Assert(d = DateTime.EncodeDateTime(2019,11,16,16,43,20,0), __LINE__) ;
-
+	
     d := DateTime.EncodeDateTime(2019,11,15,16,43,20,0);
     DateTime.Inc(d,DateTime.Day,64);
     Assert(d = DateTime.EncodeDateTime(2020,01,18,16,43,20,0), __LINE__) ;
@@ -95,7 +95,7 @@ BEGIN
     d := DateTime.EncodeDateTime(2019,11,15,16,43,20,0);
     DateTime.Inc(d,DateTime.Hour,1);
     Assert(d = DateTime.EncodeDateTime(2019,11,15,17,43,20,0), __LINE__) ;
-
+	
     (* Dec *)
     d := DateTime.EncodeDateTime(2020,11,15,16,43,20,0);
     DateTime.Dec(d,DateTime.Year,1);
@@ -177,7 +177,7 @@ BEGIN
     exp := DateTime.EncodeDateTime(2020,12,31,18,30,00,000);
     DateTime.FromString(d, "2020-12-31 18:30:", "%y-%m-%d %H:%M:%S");
     Assert(d = DateTime.ERROR, __LINE__);
-
+	
     Testing.End(test);
 END Run;
 

@@ -33,25 +33,29 @@ Oberon-2 [report](https://www.ssw.uni-linz.ac.at/Research/Papers/Oberon2.pdf) wi
 Build instructions here are for a current **ArchLinux** version, but should
 be possible to adapt to other **Linux** distributions.
 
-Windows **MSYS2** (CLANG64) also can follow these instructions and
+Windows **MSYS2** also can follow these instructions and
 is known to work well, but is much slower than on **Linux**.
-
-Note that your Windows systems anti-virus software might identify the resulting .exe file as a threat
-and in that case this check automatic must exempt these files.
 
 Alternative on the **Windows** platform is just to download the official installer.
 
 ```shell
 # Build and install patched version of ECS
-pacman -S wget patch make clang sdl2-compat
+pacman -S base-devel gcc wget # Windows : run from MSYS2 shell
 wget https://software.openbrace.org/attachments/download/418/ecs-2026.08.10.tar.gz
 wget https://software.openbrace.org/attachments/download/420/install.patch
+wget https://software.openbrace.org/attachments/download/421/msys.patch
+wget https://software.openbrace.org/attachments/download/424/trace.patch
+wget https://software.openbrace.org/attachments/download/425/ptr.patch
+wget https://software.openbrace.org/attachments/download/430/assignment.patch
 tar -xavf ecs-2026.08.10.tar.gz
 cd ecs
 patch -p0 < ../install.patch
-make -j 4 toolchain=clang all # adjust j argument to your CPU core count
-# install to ~/.local/[bin|lib|share] or other setup of choice
-make toolchain=clang prefix=~/.local install
+patch -p0 < ../msys.patch
+patch -p0 < ../trace.patch
+patch -p0 < ../ptr.patch
+patch -p0 < ../assignment.patch
+make toolchain=gcc all # adjust -j argument to your CPU core count for faster compilation
+make prefix=~/.local install
 make clean
 # add to PATH variable (adapt to your shell and setup)
 echo 'export PATH=~/.local/bin/:~/.local/lib/ecs/tools/:$PATH' >> ~/.bashrc
@@ -59,7 +63,6 @@ echo 'export ECSBASE=~/.local/lib/ecs/' >> ~/.bashrc
 cd ..
 
 # Build and install ECSStdLib
-pacman -S dos2unix
 git clone https://github.com/tenko/ECSStdLib.git
 cd ECSStdLib
 # Build native library
@@ -182,8 +185,6 @@ ecsd -r std.lib -r win64api.obf Test.mod # Remove -r win64api.obf on other platf
  24 : string
 ```
 
-## Note
+## Documentation
 
 Complete API Documentation: [Link](https://tenko.github.io/ECSStdLib/)  
-Currently a patched version of the **ECS** compiler is needed [Link](https://github.com/tenko/ECS)  
-With the next release of the **ECS** compiler these patches should be included. 
