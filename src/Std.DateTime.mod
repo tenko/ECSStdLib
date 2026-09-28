@@ -35,7 +35,7 @@ CONST
 VAR
     MonthDays: ARRAY 2, 12 OF INTEGER;
     ShiftedMonthDays: ARRAY 12 OF INTEGER;
-    UTCOffset- : INTEGER;
+    UTCOffset* : INTEGER;
 
 (* Return TRUE if the Year is a leap year *)
 PROCEDURE IsLeapYear (year : INTEGER) : BOOLEAN;
@@ -730,7 +730,7 @@ BEGIN FromSubString(datetime, src, fmt, 0)
 END FromString;
 
 BEGIN
-    UTCOffset := OSHost.GetTimeZoneOffset();
+    UTCOffset := 0;
     MonthDays[0,0] := 31;  MonthDays[0,1] := 28; MonthDays[0,2] := 31; MonthDays[0,3] := 30;
 	MonthDays[0,4] := 31;  MonthDays[0,5] := 30; MonthDays[0,6] := 31; MonthDays[0,7] := 31;
 	MonthDays[0,8] := 30;  MonthDays[0,9] := 31; MonthDays[0,10] := 30; MonthDays[0,11] := 31;

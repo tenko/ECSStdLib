@@ -187,5 +187,5 @@ BEGIN
 END Init;
 
 BEGIN
-    Init;
+    randomSeed := 0
 END Cardinal.

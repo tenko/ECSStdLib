@@ -121,6 +121,8 @@ VAR
 BEGIN
     nunits := ((nbytes + SIZE(Node) - 1) DIV SIZE(Node)) + 1;
     IF FreePtr = NIL THEN
+    	AllocSize := 0;
+    	Heap := 0;
         (* Insert sentinentel node *)
         BasePtr := SYSTEM.VAL(NodePtr, ADR(Base));
         Base.magic := MAGIC;
@@ -155,7 +157,4 @@ BEGIN
     END;
 END New;
 
-BEGIN
-    AllocSize := 0;
-    Heap := 0;
 END SysMem.
