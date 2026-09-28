@@ -80,7 +80,7 @@ BEGIN
     FlushBuffer;
     args[0] := ADP_Stopped_ApplicationExit;
     args[1] := 0;
-    IGNORE(SemiHost(SYS_EXIT_EXTENDED, SYSTEM.ADR(args)));
+    IGNORE(SemiHost(SYS_EXIT, SYSTEM.ADR(args)));
 END Abort;
 
 (* Replace putchar function in runtime *)
