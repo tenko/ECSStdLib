@@ -20,15 +20,8 @@ OPT = OptSize
 Real = Real32
 
 CPU = armt32
-
 # Semihost or Baremetal
-SYS = Baremetal
-
-ifeq ($(SYS), Semihost)
-PREFIX = semihost
-else
-PREFIX = 
-endif
+SYS = Semihost
 
 RTS = armv7mrun.obf $(ECSBASE)/runtime/armt32run.obf $(ECSBASE)/runtime/obarmt32run.lib
 
@@ -49,7 +42,7 @@ TMOD = $(addprefix tests/, $(addsuffix .mod, $(OTS)))
 TOBF = $(addprefix build/, $(addsuffix .obf, $(OTS)))
 
 .PHONY: all
-all : std$(CPU)$(PREFIX).lib
+all : std$(CPU).lib
 
 build/Std.ADTBasicType.obf : src/Std.Type.mod
 build/Std.ADTDictionary.obf : src/Std.ADTVector.mod
@@ -85,7 +78,7 @@ build/%.obf: src/%.asm
 	@cd build && cp -f $(addprefix ../, $<) .
 	@cd build && $(AS) $(notdir $<)
 
-std$(CPU)$(PREFIX).lib : $(OBF)
+std$(CPU).lib : $(OBF)
 	@echo linking $@
 	@-rm $@
 	@touch $@
@@ -125,20 +118,20 @@ build/%.obf: tests/%.mod
 	@cd build && $(OB) -t armt32 -c $(notdir $<)
 
 .PHONY: TestMain
-TestMain : $(TOBF) std$(CPU)semihost.lib build/armv7mrun.obf
+TestMain : $(TOBF) std$(CPU).lib build/armv7mrun.obf
 	@echo compiling $<
 	@mkdir -p build
 	@cd build && touch TestMain.obf
-	@cd build && $(LK) $(notdir $(TOBF)) ../std$(CPU)semihost.lib $(RTS) TestMain.obf
+	@cd build && $(LK) $(notdir $(TOBF)) ../std$(CPU).lib $(RTS) TestMain.obf
 	@cd build && $(QEMU) -M $(DEVICE) -semihosting -nographic -device loader,file=TestMain.rom,addr=$(ADR)
 
 .PHONY: Test
-Test : misc/Test.mod std$(CPU)semihost.lib build/armv7mrun.obf
+Test : misc/Test.mod std$(CPU).lib build/armv7mrun.obf
 	@echo compiling $<
 	@mkdir -p build
 	@cd build && cp -f $(addprefix ../, $<) .
 	@cd build && $(OB) -t armt32 -c $(notdir $<)
-	@cd build && $(LK) Test.obf ../std$(CPU)semihost.lib $(RTS)
+	@cd build && $(LK) Test.obf ../std$(CPU).lib $(RTS)
 	@cd build && $(QEMU) -M $(DEVICE) -semihosting -semihosting-config arg="test a b c" -nographic -device loader,file=Test.rom,addr=$(ADR)
 
 .PHONY: install
